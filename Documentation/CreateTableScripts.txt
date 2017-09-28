@@ -20,10 +20,6 @@ CREATE TABLE Employee(
   PRIMARY KEY (EmployeeID)
 );
 
-ALTER TABLE Department
-ADD FOREIGN KEY (AdministratorID)
-REFERENCES Employee(EmployeeID);
-
 CREATE TABLE Doctor(
   EmployeeID INT NOT NULL,
   DepartmentID INT NOT NULL,
@@ -36,15 +32,19 @@ CREATE TABLE Doctor(
   REFERENCES Department(DepartmentID)
 );
 
+ALTER TABLE Department
+ADD FOREIGN KEY (AdministratorID)
+REFERENCES Doctor(EmployeeID);
+
 CREATE TABLE Nurse(
   EmployeeID INT NOT NULL,
   DepartmentID INT NOT NULL,
   Specialty VARCHAR(255),
-  FOREIGN KEY (DepartmentID)
-  REFERENCES Department(DepartmentID),
-  FOREIGN KEY (EmployeeID) 
+  PRIMARY KEY (EmployeeID),
+  FOREIGN KEY (EmployeeID)
   REFERENCES Employee(EmployeeID),
-  PRIMARY KEY (EmployeeID)
+  FOREIGN KEY (DepartmentID)
+  REFERENCES Department(DepartmentID)
 );
 
 CREATE TABLE Patient(
@@ -65,11 +65,11 @@ CREATE TABLE Admission(
   ReasonForAdmission VARCHAR(255),
   DateAdmitted DATE,
   DateDischarged DATE,
-  FOREIGN KEY (MedicareID) 
+  PRIMARY KEY (AdmissionID),
+  FOREIGN KEY (MedicareID)
   REFERENCES Patient(MedicareID),
-  FOREIGN KEY (AssignedDoctorID) 
-  REFERENCES Doctor(EmployeeID),
-  PRIMARY KEY (AdmissionID)
+  FOREIGN KEY (AssignedDoctorID)
+  REFERENCES Doctor(EmployeeID)
 );
 
 CREATE TABLE Visit(
@@ -78,11 +78,11 @@ CREATE TABLE Visit(
   DoctorID INT NOT NULL,
   DateTimeVisited DATETIME,
   MedicalReport VARCHAR(255),
-  FOREIGN KEY (MedicareID) 
+  PRIMARY KEY (VisitID),
+  FOREIGN KEY (MedicareID)
   REFERENCES Patient(MedicareID),
-  FOREIGN KEY (DoctorID) 
-  REFERENCES Doctor(EmployeeID),
-  PRIMARY KEY (VisitID)
+  FOREIGN KEY (DoctorID)
+  REFERENCES Doctor(EmployeeID)
 );
 
 CREATE TABLE Test(
@@ -90,7 +90,7 @@ CREATE TABLE Test(
   MedicareID INT NOT NULL,
   TestType VARCHAR(127),
   DateTimeTested DATETIME,
+  PRIMARY KEY (TestID),
   FOREIGN KEY (MedicareID) 
-  REFERENCES Patient(MedicareID),
-  PRIMARY KEY (TestID)
+  REFERENCES Patient(MedicareID)
 );
