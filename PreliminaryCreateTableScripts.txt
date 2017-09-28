@@ -1,5 +1,5 @@
 CREATE TABLE Department(
-  DepartmentID INT NOT NULL,
+  DepartmentID INT NOT NULL AUTO_INCREMENT,
   Name VARCHAR(255),
   AdministratorID INT NOT NULL,
   NumberOfBeds INT,
@@ -7,7 +7,7 @@ CREATE TABLE Department(
 );
 
 CREATE TABLE Employee(
-  EmployeeID INT NOT NULL,
+  EmployeeID INT NOT NULL AUTO_INCREMENT,
   FirstName VARCHAR(255),
   LastName VARCHAR(255),
   JobTitle VARCHAR(255),
@@ -15,7 +15,7 @@ CREATE TABLE Employee(
   EndDate DATE,
   Gender ENUM('Male', 'Female'),
   DateOfBirth DATE,
-  Phone CHAR(20),
+  Phone VARCHAR(20),
   Email VARCHAR(127),
   PRIMARY KEY (EmployeeID)
 );
@@ -23,3 +23,51 @@ CREATE TABLE Employee(
 ALTER TABLE Department
 ADD FOREIGN KEY (AdministratorID)
 REFERENCES Employee(EmployeeID);
+
+CREATE TABLE Doctor(
+  EmployeeID INT NOT NULL,
+  DepartmentID INT NOT NULL,
+  Specialty VARCHAR(255),
+  VisitFee FLOAT NOT NULL,
+  PRIMARY KEY (EmployeeID),
+  FOREIGN KEY (EmployeeID) 
+  REFERENCES Employee(EmployeeID),
+  FOREIGN KEY (DepartmentID)
+  REFERENCES Department(DepartmentID)
+);
+
+CREATE TABLE Nurse(
+  EmployeeID INT NOT NULL,
+  DepartmentID INT NOT NULL,
+  Specialty VARCHAR(255),
+  FOREIGN KEY (DepartmentID)
+  REFERENCES Department(DepartmentID),
+  FOREIGN KEY (EmployeeID) 
+  REFERENCES Employee(EmployeeID),
+  PRIMARY KEY (EmployeeID)
+);
+
+CREATE TABLE Patient(
+  MedicareID INT NOT NULL AUTO_INCREMENT,
+  FirstName VARCHAR(255),
+  LastName VARCHAR(255),
+  Gender ENUM('Male', 'Female'),
+  DateOfBirth DATE,
+  Phone VARCHAR(20),
+  Address VARCHAR(255),
+  PRIMARY KEY (MedicareID)
+);
+
+CREATE TABLE Admission(
+  AdmissionID INT NOT NULL AUTO_INCREMENT,
+  MedicareID INT NOT NULL,
+  AssignedDoctorID INT NOT NULL,
+  ReasonForAdmission VARCHAR(255),
+  DateAdmitted DATE,
+  DateDischarged DATE,
+  FOREIGN KEY (MedicareID) 
+  REFERENCES Patient(MedicareID),
+  FOREIGN KEY (AssignedDoctorID) 
+  REFERENCES Doctor(EmployeeID),
+  PRIMARY KEY AdmissionID
+);
