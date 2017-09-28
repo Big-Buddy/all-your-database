@@ -1,0 +1,25 @@
+CREATE TABLE Department(
+  DepartmentID INT NOT NULL,
+  Name VARCHAR(255),
+  AdministratorID INT NOT NULL,
+  NumberOfBeds INT,
+  PRIMARY KEY(DepartmentID)
+);
+
+CREATE TABLE Employee(
+  EmployeeID INT NOT NULL,
+  FirstName VARCHAR(255),
+  LastName VARCHAR(255),
+  JobTitle VARCHAR(255),
+  StartDate DATE,
+  EndDate DATE,
+  Gender ENUM('Male', 'Female'),
+  DateOfBirth DATE,
+  Phone CHAR(20),
+  Email VARCHAR(127),
+  PRIMARY KEY (EmployeeID)
+);
+
+ALTER TABLE Department
+ADD FOREIGN KEY (AdministratorID)
+REFERENCES Employee(EmployeeID);
