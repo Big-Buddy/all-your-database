@@ -69,5 +69,28 @@ CREATE TABLE Admission(
   REFERENCES Patient(MedicareID),
   FOREIGN KEY (AssignedDoctorID) 
   REFERENCES Doctor(EmployeeID),
-  PRIMARY KEY AdmissionID
+  PRIMARY KEY (AdmissionID)
+);
+
+CREATE TABLE Visit(
+  VisitID INT NOT NULL AUTO_INCREMENT,
+  MedicareID INT NOT NULL,
+  DoctorID INT NOT NULL,
+  DateTimeVisited DATETIME,
+  MedicalReport VARCHAR(255),
+  FOREIGN KEY (MedicareID) 
+  REFERENCES Patient(MedicareID),
+  FOREIGN KEY (DoctorID) 
+  REFERENCES Doctor(EmployeeID),
+  PRIMARY KEY (VisitID)
+);
+
+CREATE TABLE Test(
+  TestID INT NOT NULL AUTO_INCREMENT,
+  MedicareID INT NOT NULL,
+  TestType VARCHAR(127),
+  DateTimeTested DATETIME,
+  FOREIGN KEY (MedicareID) 
+  REFERENCES Patient(MedicareID),
+  PRIMARY KEY (TestID)
 );
