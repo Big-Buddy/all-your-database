@@ -1,6 +1,10 @@
+/* Table Creation */
+
 CREATE TABLE Department(
   DepartmentID INT NOT NULL AUTO_INCREMENT,
-  Name VARCHAR(255),
+  Name VARCHAR(255) NOT NULL,
+  /* NOTE: The following column will be made into a foreign key
+  AFTER the creation of all the Doctor entries below. */
   AdministratorID INT NOT NULL,
   NumberOfBeds INT,
   PRIMARY KEY(DepartmentID)
@@ -8,15 +12,20 @@ CREATE TABLE Department(
 
 CREATE TABLE Employee(
   EmployeeID INT NOT NULL AUTO_INCREMENT,
-  FirstName VARCHAR(255),
-  LastName VARCHAR(255),
+  FirstName VARCHAR(255) NOT NULL,
+  LastName VARCHAR(255) NOT NULL,
   JobTitle VARCHAR(255),
-  StartDate DATE,
+  StartDate DATE NOT NULL,
   EndDate DATE,
   Gender ENUM('Male', 'Female'),
   DateOfBirth DATE,
   Phone VARCHAR(20),
   Email VARCHAR(127),
+  AddressStreet VARCHAR(255),
+  AddressCity VARCHAR(127),
+  AddressProvince VARCHAR(127),
+  AddressCountry VARCHAR(63),
+  AddressPostalCode VARCHAR(63),
   PRIMARY KEY (EmployeeID)
 );
 
@@ -32,10 +41,6 @@ CREATE TABLE Doctor(
   REFERENCES Department(DepartmentID)
 );
 
-ALTER TABLE Department
-ADD FOREIGN KEY (AdministratorID)
-REFERENCES Doctor(EmployeeID);
-
 CREATE TABLE Nurse(
   EmployeeID INT NOT NULL,
   DepartmentID INT NOT NULL,
@@ -48,13 +53,17 @@ CREATE TABLE Nurse(
 );
 
 CREATE TABLE Patient(
-  MedicareID INT NOT NULL AUTO_INCREMENT,
+  MedicareID INT NOT NULL,
   FirstName VARCHAR(255),
   LastName VARCHAR(255),
   Gender ENUM('Male', 'Female'),
   DateOfBirth DATE,
   Phone VARCHAR(20),
-  Address VARCHAR(255),
+  AddressStreet VARCHAR(255),
+  AddressCity VARCHAR(127),
+  AddressProvince VARCHAR(127),
+  AddressCountry VARCHAR(63),
+  AddressPostalCode VARCHAR(63),
   PRIMARY KEY (MedicareID)
 );
 
@@ -63,7 +72,7 @@ CREATE TABLE Admission(
   MedicareID INT NOT NULL,
   AssignedDoctorID INT NOT NULL,
   ReasonForAdmission VARCHAR(255),
-  DateAdmitted DATE,
+  DateAdmitted DATE NOT NULL,
   DateDischarged DATE,
   PRIMARY KEY (AdmissionID),
   FOREIGN KEY (MedicareID)
@@ -76,7 +85,7 @@ CREATE TABLE Visit(
   VisitID INT NOT NULL AUTO_INCREMENT,
   MedicareID INT NOT NULL,
   DoctorID INT NOT NULL,
-  DateTimeVisited DATETIME,
+  DateTimeVisited DATETIME NOT NULL,
   MedicalReport VARCHAR(255),
   PRIMARY KEY (VisitID),
   FOREIGN KEY (MedicareID)
@@ -94,3 +103,67 @@ CREATE TABLE Test(
   FOREIGN KEY (MedicareID) 
   REFERENCES Patient(MedicareID)
 );
+
+/* Beginning of Table Population
+NOTE: ADD ONLY Departments HERE! */
+
+INSERT INTO Department(Name, AdministratorID, NumberOfBeds)
+VALUES ('Neurology', 1, 21);
+
+/* Doctor Definitions
+NOTE: ADD ONLY Doctors HERE,
+CREATING THE Employee FIRST, THEN THE Doctor */
+
+INSERT INTO Employee(FirstName, LastName, JobTitle, StartDate, EndDate,
+             Gender, DateOfBirth, Phone, Email, AddressStreet,
+             AddressCity, AddressProvince, AddressCountry, AddressPostalCode)
+VALUES ('Nick', 'Jonas', 'Doctor', '2011-05-14', NULL, 'Male', '1980-09-09',
+       '5144463425', 'jonie34@we.com', '567 FireStreet', 'Windsor', 'Ontario',
+       'Canada', 'H5E3G5');
+
+INSERT INTO Doctor(EmployeeID, DepartmentID, Specialty, VisitFee)
+VALUES (1, 1, 'Neurology', 98.97);
+
+/* WARNING!!! DO NOT MOVE THIS STATEMENT
+THIS HAS TO BE DONE HERE BECAUSE Doctor AND Department DEPEND ON EACH OTHER! */
+ALTER TABLE Department
+ADD FOREIGN KEY (AdministratorID)
+REFERENCES Doctor(EmployeeID);
+
+/* Nurse Definitions */
+
+INSERT INTO Employee(FirstName, LastName, JobTitle, StartDate, EndDate,
+             Gender, DateOfBirth, Phone, Email, AddressStreet,
+             AddressCity, AddressProvince, AddressCountry, AddressPostalCode)
+VALUES ('Tina', 'Thui', 'Nurse', '2011-02-14', NULL, 'Female', '1975-09-09',
+       '5149384756', 'thui@we.com', '567 Firewall Street', 'Toronto', 'Ontario',
+       'Canada', 'H5E3G6');
+
+INSERT INTO Nurse(EmployeeID, DepartmentID, Specialty)
+VALUES (2, 1, 'Neurology');
+
+/* Patient Definitions */
+
+INSERT INTO Patient(MedicareID, FirstName, LastName, Gender,
+                    DateOfBirth, Phone, AddressStreet, AddressCity,
+                    AddressProvince, AddressCountry, AddressPostalCode)
+VALUES (2345164, 'Don', 'John', 'Male', '1976-04-14', '5149384756',
+        '456 Firewall Street', 'Toronto', 'Ontario', 'Canada', 'H5E3G6');
+
+/* Admission Definitions */
+
+INSERT INTO Admission(MedicareID, AssignedDoctorID,
+                      ReasonForAdmission, DateAdmitted,
+                      DateDischarged)
+VALUES (2345164, 1, 'Bad Face Hurt', '2012-09-17', '2012-10-17');
+
+/* Visit Definitions */
+
+INSERT INTO Visit(MedicareID, DoctorID, DateTimeVisited,
+                  MedicalReport)
+VALUES (2345164, 1, '2012-09-17 10:45:56', 'stuff.pdf');
+
+/* Test Definitions */
+
+INSERT INTO Test(MedicareID, TestType, DateTimeTested)
+VALUES (2345164, 'Blood', '2012-09-17 10:47:56');
