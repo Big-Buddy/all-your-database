@@ -1,0 +1,20 @@
+1- Give detail of all nurses who are currently working.
+	select * from Employee
+	where JobTitle = 'Nurse'
+	and EndDate is null
+2- Give detail of all patients who have been admitted for 'Heart Surgery".
+	select p.* from Patient p join admission a on p.MedicareId = a.MedicareID
+	where a.ReasonForAdmission = 'Heart Surgery'
+3- Given a medicareID, list the medical report of that patient.
+	select p.MedicareId, v.MedicalReport from Patient p join Visit v on p.MedicareId = v.MedicareID
+4- Find the patients who are born before Jan 1st, 1950, order by their firstName and
+lastName.
+5- Give details of department that have the highest number of beds.
+6- List the information about all the patients who have been admitted, grouped by their
+disease.
+7- Find all the patients who have been admitted to the department of Neurology.
+8- List the name and specialty of all the doctors who live in Laval and worked or have been
+working for 10 year in this hospital.
+9- Given a medicareID, compute the total sum of the expenses for a person in this hospital.
+Assume that each admission costs $500 per night. 
+
