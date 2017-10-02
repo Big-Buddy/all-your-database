@@ -1,20 +1,73 @@
 1- Give detail of all nurses who are currently working.
 	select * from Employee
-	where JobTitle = 'Nurse'
-	and EndDate is null
+		where JobTitle = 'Nurse'
+		and EndDate is null
+	
+	alternate:
+	Select * from Nurse
+		inner join Employee on Nurse.EmployeeID = Employee.EmployeeID
+		where Employee.EndDate is null
+	
 2- Give detail of all patients who have been admitted for 'Heart Surgery".
-	select p.* from Patient p join admission a on p.MedicareId = a.MedicareID
-	where a.ReasonForAdmission = 'Heart Surgery'
+	select p.* from Patient p 
+		join admission a on p.MedicareId = a.MedicareID
+		where a.ReasonForAdmission = 'Heart Surgery'
+		
 3- Given a medicareID, list the medical report of that patient.
-	select p.MedicareId, v.MedicalReport from Patient p join Visit v on p.MedicareId = v.MedicareID
+	select p.MedicareId, v.MedicalReport 
+		from Patient p join Visit v on p.MedicareId = v.MedicareID
+		
+	slternate: (gets only the most recent report)
+	Select Patient.FirstName, Patient.LastName, Visit.MedicalReport from Patient
+		inner join Visit on Visit.MedicareID = Patient.MedicareID	
+		order by DateTimeVisited desc
+		limit 1
+	
 4- Find the patients who are born before Jan 1st, 1950, order by their firstName and
 lastName.
+	Select * from Patient
+		where DateOfBirth < '1-1-1950'
+		order by FirstName, LastName
+
 5- Give details of department that have the highest number of beds.
+	;with highestbednum as (
+		select max(NumberOfBeds) maxNum from Department
+	)
+	Select * from Department
+		where NumberOfBeds = highestbednum.maxNum
+
 6- List the information about all the patients who have been admitted, grouped by their
 disease.
+	All patient info, ordered by disease
+	Select * from Patient 
+		inner join Admission on Admission.MedicareID = Patient.MedicareID
+		order by ReasonForAdmission
+
+	All diseases, with a count of how many people have it
+	Select ReasonForAdmission, count(*) numPatients from Patient
+		inner join Admission on Admission.MedicareID = Patient.MedicareID
+		group by ReasonForAdmission
+
 7- Find all the patients who have been admitted to the department of Neurology.
+	Select * from Patient
+		inner join Admission on Admission.MedicareID = Patient.MedicareID
+		inner join Doctor on Doctor.EmployeeID = Admission.AssignedDoctorID
+		inner join Department on Department.DepartmentID = Doctor.DepartmentID
+		where Department.Name = 'Neurology'
+
+
 8- List the name and specialty of all the doctors who live in Laval and worked or have been
 working for 10 year in this hospital.
+	Select Employee.FirstName + ' ' + Employee.LastName as Name, Doctor.Specialty from Doctor
+		inner join Employee on Employee.EmployeeID = Doctor.DoctorID
+		where Employee.Address like '% Laval %'
+		and DATEDIFF(YEAR, Employee.StartDate, Employee.EndDate) diffYears < 10
+
 9- Given a medicareID, compute the total sum of the expenses for a person in this hospital.
 Assume that each admission costs $500 per night. 
+	For now, this only gets the expenses of admissions. Still need to add cost of visits.
+	Select Patient.FirstName + ' ' + Patient.LastName as Name, count(*) * 500 as TotalCost from Patient
+		inner join Admission on Admission.MedicareID = Patient.MedicareID
+		where Patient.MedicareID = ''
+		group by Patient.FirstName, Patient.LastName
 
