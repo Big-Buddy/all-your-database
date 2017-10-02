@@ -30,11 +30,8 @@ lastName.
 		order by FirstName, LastName
 
 5- Give details of department that have the highest number of beds.
-	;with highestbednum as (
-		select max(NumberOfBeds) maxNum from Department
-	)
 	Select * from Department
-		where NumberOfBeds = highestbednum.maxNum
+		where NumberOfBeds = (select max(NumberOfBeds) from Department)
 
 6- List the information about all the patients who have been admitted, grouped by their
 disease.
