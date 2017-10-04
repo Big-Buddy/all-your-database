@@ -17,12 +17,16 @@
 	select p.MedicareId, v.MedicalReport 
 		from Patient p join Visit v on p.MedicareId = v.MedicareID
 		
-	slternate: (gets only the most recent report)
-	Select Patient.FirstName, Patient.LastName, Visit.MedicalReport from Patient
-		inner join Visit on Visit.MedicareID = Patient.MedicareID	
-		order by DateTimeVisited desc
-		limit 1
-	
+	alternate: (gets only the most recent report)
+	SELECT concat(Patient.FirstName, ' ', Patient.LastName) as Name
+		, Patient.MedicareID
+		, Visit.MedicalReport
+		, Visit.DateTimeVisited
+	FROM Patient
+	INNER JOIN Visit ON Patient.MedicareID = Visit.MedicareID
+	ORDER BY Visit.DateTimeVisited DESC
+	LIMIT 1;
+
 4- Find the patients who are born before Jan 1st, 1950, order by their firstName and
 lastName.
 	Select * from Patient
@@ -41,9 +45,11 @@ disease.
 		order by ReasonForAdmission
 
 	All diseases, with a count of how many people have it
-	Select ReasonForAdmission, count(*) numPatients from Patient
-		inner join Admission on Admission.MedicareID = Patient.MedicareID
-		group by ReasonForAdmission
+	SELECT ReasonForAdmission
+	  , count(*) numPatients
+	FROM Patient
+	INNER JOIN Admission ON Admission.MedicareID = Patient.MedicareID
+	GROUP BY  ReasonForAdmission;
 
 7- Find all the patients who have been admitted to the department of Neurology.
 	Select * from Patient
@@ -63,8 +69,12 @@ working for 10 year in this hospital.
 9- Given a medicareID, compute the total sum of the expenses for a person in this hospital.
 Assume that each admission costs $500 per night. 
 	For now, this only gets the expenses of admissions. Still need to add cost of visits.
-	Select Patient.FirstName + ' ' + Patient.LastName as Name, count(*) * 500 as TotalCost from Patient
-		inner join Admission on Admission.MedicareID = Patient.MedicareID
-		where Patient.MedicareID = ''
-		group by Patient.FirstName, Patient.LastName
+	SELECT concat(Patient.FirstName, ' ', Patient.LastName) as Name,
+    	Patient.MedicareID,
+    	concat(count(*) *500, '', '$') as TotalCost
+    FROM Patient
+	INNER JOIN Admission on Admission.MedicareID = Patient.MedicareID
+    WHERE Patient.MedicareID = ''
+    GROUP BY Patient.FirstName;
+
 
