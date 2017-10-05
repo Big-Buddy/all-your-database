@@ -25,3 +25,14 @@ password      => HwsbV9HS
  /www/groups/f/fv_comp353_2 <- where all our web files should go
  
 /groups/f/fv_comp353_2  <- not really sure what this dir is 
+
+## How to connect to the server 
+
+1. Download PUTTY or any SSH client
+2. Once PUTTY is opened, type in the hostname "ENCS_USERNAME@login.encs.concordia.ca"
+and select "Open"
+3. You will be prompted to enter your encs password. When successful, you should see a
+ banner that says "Concordia University Faculty..."
+4. To access the database, type the mysql login string and enter the password when prompted
+
+You are now logged in to MySQL and can start executing queries!
