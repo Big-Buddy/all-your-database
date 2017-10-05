@@ -91,16 +91,16 @@ Assume that each admission costs $500 per night.
        WHERE Patient.MedicareID like '%'
        group by MedicareId
 
-another alternative:
-Use fvc353_2;
-Select medID,  sum(totalCost) totalCosts 
-from (
-	Select sum(500 * timestampdiff(day, Admission.DateAdmitted, ifnull(Admission.DateDischarged, now()))) totalCost, Admission.MedicareID medID from Admission
-		group by Admission.MedicareID
-	Union All
-	Select sum(Doctor.VisitFee) totalCost, Visit.MedicareID medID from Visit
-		inner join Doctor on Doctor.EmployeeID = Visit.DoctorID
-		group by Visit.MedicareID
-) Costs 
-group by medID
+	//another alternative:
+	Use fvc353_2;
+	Select medID,  sum(totalCost) totalCosts 
+	from (
+		Select sum(500 * timestampdiff(day, Admission.DateAdmitted, ifnull(Admission.DateDischarged, now()))) totalCost, Admission.MedicareID medID from Admission
+			group by Admission.MedicareID
+		Union All
+		Select sum(Doctor.VisitFee) totalCost, Visit.MedicareID medID from Visit
+			inner join Doctor on Doctor.EmployeeID = Visit.DoctorID
+			group by Visit.MedicareID
+	) Costs 
+	group by medID
 
