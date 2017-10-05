@@ -76,5 +76,19 @@ Assume that each admission costs $500 per night.
 	INNER JOIN Admission on Admission.MedicareID = Patient.MedicareID
     WHERE Patient.MedicareID = ''
     GROUP BY Patient.FirstName;
+	
+	//taking into account the doctor's visit fee per visit, using ALL medicareID's for testing:
+	SELECT concat(Patient.FirstName, ' ', Patient.LastName) as Name,
+    	Patient.MedicareID,
+        concat(TRUNCATE(count(*) *500 + 
+          (select SUM(VisitFee) 
+           from Doctor 
+           where EmployeeID = Admission.AssignedDoctorID) * (select count(MedicareID) 
+                                                             from Visit 
+                                                             where Visit.MedicareID = Patient.MedicareID),2), '', '$') as TotalCost
+       from Patient
+       inner join Admission on Admission.MedicareID = Patient.MedicareID
+       WHERE Patient.MedicareID like '%'
+       group by MedicareId
 
 
