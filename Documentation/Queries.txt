@@ -102,5 +102,6 @@ Assume that each admission costs $500 per night.
 			inner join Doctor on Doctor.EmployeeID = Visit.DoctorID
 			group by Visit.MedicareID
 	) Costs 
+	where medID like '%%'
 	group by medID
 
