@@ -1,4 +1,4 @@
-/* Table Creation */
+﻿/* Table Creation */
 
 CREATE TABLE Department(
   DepartmentID INT NOT NULL AUTO_INCREMENT,
@@ -331,7 +331,7 @@ VALUES (3592679, 2, 'Back Pain', '2012-02-12', '2012-12-12');
 
 INSERT INTO Admission(MedicareID, AssignedDoctorID, ReasonForAdmission,
                       DateAdmitted, DateDischarged)
-VALUES (1034148, 2, 'Cancer of the Rectum', '2012-02-12', '2012-12-12');
+VALUES (1034148, 2, 'Heart Surgery', '2012-02-12', '2012-12-12');
 
 INSERT INTO Admission(MedicareID, AssignedDoctorID, ReasonForAdmission,
                       DateAdmitted, DateDischarged)

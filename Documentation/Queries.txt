@@ -29,9 +29,7 @@
 
 4- Find the patients who are born before Jan 1st, 1950, order by their firstName and
 lastName.
-	Select * from Patient
-		where DateOfBirth < '1-1-1950'
-		order by FirstName, LastName
+	Select * from Patient where DateOfBirth < '1950-1-1' order by FirstName, LastName
 
 5- Give details of department that have the highest number of beds.
 	Select * from Department
