@@ -59,10 +59,8 @@ disease.
 
 8- List the name and specialty of all the doctors who live in Laval and worked or have been
 working for 10 year in this hospital.
-	Select Employee.FirstName + ' ' + Employee.LastName as Name, Doctor.Specialty from Doctor
-		inner join Employee on Employee.EmployeeID = Doctor.DoctorID
-		where Employee.Address like '% Laval %'
-		and DATEDIFF(YEAR, Employee.StartDate, Employee.EndDate) diffYears < 10
+	 Select CONCAT(Employee.FirstName, ' ', Employee.LastName) as Name, Doctor.Specialty from Doctor inner join Employee on Employee.EmployeeID = Doctor.EmployeeID where Employee.AddressCity like '%Laval%' and timestampdiff(YEAR,Employee.StartDate, IFNULL(Employee.EndDate, NOW())) >= 10;
+
 
 9- Given a medicareID, compute the total sum of the expenses for a person in this hospital.
 Assume that each admission costs $500 per night. 
