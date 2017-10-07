@@ -14,8 +14,9 @@ select Patient.* from Patient
 
 3- Given a medicareID, list the medical report of that patient.
 
-select Patient.MedicareId, MedicalReport
+select Patient.MedicareID, MedicalReport
 	from Patient join Visit on Patient.MedicareID = Visit.MedicareID
+	where Patient.MedicareID like '%%'
 
 
 4- Find the patients who are born before Jan 1st, 1950, order by their firstName and
@@ -59,11 +60,15 @@ select concat(FirstName, ' ', LastName) as Name, Specialty
 9- Given a medicareID, compute the total sum of the expenses for a person in this hospital.
 Assume that each admission costs $500 per night.
 
-select Patient.MedicareID, concat(Patient.FirstName, ' ', Patient.LastName) as Name,
-	concat('$', round(ifnull(
-	(select sum(timestampdiff(DAY, DateAdmitted, IFNULL(DateDischarged, NOW())))
-	from Admission where Admission.MedicareID = Patient.MedicareID), 0) * 500
-	+ sum(VisitFee), 2)) as TotalCost
-	from Patient join Visit on Visit.MedicareID = Patient.MedicareID
-	join Doctor on EmployeeID = Visit.DoctorID
-	group by MedicareId
+select medID as MedicareID, concat(Patient.FirstName, ' ', Patient.LastName) as Name, concat('$', round(sum(totalCost), 2)) TotalCost
+	from (
+		select sum(500 * timestampdiff(day, Admission.DateAdmitted, ifnull(Admission.DateDischarged, now()))) totalCost,
+		Admission.MedicareID medID from Admission group by Admission.MedicareID
+		union all
+		select sum(Doctor.VisitFee) totalCost, Visit.MedicareID medID from Visit
+			join Doctor on Doctor.EmployeeID = Visit.DoctorID
+			group by Visit.MedicareID
+	) Costs
+	join Patient on medID = Patient.MedicareID
+	where medID like '%%'
+	group by medID
