@@ -1,103 +1,68 @@
 1- Give detail of all nurses who are currently working.
-	select * from Employee
-		where JobTitle = 'Nurse'
-		and EndDate is null
-	
-	alternate:
-	Select * from Nurse
-		inner join Employee on Nurse.EmployeeID = Employee.EmployeeID
-		where Employee.EndDate is null
-	
+
+select Employee.*, DepartmentID, Specialty
+	from Employee join Nurse on Nurse.EmployeeID = Employee.EmployeeID
+	where EndDate is null
+
+
 2- Give detail of all patients who have been admitted for 'Heart Surgery".
-	select p.* from Patient p 
-		join admission a on p.MedicareId = a.MedicareID
-		where a.ReasonForAdmission = 'Heart Surgery'
-		
+
+select Patient.* from Patient
+	join Admission on Patient.MedicareID = Admission.MedicareID
+	where ReasonForAdmission = 'Heart Surgery'
+
+
 3- Given a medicareID, list the medical report of that patient.
-	select p.MedicareId, v.MedicalReport 
-		from Patient p join Visit v on p.MedicareId = v.MedicareID
-		
-	alternate: (gets only the most recent report)
-	SELECT concat(Patient.FirstName, ' ', Patient.LastName) as Name
-		, Patient.MedicareID
-		, Visit.MedicalReport
-		, Visit.DateTimeVisited
-	FROM Patient
-	INNER JOIN Visit ON Patient.MedicareID = Visit.MedicareID
-	ORDER BY Visit.DateTimeVisited DESC
-	LIMIT 1;
+
+select Patient.MedicareId, MedicalReport
+	from Patient join Visit on Patient.MedicareID = Visit.MedicareID
+
 
 4- Find the patients who are born before Jan 1st, 1950, order by their firstName and
 lastName.
-	Select * from Patient where DateOfBirth < '1950-1-1' order by FirstName, LastName
+
+select * from Patient where DateOfBirth < '1950-01-01' order by FirstName, LastName
+
 
 5- Give details of department that have the highest number of beds.
-	Select * from Department
-		where NumberOfBeds = (select max(NumberOfBeds) from Department)
+
+select * from Department
+	where NumberOfBeds = (select max(NumberOfBeds) from Department)
+
 
 6- List the information about all the patients who have been admitted, grouped by their
 disease.
-	All patient info, ordered by disease
-	Select * from Patient 
-		inner join Admission on Admission.MedicareID = Patient.MedicareID
-		order by ReasonForAdmission
 
-	All diseases, with a count of how many people have it
-	SELECT ReasonForAdmission
-	  , count(*) numPatients
-	FROM Patient
-	INNER JOIN Admission ON Admission.MedicareID = Patient.MedicareID
-	GROUP BY  ReasonForAdmission;
+select Patient.*, ReasonForAdmission from Patient 
+	join Admission on Admission.MedicareID = Patient.MedicareID
+	order by ReasonForAdmission
+
 
 7- Find all the patients who have been admitted to the department of Neurology.
-	Select * from Patient
-		inner join Admission on Admission.MedicareID = Patient.MedicareID
-		inner join Doctor on Doctor.EmployeeID = Admission.AssignedDoctorID
-		inner join Department on Department.DepartmentID = Doctor.DepartmentID
-		where Department.Name = 'Neurology'
+
+select distinct Patient.* from Patient
+	inner join Admission on Admission.MedicareID = Patient.MedicareID
+	inner join Doctor on Doctor.EmployeeID = Admission.AssignedDoctorID
+	inner join Department on Department.DepartmentID = Doctor.DepartmentID
+	where Name = 'Neurology'
 
 
 8- List the name and specialty of all the doctors who live in Laval and worked or have been
 working for 10 year in this hospital.
-	 Select CONCAT(Employee.FirstName, ' ', Employee.LastName) as Name, Doctor.Specialty from Doctor inner join Employee on Employee.EmployeeID = Doctor.EmployeeID where Employee.AddressCity like '%Laval%' and timestampdiff(YEAR,Employee.StartDate, IFNULL(Employee.EndDate, NOW())) >= 10;
+
+select concat(FirstName, ' ', LastName) as Name, Specialty
+	from Doctor join Employee on Employee.EmployeeID = Doctor.EmployeeID
+	where AddressCity like '%Laval%'
+	and timestampdiff(YEAR,StartDate, IFNULL(EndDate, NOW())) >= 10
 
 
 9- Given a medicareID, compute the total sum of the expenses for a person in this hospital.
-Assume that each admission costs $500 per night. 
-	For now, this only gets the expenses of admissions. Still need to add cost of visits.
-	SELECT concat(Patient.FirstName, ' ', Patient.LastName) as Name,
-    	Patient.MedicareID,
-    	concat(count(*) *500, '', '$') as TotalCost
-    FROM Patient
-	INNER JOIN Admission on Admission.MedicareID = Patient.MedicareID
-    WHERE Patient.MedicareID = ''
-    GROUP BY Patient.FirstName;
-	
-	//taking into account the doctor's visit fee per visit, using ALL medicareID's for testing:
-	SELECT concat(Patient.FirstName, ' ', Patient.LastName) as Name,
-    	Patient.MedicareID,
-        concat(TRUNCATE(count(*) *500 + 
-          (select SUM(VisitFee) 
-           from Doctor 
-           where EmployeeID = Admission.AssignedDoctorID) * (select count(MedicareID) 
-                                                             from Visit 
-                                                             where Visit.MedicareID = Patient.MedicareID),2), '', '$') as TotalCost
-       from Patient
-       inner join Admission on Admission.MedicareID = Patient.MedicareID
-       WHERE Patient.MedicareID like '%'
-       group by MedicareId
+Assume that each admission costs $500 per night.
 
-	//another alternative:
-	Use fvc353_2;
-	Select medID,  sum(totalCost) totalCosts 
-	from (
-		Select sum(500 * timestampdiff(day, Admission.DateAdmitted, ifnull(Admission.DateDischarged, now()))) totalCost, Admission.MedicareID medID from Admission
-			group by Admission.MedicareID
-		Union All
-		Select sum(Doctor.VisitFee) totalCost, Visit.MedicareID medID from Visit
-			inner join Doctor on Doctor.EmployeeID = Visit.DoctorID
-			group by Visit.MedicareID
-	) Costs 
-	where medID like '%%'
-	group by medID
-
+select Patient.MedicareID, concat(Patient.FirstName, ' ', Patient.LastName) as Name,
+	concat('$', round(
+	(select count(*) from Admission where Admission.MedicareID = Patient.MedicareID) * 500
+	+ sum(VisitFee), 2)) as TotalCost
+	from Patient join Visit on Visit.MedicareID = Patient.MedicareID
+	join Doctor on EmployeeID = Visit.DoctorID
+	group by MedicareId
