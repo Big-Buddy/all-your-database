@@ -53,15 +53,16 @@ working for 10 year in this hospital.
 select concat(FirstName, ' ', LastName) as Name, Specialty
 	from Doctor join Employee on Employee.EmployeeID = Doctor.EmployeeID
 	where AddressCity like '%Laval%'
-	and timestampdiff(YEAR,StartDate, IFNULL(EndDate, NOW())) >= 10
+	and timestampdiff(YEAR, StartDate, IFNULL(EndDate, NOW())) >= 10
 
 
 9- Given a medicareID, compute the total sum of the expenses for a person in this hospital.
 Assume that each admission costs $500 per night.
 
 select Patient.MedicareID, concat(Patient.FirstName, ' ', Patient.LastName) as Name,
-	concat('$', round(
-	(select count(*) from Admission where Admission.MedicareID = Patient.MedicareID) * 500
+	concat('$', round(ifnull(
+	(select sum(timestampdiff(DAY, DateAdmitted, IFNULL(DateDischarged, NOW())))
+	from Admission where Admission.MedicareID = Patient.MedicareID), 0) * 500
 	+ sum(VisitFee), 2)) as TotalCost
 	from Patient join Visit on Visit.MedicareID = Patient.MedicareID
 	join Doctor on EmployeeID = Visit.DoctorID
