@@ -1,0 +1,89 @@
+create table Users
+(
+  UserID varchar(63) not null,
+  Password varchar(127) not null,
+  UserType enum('Buyer', 'Seller', 'StoreManger', 'Admin') not null,
+  MembershipPlan enum('Normal', 'Silver', 'Premium') not null default 'Normal',
+  Phone varchar(20),
+  Email varchar(127),
+  AddressStreet varchar(255) not null,
+  AddressCity enum('Montreal', 'Quebec City', 'Toronto', 'Ottawa') not null,
+  AddressProvince enum('Quebec', 'Ontario') not null,
+  AddressCountry varchar(63) not null,
+  AddressPostalCode varchar(63) not null,
+  primary key (UserID)/*,
+  constraint CHK_Email check (isnull(Email) or Email regexp '^[A-Z0-9\\._-]+@[A-Z0-9\\.-]+\\.[A-Z]{2,4}$'),
+  constraint CHK_Phone check (isnull(Phone) or Phone regexp '^[0-9]{10,20}$'),
+  constraint CHK_Contact check (not (isnull(Phone) and isnull(Email)))*/
+);
+
+create table Ads
+(
+  AdID int not null auto_increment,
+  PostingUserID varchar(63) not null,
+  PostingDate date not null,
+  DaysToPromote int not null default 0,
+  AdType enum('Buy', 'Sell') not null,
+  SellerType enum('Owner', 'Business'),
+  Title varchar(255) not null,
+  Description varchar(2047) not null,
+  PriceInCADCents int not null,
+  Category enum('Clothing', 'Books', 'BuySellElectronics', 'MusicalInstruments', /* Buy and Sell */
+                'Tutors', 'EventPlanners', 'Photographers', 'PersonalTrainers', /* Services */
+                'RentElectronics', 'Car', 'Apartment', 'WeddingDresses', /* Rent */
+                'MenSeekingWomen', 'WomenSeekingMen', 'MenSeekingMen', 'WomenSeekingWomen') /* Personals */
+                not null,
+  primary key (AdID),
+  foreign key (PostingUserID) references Users(UserID)
+);
+
+create table Images
+(
+  FilePath varchar(511) not null,
+  AdID int not null,
+  foreign key (AdID) references Ads(AdID)
+);
+
+create table Payments
+(
+  PayingUserID varchar(63) not null,
+  AmountInCADCents int not null,
+  CardNumber char(16) not null,
+  CardExpiryDate date not null,
+  CardSecurityCode char(3) not null,
+  CardholderName varchar(127) not null,
+  CardCompany enum('MasterCard', 'Visa', 'American Express', 'Discover') not null,
+  CardType enum('Debit', 'Credit') not null,
+  PaymentDate datetime,
+  foreign key (PayingUserID) references Users(UserID)
+);
+
+create table Stores
+(
+  StoreID int not null auto_increment,
+  ManagerUserID varchar(63) not null,
+  StoreName varchar(255) not null,
+  StrategicLocation enum('SL1', 'SL2', 'SL3', 'SL4') not null,
+  primary key (StoreID),
+  foreign key (ManagerUserID) references Users(UserID)
+);
+
+create table RentedSpaces
+(
+  RenterUserID varchar(63) not null,
+  StoreID int not null,
+  DateRented date not null,
+  HoursRanted tinyint not null,
+  foreign key (RenterUserID) references Users(UserID),
+  foreign key (StoreID) references Stores(StoreID)
+);
+  
+
+create table Ratings
+(
+  AdIDBeingRated int not null,
+  UserIDRatingAd varchar(63) not null,
+  Rating tinyint not null,
+  foreign key (AdIDBeingRated) references Ads(AdID),
+  foreign key (UserIdRatingAd) references Users(UserID)
+);
