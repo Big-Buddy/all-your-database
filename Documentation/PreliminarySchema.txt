@@ -42,24 +42,6 @@ create table Images
   foreign key (AdID) references Ads(AdID)
 );
 
-create table Payments
-(
-  PaymentID int not null auto_increment,
-  PayingUserID varchar(63) not null,
-  AdID int not null unique,
-  AmountInCADCents int not null,
-  CardNumber char(16) not null,
-  CardExpiryDate date not null,
-  CardSecurityCode char(3) not null,
-  CardholderName varchar(127) not null,
-  CardCompany enum('MasterCard', 'Visa', 'American Express', 'Discover') not null,
-  CardType enum('Debit', 'Credit') not null,
-  PaymentDate datetime,
-  primary key (PaymentID),
-  foreign key (PayingUserID) references Users(UserID),
-  foreign key (AdID) references Ads(AdID)
-);
-
 create table Stores
 (
   StoreID int not null auto_increment,
@@ -73,16 +55,32 @@ create table Stores
 create table RentedSpaces
 (
   RentedSpaceID int not null auto_increment,
-  RenterUserID varchar(63) not null,
+  AdID int not null,
   StoreID int not null,
   DateRented date not null,
-  HoursRanted tinyint not null,
+  HoursRented tinyint not null,
   DeliveryServices bool not null,
-  AdID int not null,
   primary key (RentedSpaceID),
-  foreign key (RenterUserID) references Users(UserID),
-  foreign key (StoreID) references Stores(StoreID),
-  foreign key (AdID) references Ads(AdID)
+  foreign key (AdID) references Ads(AdID),
+  foreign key (StoreID) references Stores(StoreID)
+);
+
+create table Payments
+(
+  PaymentID int not null auto_increment,
+  PayingUserID varchar(63) not null,
+  RentedSpaceID int, /* May be null in case of buying Promotion/Membership */
+  AmountInCADCents int not null,
+  CardNumber char(16) not null,
+  CardExpiryDate date not null,
+  CardSecurityCode char(3) not null,
+  CardholderName varchar(127) not null,
+  CardCompany enum('MasterCard', 'Visa', 'American Express', 'Discover') not null,
+  CardType enum('Debit', 'Credit') not null,
+  PaymentDate datetime,
+  primary key (PaymentID),
+  foreign key (PayingUserID) references Users(UserID),
+  foreign key (RentedSpaceID) references RentedSpaces(RentedSpaceID)
 );
 
 create table Ratings
