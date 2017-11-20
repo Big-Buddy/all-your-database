@@ -1,14 +1,15 @@
 <?php
-    include './repositories/UserRepository.php';
+    require 'repositories/UserRepository.php';
+    $email = $_POST['email'];
+    $password = $_POST['password'];
 
     $userRepository = new UserRepository();
     $user = new User;
-    $user->email = 'adriel@comp.com';
-    $user->password = 'comp353';
+    $user->email = $email;
+    $user->password = $password;
 
     $user2 = new User;
     $user2 = $userRepository->authenticateUser($user);
 
-    var_dump($user2);
-
+    echo json_encode($user2);
  ?>

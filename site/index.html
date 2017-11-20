@@ -35,4 +35,23 @@
 		<input type="submit" value="Sign Up"/>
 	</div>
 </body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+	$(document).ready(function() {
+        $.ajax({
+            url: '/php/test.php',
+            type: 'POST',
+			data: {
+                email: 'adriel@comp.com',
+				password: 'comp353'
+			},
+            success: (function(response) {
+                console.log(JSON.parse(response));
+                var email = response.email;
+
+            }).bind(this)
+        });
+	});
+</script>
 </html>
