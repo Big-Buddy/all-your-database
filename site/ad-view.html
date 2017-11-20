@@ -1,0 +1,31 @@
+<html>
+<head>
+	<title>View ads</title>
+	<link href="/css/style.css" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="/js/functions.js"></script>
+</head>
+<body>
+	<div class="container">
+		<h1>You are viewing <span id="category"></span> ads in <span id="city"></span></h1>
+		<div id="ads_container">
+			<!-- Formatted list of ads (html) goes here -->
+			<!-- Each ad has format: Title - description - seller's name with link to their ads - rate product btn-->
+			<!-- For admins, each ad has format: Title - description - alter ad btn - remove ad btn -->
+		</div>
+	</div>
+</body>
+<script>
+	$(document).ready(function(){
+		//get city and category
+		var city = getUrlParameter("city");
+		var category = getUrlParameter("category");		
+		$("#category").html(category);
+		$("#city").html(city).css('textTransform', 'capitalize');
+
+		//retrieve relevant ads from DB
+		//format respones
+		//$("#ads_container").html(formatted_response);
+	});
+</script>
+</html>

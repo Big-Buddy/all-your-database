@@ -1,0 +1,118 @@
+<html>
+<head>
+	<title>Select Region</title>
+	<link href="/css/style.css" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="/js/functions.js"></script>
+</head>
+<body>
+	<div class="container">
+		<h1>Select a region and category</h1>
+		Province:
+		<br />
+		<div id="province_container">
+			<select id="province">
+				<option selected disabled>Select a province..</option>
+				<option value="on">Ontario</option>
+				<option value="qc">Quebec</option>
+			</select>
+		</div>
+		<div id="cities_on_container" class="hidden">
+			City:
+			<br />
+			<select id="on_city">
+				<option selected disabled>Select a city..</option>
+				<option value="ottawa">Ottawa</option>
+				<option value="toronto">Toronto</option>
+			</select>
+		</div>
+		<div id="cities_qc_container" class="hidden">
+			City:
+			<br />
+			<select id="qc_city">
+				<option selected disabled>Select a city..</option>
+				<option value="montreal">Montreal</option>
+				<option value="quebec_city">Quebec City</option>
+			</select>
+		</div>
+		<div id="category_container" class="hidden">
+			Category:
+			<br />
+			<select id="category">
+				<option selected disabled>Select a category..</option>
+				<option value="buy_sell">Buy and Sell</option>
+				<option value="services">Services</option>
+				<option value="rent">Rent</option>
+				<option value="personals">Personals</option>
+			</select>
+		</div>
+		<br />
+		<a id="go_to_region" class="btn hidden">Go</a>
+		<p id="error_msg" class="hidden">Please select a region and category before proceeding.</p>
+	</div>
+</body>
+<script>
+$(document).ready(function(){
+	var province = "";
+	var city = "";
+	var category = "";
+	//on select province, make appropriate city list available
+	$("#province").change(function(){
+		if($(this).val() == "on"){
+			$("#cities_on_container").show();
+			$("#cities_qc_container").hide();
+			province = "on";
+		}
+		else if($(this).val() == "qc"){
+			$("#cities_qc_container").show();
+			$("#cities_on_container").hide();
+			province = "qc";
+		}
+	});
+	//on city select, make category available
+	$("#on_city").change(function(){
+		$("#category_container").show();
+		city = $(this).val();
+	});
+	$("#qc_city").change(function(){
+		$("#category_container").show();
+		city = $(this).val();
+	});
+
+	//on category select, make "Go" btn available
+	$("#category").change(function(){
+		$("#go_to_region").css("display","block");
+		category = $(this).val();
+	});
+
+	$("#go_to_region").on("click", function(e){
+		e.preventDefault();
+		if(province == "" || city == "" || category == ""){
+			//error, don't proceed
+			$("#error_msg").show();
+		}
+		else{
+			$("#error_msg").hide();
+			//get URL PARAM
+			//go btn href == ad-edit.html if url param ?post_ad=true
+			//go btn href == ad-edit.html if url param ?view_ad=true or no params (default)
+			var btn_href = "";
+			if(getUrlParameter("post_ad") == "true"){
+				btn_href = "/ad-edit.html";
+			}
+			else if(getUrlParameter("view_ad") == "true"){
+				btn_href = "/ad-view.html";
+			}
+			else{
+				btn_href = "/ad-view.html";
+			}
+			//append params
+			btn_href += "?province=" + province + "&city=" + city + "&category=" + category;
+			window.location.href = btn_href;
+		}
+	});
+	
+});
+
+</script>
+</html>

@@ -1,0 +1,52 @@
+<html>
+<head>
+	<title>Post an ad</title>
+	<link href="/css/style.css" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="/js/functions.js"></script>
+</head>
+<body>
+	<div class="container">
+		<h1>Fill the form to submit an ad</h1>
+		Contact Information - Email or Phone number
+		<input type="text" name="contact_info"/>
+		<br />
+		Price - in CAD
+		<input type="text" name="price"/>
+		<br />
+		Ad type: Category Selected
+		<select id="category">
+			<!-- this field is set based on select-region page -->
+			<option selected disabled value="buy_sell">Buy/Sell</option>
+		</select>
+		<br />
+		For Sale by: Owner/Business
+		<select id="for_sale_by">
+			<!-- this field is set based on select-region page -->
+			<option selected value="owner">Owner</option>
+			<option value="business">Business</option>
+		</select>
+		<br />
+		Availability: Online/Store
+		<select id="availability">
+			<!-- this field is set based on select-region page -->
+			<option selected value="owner">Owner</option>
+			<option value="business">Business</option>
+		</select>
+		<br />
+		Title
+		<input type="text" name="title" /> 
+		<br />
+		Description
+		<input type="text" name="description" />
+		<br />
+		Address
+		<input type="text" name="address" />
+		<br />
+		Images
+		<a id="ad_submit" class="btn">Submit</a>
+	</div>
+</body>
+<script>	
+</script>
+</html>

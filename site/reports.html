@@ -1,0 +1,43 @@
+<html>
+<head>
+	<title>Report Generator</title>
+	<link href="/css/style.css" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="/js/functions.js"></script>
+</head>
+<body>
+	<div class="container">
+		<a id="list_users_most_ads" class="btn">List the users with the most ads</a>
+		<br />
+		<a id="list_recent_ads" class="btn">List the ads posted within the past 10 days</a>
+		<br />
+		<a id="list_users_selling_mens_jackets" class="btn">User details for users selling men's jackets in Quebec</a>
+		<br />
+		<a id="list_rent_items" class="btn">List all the "rent" items</a>
+		<br />
+		<a id="list_highest_rated" class="btn">List the highest rated items based on city and province</a>
+		 <!-- TODO: capture city and region -->
+		<br />
+		<a id="list_daily_revenue" class="btn">Get the daily revenue and number of transactions by given store manager (past 15 days)</a>
+		<!-- TODO: capture store manager -->
+		<br />
+		<a id="list_store_rent_profitability" class="btn">Get the store rent profitability SL-1 SL-4 on weekends or weekdays</a>
+		<br />
+		<a id="list_store_item_types" class="btn">List the types of items sold by each store in given province</a>
+		<!-- TODO: capture province -->
+		<br />
+		<a id="list_seller_delivery_costs" class="btn">List a given seller's upcoming 7 day delivery fees, and past 7 day fees</a>
+		<!-- TODO: capture seller -->
+		<br />
+
+		<!-- TODO: one more report of our choice -->
+		
+		<div id="report_view_container">
+			<!-- to be populated based on the report button that was clicked -->
+		</div>
+	</div>
+</body>
+<script>	
+// Onclick for each "button", performing necessary SQL query and putting formatted response insite report_view_container
+</script>
+</html>

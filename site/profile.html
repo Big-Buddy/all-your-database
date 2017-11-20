@@ -1,0 +1,59 @@
+<html>
+<head>
+	<title>Account</title>
+	<link href="/css/style.css" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="/js/functions.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div id="user_container">
+			Your ads:
+			<div id="user_ads_container">
+				<!-- to be populated with DB information -->
+				<!-- 
+				List all ads, expired or current
+				format of each ad is as follows:
+				(for current ads)
+				Title - description - position in list - edit ad btn - delete ad btn - purchase promotion btn
+				(for expired ads)
+				Title - description - "expired" 
+				-->
+			</div>
+			<br/>
+			<a id="user_membership_pay" class="btn" href="/membership-payment.html">Select Membership and Payment</a>
+		
+		</div>
+
+		<!-- Admin section -->
+		<div id="admin_container" class="hidden">
+			<div id="admin_payments_container">
+				<!-- to be populated with DB information -->
+				<!-- 
+				List of user payments with details
+				(format to be determined...)
+				-->
+			</div>
+			<a class="btn" id="send_pending_payments">Send pending payments to external processing department</a>
+			<a class="btn" href="/reports.html">Generate a report</a>
+		</div>
+	</div>
+</body>
+<script>
+	$(document).ready(function(){
+		//determine user status
+		if(readCookie("user_type") == "user"){
+			$("#user_container").show();
+			$("#admin_container").hide();
+		}
+		else if(readCookie("user_type") == "admin"){
+			$("#admin_container").show();
+			$("#user_container").hide();
+		}
+		// else{
+		// 	//not logged in, redirect to index.html
+		// 	redirectOut();
+		// }
+	});
+</script>
+</html>
