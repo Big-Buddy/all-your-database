@@ -20,11 +20,12 @@ create table Ads
   PostingUserID varchar(63) not null,
   PostingDate date not null,
   DaysToPromote int not null default 0,
+  AdPostion int not null auto_increment,
   AdType enum('Buy', 'Sell') not null,
   SellerType enum('Owner', 'Business'),
   Title varchar(255) not null,
   Description varchar(2047) not null,
-  PriceInCADCents int not null,
+  PriceInCADCents int,
   Category enum('Clothing', 'Books', 'BuySellElectronics', 'MusicalInstruments', /* Buy and Sell */
                 'Tutors', 'EventPlanners', 'Photographers', 'PersonalTrainers', /* Services */
                 'RentElectronics', 'Car', 'Apartment', 'WeddingDresses', /* Rent */
