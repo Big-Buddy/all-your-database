@@ -33,12 +33,22 @@ a.btn{
 	margin-top: 15px;
 	margin-bottom: 30px;
 }
+.input-form td:first-child{
+	text-align: right;
+}
 .input-form td{
 	padding: 1px;
 }
 .input-form select {
     width: 93%;
 }
+.input-form-large{
+	width: 600px;
+}
+.input-form-large input, .input-form-large select{
+	width: 93%;
+}
+
 .header-bar{
     position: fixed;
     top: 0;
@@ -58,4 +68,8 @@ a.btn{
 	padding-bottom:5px;
 	padding-top: 5px;
 	background-color: #efefef;
+}
+
+.error-msg{
+	color:red;
 }

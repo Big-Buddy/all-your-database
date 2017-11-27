@@ -10,7 +10,7 @@
 <body>
 	<div class="container">
 		<h1>Fill the form to submit an ad</h1>
-		<table class="input-form">
+		<table class="input-form input-form-large">
 			<tr>
 				<td>Email or Phone number</td>
 				<td><input type="text" name="contact_info"/></td>
@@ -24,16 +24,17 @@
 				<td>
 					<select id="category">
 						<!-- this field is set based on select-region page -->						
-						<option selected value="buy">Buy</option>
-						<option value="sell">Sell</option>
+						<option selected value="buy-sell">Buy/Sell</option>
+						<option value="services">Services</option>
+						<option value="rent">Rent</option>
+						<option value="personals">Personals</option>
 					</select>
 				</td>
 			</tr>
 			<tr>
 				<td>Owner or Business</td>
 				<td>
-					<select id="for_sale_by">
-						<!-- this field is set based on select-region page -->
+					<select id="for_sale_by">						
 						<option selected value="owner">Owner</option>
 						<option value="business">Business</option>
 					</select>
@@ -42,8 +43,7 @@
 			<tr>
 				<td>Online or In-Store</td>
 				<td>
-					<select id="availability">
-						<!-- this field is set based on select-region page -->
+					<select id="availability">						
 						<option selected value="online">Online</option>
 						<option value="instore">In-Store</option>
 					</select>
@@ -63,7 +63,7 @@
 			</tr>
 			<tr>
 				<td>Image</td>
-				<td>upload</td>
+				<td><input type="file" name="pic" accept="image/*"></td>
 			</tr>
 			
 		</table>
@@ -71,5 +71,25 @@
 	</div>
 </body>
 <script>	
+	$(document).ready(function(){
+		//get URL params
+		var category = getUrlParameter("category");
+		switch(category){
+			case "buy_sell":
+				$("#category").val("buy-sell");
+				break;
+			case "services":
+				$("#category").val("services");
+				break;
+			case "rent":
+				$("#category").val("rent");
+				break;
+			case "personals":
+				$("#category").val("personals");
+				break;
+			default:
+				$("#category").val("buy-sell");
+		}
+	});
 </script>
 </html>
