@@ -13,11 +13,11 @@
 		<table class="input-form input-form-large">
 			<tr>
 				<td>Email or Phone number</td>
-				<td><input type="text" name="contact_info"/></td>
+				<td><input type="text" name="contact_info" id="contact_info"/></td>
 			</tr>
 			<tr>
 				<td>Price - in CAD</td>
-				<td><input type="text" name="price"/></td>
+				<td><input type="text" name="price" id="price"/></td>
 			</tr>	
 			<tr>
 				<td>Category</td>
@@ -51,22 +51,23 @@
 			</tr>	
 			<tr>
 				<td>Title</td>
-				<td><input type="text" name="title" /> </td>
+				<td><input type="text" name="title" id="title" /> </td>
 			</tr>
 			<tr>
 				<td>Description</td>
-				<td><input type="text" name="description" /></td>
+				<td><input type="text" name="description" id="description" /></td>
 			</tr>
 			<tr>
 				<td>Address</td>
-				<td><input type="text" name="address" /></td>
+				<td><input type="text" name="address" id="address" /></td>
 			</tr>
 			<tr>
 				<td>Image</td>
-				<td><input type="file" name="pic" accept="image/*"></td>
+				<td><input type="file" name="pic" id="pic" accept="image/*"></td>
 			</tr>
 			
 		</table>
+		<p id="ad-error" class="error-msg" style="display:none;">Please enter all fields before submitting.</p>
 		<a id="ad_submit" class="btn">Submit</a>
 	</div>
 </body>
@@ -90,6 +91,83 @@
 			default:
 				$("#category").val("buy-sell");
 		}
+
+		/****************************************
+        				AD SUBMIT
+		****************************************/
+        $("#ad_submit").on('click', function(e){
+        	e.preventDefault();
+        	var contact_info = $("#contact_info").val();
+        	var price = $("#price").val();
+        	var category = $("#category").val();
+			var for_sale_by = $("#for_sale_by").val();
+			var availability = $("#availability").val();
+        	var title = $("#title").val();
+			var description = $("#description").val();
+			var address = $("#address").val();
+			var pic = $("#pic").val();
+        	var isError = false;
+        	$("#ad-error").hide();
+
+        	//validation
+        	if(contact_info == "" || contact_info == null || contact_info == undefined){
+        		isError = true;
+        	}
+        	if(price == "" || price == null || price == undefined){
+        		isError = true;
+        	}
+        	if(category == "" || category == null || category == undefined){
+        		isError = true;
+        	}
+        	if(for_sale_by == "" || for_sale_by == null || for_sale_by == undefined){
+        		isError = true;
+        	}
+        	if(availability == "" || availability == null || availability == undefined){
+        		isError = true;
+        	}
+        	if(title == "" || title == null || title == undefined){
+        		isError = true;
+        	}
+        	if(description == "" || description == null || description == undefined){
+        		isError = true;
+        	}
+        	if(address == "" || address == null || address == undefined){
+        		isError = true;
+        	}
+        	if(pic == "" || pic == null || pic == undefined){
+        		isError = true;
+        	}
+        	// console.log("contact_info:" + contact_info + "price:" + price + "category:" +category+ "for_sale_by:" +for_sale_by+"availability:"+ availability+"title:" +title+ "description:"+ description + "address:" +address+"pic:"+pic);
+        	if(isError){
+        		$("#ad-error").show();
+        	}        	
+        	else{        		
+        		//no errors, proceed with submit attempt
+        		$.ajax({
+		            url: '/php/post_ad.php',
+		            type: 'POST',
+					data: {
+		                contact_info: contact_info,
+						price: price,
+						category: category,
+						for_sale_by: for_sale_by,
+						availability: availability,
+						title: title,
+						description: description,
+						address: address,
+						pic: pic
+					},
+		            success: function(response) {
+		                //if response indicates ad post was successful...
+		                //display success message
+		                //redirect to /landing.html
+		            },
+		            error: function(err){
+		            	alert("There was an error while trying to post your ad: " + JSON.stringify(err));
+		            }
+		        });
+        	}        	
+        });
 	});
 </script>
 </html>
