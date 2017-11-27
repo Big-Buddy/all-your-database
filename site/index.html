@@ -12,68 +12,169 @@
 		<table class="input-form">	
 			<tr>
 				<td>Username:</td>
-				<td><input type="text" name="username" /></td>
+				<td><input type="text" name="username" id="username" /></td>
 			</tr>	
 			<tr>
 				<td>Password:</td>
-				<td><input type="password" name="password" /></td>
+				<td><input type="password" name="password" id="password" /></td>
 			</tr>
 		</table>
+		<p id="login-error" class="error-msg" style="display:none;">Please enter a valid username and password to continue.</p>
 		<input type="submit" value="Log in" id="login_btn"/>
 		<hr>
 		<h3>Don't have an account? Sign up</h3>
 		<table class="input-form">
 			<tr>
 				<td>Email:</td>
-				<td><input type="text" name="c_username" /></td>
+				<td><input type="text" name="c_username" id="c_username"/></td>
 			</tr>	
 			<tr>
 				<td>Password:</td>
-				<td><input type="password" name="c_password" /></td>
+				<td><input type="password" name="c_password" id="c_password"/></td>
 			</tr>	
 			<tr>
 				<td>Phone number:</td>
-				<td><input type="text" name="c_phone" /></td>
+				<td><input type="text" name="c_phone" id="c_phone"/></td>
 			</tr>	
 			<tr>
 				<td>Address:</td>
-				<td><input type="text" name="c_address" /></td>
+				<td><input type="text" name="c_address" id="c_address"/></td>
 			</tr>	
 			<tr>
 				<td>City:</td>
-				<td><input type="text" name="c_city" /></td>
+				<td><input type="text" name="c_city" id="c_city"/></td>
 			</tr>	
 			<tr>
 				<td>Province:</td>
-				<td><input type="text" name="c_province" /></td>
+				<td><input type="text" name="c_province" id="c_province"/></td>
 			</tr>	
 			<tr>
 				<td>Country:</td>
-				<td><input type="text" name="c_country" /></td>
+				<td><input type="text" name="c_country" id="c_country"/></td>
 			</tr>	
 			<tr>
 				<td>Postal code:</td>
-				<td><input type="text" name="c_postal" /></td>
+				<td><input type="text" name="c_postal" id="c_postal"/></td>
 			</tr>				
 		</table>
+		<p id="signup-error" class="error-msg" style="display:none;">Please enter all fields before submitting.</p>
 		<input type="submit" value="Sign Up" id="signup_btn"/>
 	</div>
 </body>
 <script>
 	$(document).ready(function() {
-        $.ajax({
-            url: '/php/test.php',
-            type: 'POST',
-			data: {
-                email: 'adriel@comp.com',
-				password: 'comp353'
-			},
-            success: (function(response) {
-                console.log(JSON.parse(response));
-                var email = response.email;
+        
 
-            }).bind(this)
+        /****************************************
+        				LOGIN
+		****************************************/
+        $("#login_btn").on('click', function(e){
+        	var username = $("#username").val();
+        	var password = $("#password").val();
+        	var isError = false;
+        	$("#login-error").hide();
+
+        	//validation
+        	if(username == "" || username == null || username == undefined){
+        		isError = true;
+        	}
+        	if(password == "" || password == null || password == undefined){
+        		isError = true;
+        	}
+        	if(isError){
+        		$("#login-error").show();
+        	}
+        	else{
+        		//no errors, proceed with login attempt
+        		$.ajax({
+		            url: '/php/login.php',
+		            type: 'POST',
+					data: {
+		                username: username,
+						password: password
+					},
+		            success: function(response) {
+		                //if response indicates correct credentials...
+		                //add user session
+		                //redirect to /landing.html
+		            },
+		            error: function(err){
+		            	alert("There was an error while trying to login: " + JSON.stringify(err));
+		            }
+		        });
+        	}        	
         });
+		/****************************************
+        				SIGNUP
+		****************************************/
+        $("#signup_btn").on('click', function(e){
+        	e.preventDefault();
+        	var username = $("#c_username").val();
+        	var password = $("#c_password").val();
+        	var phone = $("#c_phone").val();
+			var address = $("#c_address").val();
+			var city = $("#c_city").val();
+			var province = $("#c_province").val();
+			var country = $("#c_country").val();
+			var postal = $("#c_postal").val();
+        	var isError = false;
+        	$("#signup-error").hide();
+
+        	//validation
+        	if(username == "" || username == null || username == undefined){
+        		isError = true;
+        	}
+        	if(password == "" || password == null || password == undefined){
+        		isError = true;
+        	}
+        	if(phone == "" || phone == null || phone == undefined){
+        		isError = true;
+        	}
+        	if(address == "" || address == null || address == undefined){
+        		isError = true;
+        	}
+        	if(city == "" || city == null || city == undefined){
+        		isError = true;
+        	}
+        	if(province == "" || province == null || province == undefined){
+        		isError = true;
+        	}
+        	if(country == "" || country == null || country == undefined){
+        		isError = true;
+        	}
+        	if(postal == "" || postal == null || postal == undefined){
+        		isError = true;
+        	}
+        	if(isError){
+        		$("#signup-error").show();
+        	}
+        	else{
+        		//no errors, proceed with login attempt
+        		$.ajax({
+		            url: '/php/signup.php',
+		            type: 'POST',
+					data: {
+		                username: username,
+						password: password,
+						phone: phone,
+						address: address,
+						city: city,
+						province: province,
+						country: country,
+						postal: postal
+					},
+		            success: function(response) {
+		                //if response indicates new user was added...
+		                //add user session
+		                //redirect to /landing.html
+		            },
+		            error: function(err){
+		            	alert("There was an error while trying to signup: " + JSON.stringify(err));
+		            }
+		        });
+        	}        	
+        });
+
 	});
 </script>
 </html>
