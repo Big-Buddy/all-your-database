@@ -3,40 +3,62 @@
 	<title>Log In</title>
 	<link href="/css/style.css" rel="stylesheet">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<script src="/js/functions.js"></script>
 </head>
 <body>
 	<div class="container">
 		<h1>Please log in to continue</h1>
-		Username: <input type="text" name="username" />
-		<br/>
-		Password:<input type="password" name="password" />
-		<br/>
-		<input type="submit" value="Log in"/>
+		<table class="input-form">	
+			<tr>
+				<td>Username:</td>
+				<td><input type="text" name="username" /></td>
+			</tr>	
+			<tr>
+				<td>Password:</td>
+				<td><input type="password" name="password" /></td>
+			</tr>
+		</table>
+		<input type="submit" value="Log in" id="login_btn"/>
 		<hr>
-		<h2>Don't have an account? Sign up</h2>
-		<h1>Please enter your information using the form below</h1>
-		Email: <input type="text" name="c_username" />
-		<br/>
-		Password:<input type="password" name="c_password" />
-		<br/>
-		Phone number: <input type="text" name="c_phone" />
-		<br/>
-		Address: <input type="text" name="c_address" />
-		<br/>
-		City: <input type="text" name="c_city" />
-		<br/>
-		Province: <input type="text" name="c_province" />
-		<br/>
-		Country: <input type="text" name="c_country" />
-		<br/>
-		Postal code: <input type="text" name="c_postal" />
-		<br/>
-		<input type="submit" value="Sign Up"/>
+		<h3>Don't have an account? Sign up</h3>
+		<table class="input-form">
+			<tr>
+				<td>Email:</td>
+				<td><input type="text" name="c_username" /></td>
+			</tr>	
+			<tr>
+				<td>Password:</td>
+				<td><input type="password" name="c_password" /></td>
+			</tr>	
+			<tr>
+				<td>Phone number:</td>
+				<td><input type="text" name="c_phone" /></td>
+			</tr>	
+			<tr>
+				<td>Address:</td>
+				<td><input type="text" name="c_address" /></td>
+			</tr>	
+			<tr>
+				<td>City:</td>
+				<td><input type="text" name="c_city" /></td>
+			</tr>	
+			<tr>
+				<td>Province:</td>
+				<td><input type="text" name="c_province" /></td>
+			</tr>	
+			<tr>
+				<td>Country:</td>
+				<td><input type="text" name="c_country" /></td>
+			</tr>	
+			<tr>
+				<td>Postal code:</td>
+				<td><input type="text" name="c_postal" /></td>
+			</tr>				
+		</table>
+		<input type="submit" value="Sign Up" id="signup_btn"/>
 	</div>
 </body>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
 	$(document).ready(function() {
         $.ajax({

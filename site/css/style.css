@@ -3,8 +3,9 @@
 	max-width: 1000px;
 	margin:auto;
 	text-align: center;
+	margin-top:70px;
 }
-.btn{
+.btn-small{
 	display: block;
 	padding:5px 8px;
 	border: 1px solid;
@@ -17,8 +18,44 @@
 a.btn{
 	text-decoration: none;
 	color:black;
+	background-image: linear-gradient(to bottom, #e4e4e4, #f7f7f7);
+	border: 1px solid #afafaf;
 }
 
-.hidden{
+.hidden-content{
 	display:none;
+}
+
+.input-form{
+	width: 400px;
+	text-align: center;
+	margin: auto;
+	margin-top: 15px;
+	margin-bottom: 30px;
+}
+.input-form td{
+	padding: 1px;
+}
+.input-form select {
+    width: 93%;
+}
+.header-bar{
+    position: fixed;
+    top: 0;
+    height: 50px;
+    background-color: #d9edf7;
+    width: 100%;
+    padding-left: 50px;
+    font-size: 25px;
+    line-height: 1.9;
+    font-family: "Lucida Console", Monaco, monospace;
+}
+.footer-bar{
+	position: fixed;
+	bottom:0;
+	text-align: center;
+	width:100%;
+	padding-bottom:5px;
+	padding-top: 5px;
+	background-color: #efefef;
 }

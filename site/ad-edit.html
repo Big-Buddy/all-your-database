@@ -3,47 +3,70 @@
 	<title>Post an ad</title>
 	<link href="/css/style.css" rel="stylesheet">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<script src="/js/functions.js"></script>
+
 </head>
 <body>
 	<div class="container">
 		<h1>Fill the form to submit an ad</h1>
-		Contact Information - Email or Phone number
-		<input type="text" name="contact_info"/>
-		<br />
-		Price - in CAD
-		<input type="text" name="price"/>
-		<br />
-		Ad type: Category Selected
-		<select id="category">
-			<!-- this field is set based on select-region page -->
-			<option selected disabled value="buy_sell">Buy/Sell</option>
-		</select>
-		<br />
-		For Sale by: Owner/Business
-		<select id="for_sale_by">
-			<!-- this field is set based on select-region page -->
-			<option selected value="owner">Owner</option>
-			<option value="business">Business</option>
-		</select>
-		<br />
-		Availability: Online/Store
-		<select id="availability">
-			<!-- this field is set based on select-region page -->
-			<option selected value="owner">Owner</option>
-			<option value="business">Business</option>
-		</select>
-		<br />
-		Title
-		<input type="text" name="title" /> 
-		<br />
-		Description
-		<input type="text" name="description" />
-		<br />
-		Address
-		<input type="text" name="address" />
-		<br />
-		Images
+		<table class="input-form">
+			<tr>
+				<td>Email or Phone number</td>
+				<td><input type="text" name="contact_info"/></td>
+			</tr>
+			<tr>
+				<td>Price - in CAD</td>
+				<td><input type="text" name="price"/></td>
+			</tr>	
+			<tr>
+				<td>Category</td>
+				<td>
+					<select id="category">
+						<!-- this field is set based on select-region page -->						
+						<option selected value="buy">Buy</option>
+						<option value="sell">Sell</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Owner or Business</td>
+				<td>
+					<select id="for_sale_by">
+						<!-- this field is set based on select-region page -->
+						<option selected value="owner">Owner</option>
+						<option value="business">Business</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Online or In-Store</td>
+				<td>
+					<select id="availability">
+						<!-- this field is set based on select-region page -->
+						<option selected value="online">Online</option>
+						<option value="instore">In-Store</option>
+					</select>
+				</td>
+			</tr>	
+			<tr>
+				<td>Title</td>
+				<td><input type="text" name="title" /> </td>
+			</tr>
+			<tr>
+				<td>Description</td>
+				<td><input type="text" name="description" /></td>
+			</tr>
+			<tr>
+				<td>Address</td>
+				<td><input type="text" name="address" /></td>
+			</tr>
+			<tr>
+				<td>Image</td>
+				<td>upload</td>
+			</tr>
+			
+		</table>
 		<a id="ad_submit" class="btn">Submit</a>
 	</div>
 </body>
