@@ -4,5 +4,8 @@ Ads:
 3. Trigger to decrement "Days to Promote" every day if the value isn't 0
 4. NOT SURE IF WE SHOULD HANDLE THIS IN THE APP - Trigger to determine the position of the ads (NEW COLUMN AdPosition) everytime a new ad is interested
 
+Rented Spaces:
+1. Trigger to prevent users from renting a space for a given StoreID for hours which exceed a maximum of 8 hours
+
 Overall:
 1. Trigger to send payment info to some kind of backup
