@@ -2,7 +2,7 @@ create table Users
 (
   UserID varchar(63) not null,
   Password varchar(127) not null,
-  UserType enum('Buyer', 'Seller', 'StoreManger', 'Admin') not null,
+  UserType enum('Regular', 'StoreManager', 'Admin') not null,
   MembershipPlan enum('Normal', 'Silver', 'Premium') not null default 'Normal',
   Phone varchar(20),
   Email varchar(127),
