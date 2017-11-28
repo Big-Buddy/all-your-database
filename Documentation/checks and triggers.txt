@@ -7,5 +7,8 @@ Ads:
 Rented Spaces:
 1. Trigger to prevent users from renting a space for a given StoreID for hours which exceed a maximum of 8 hours
 
+Ratings:
+1. Ensure a rating can't be over 5
+
 Overall:
 1. Trigger to send payment info to some kind of backup
