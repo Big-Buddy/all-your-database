@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/css/style.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="/js/functions.js"></script>
+</head>
+<body>
+
+</body>
+<script>
+    $(document).ready(function() {
+        $.ajax({
+            url: '/php/scripts/login.php',
+            type: 'POST',
+            data: {
+                username: 'adriel@comp.com',
+                password: 'comp353'
+            },
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(response) {
+                var errorMessage = JSON.parse(response.responseText).message; //refer to the script to see error msg
+                var statusCode = response.status;
+                console.log(errorMessage);
+                console.log(statusCode);
+            }
+        });
+    });
+
+</script>
+</html>

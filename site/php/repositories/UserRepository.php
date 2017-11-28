@@ -1,28 +1,21 @@
 <?php
     // MYSQL queries for the User Relation
-    include 'Connection.php';
-    include 'models/User.php';
-    include 'interfaces/UserRepositoryInterface.php';
+    require '../Connection.php';
 
-    class UserRepository implements UserRepositoryInterface {
+    class UserRepository {
         private $connection;
-        public function __construct() {
+        public function __construct()
+        {
             $this->connection = openConnection();
         }
 
-        public function authenticateUser(User $user) {
+        public function authenticateUser($email, $password)
+        {
             $sql = "SELECT * FROM Users ";
-            $sql .= "WHERE email='$user->email' AND password='$user->password'";
+            $sql .= "WHERE email='$email' AND password='$password'";
             $result = $this->connection->query($sql);
-
-            if ($result->num_rows > 0) {
-              while($row = $result->fetch_assoc()) {
-                $user = new User();
-                $user->email = $row['email'];
-                $user->password = $row['password'];
-                return $user;
-              }
-            }
+            closeConnection($this->connection);
+            return $result;
         }
     }
  ?>

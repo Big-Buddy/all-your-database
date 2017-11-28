@@ -15,7 +15,7 @@
     }
 
     /**
-     * Clses the connection
+     * Closes the connection
      * @param MySQLI Connection $connection
      */
     function closeConnection($connection) {
