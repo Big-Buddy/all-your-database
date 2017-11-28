@@ -1,7 +1,13 @@
 // Global/widely used functions
 // Note; this file is included on all pages, so use document.ready or similar with caution!
 
-
+$(document).ready(function(){
+    //load the footer and nav bar
+    var header = "<div class='header-bar'>OCN Portal</div>";
+    var footer = "<div class='footer-bar'>&copy; 2017 Concordia University</div>";
+    $('body').prepend(header);
+    $('body').append(footer);
+});
 function getUrlParameter(name){	
     var sPageURL = window.location.search.substring(1);
     var sURLVariables = sPageURL.split('&');
