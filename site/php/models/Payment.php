@@ -1,6 +1,7 @@
 <?php
 	
 	class Payment {
+		// For the sake of the project, we will declare all the fields public
 		public $paymentID;
 		public $payingUserID;
 		public $rentedSpaceID;
