@@ -3,6 +3,7 @@
 		// For the sake of the project, we will declare all the fields public
 	    public $userId;
 	    public $password;
+	    public $userType;
 	    public $membershipPlan;
 	    public $phone;
 	    public $email;
