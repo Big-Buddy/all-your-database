@@ -20,9 +20,7 @@ create table Ads
   PostingUserID varchar(63) not null,
   PostingDate date not null,
   DaysToPromote int not null default 0,
-  AdPostion int not null auto_increment,
   AdType enum('Buy', 'Sell') not null,
-  SellerType enum('Owner', 'Business'),
   Title varchar(255) not null,
   Description varchar(2047) not null,
   PriceInCADCents int,
@@ -94,3 +92,16 @@ create table Ratings
   foreign key (AdIDBeingRated) references Ads(AdID),
   foreign key (UserIdRatingAd) references Users(UserID)
 );
+
+delimiter //
+
+create trigger RejectPersonalSelling before insert on Ads
+for each row
+begin
+  if new.AdType = 'Sell' and (new.Category = 'MenSeekingWomen' or new.Category = 'WomenSeekingMen'
+      or new.Category = 'MenSeekingMen' or new.Category = 'WomenSeekingWomen') then
+    signal sqlstate '45000' set message_text = "Can't sell personals";
+    end if;
+end;//
+
+delimiter ;
