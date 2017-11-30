@@ -91,7 +91,6 @@ create table Ratings
   primary key (RatingID),
   foreign key (AdIDBeingRated) references Ads(AdID),
   foreign key (UserIdRatingAd) references Users(UserID)
-  CHECK (Rating <= 5)
 );
 
 delimiter //
