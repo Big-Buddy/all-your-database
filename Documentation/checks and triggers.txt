@@ -1,18 +1,13 @@
 Ads:
 1. Trigger for expired ads (DONE)
 2. Personals shouldn't be under the "selling" category (DONE)
-3. Trigger to decrement "Days to Promote" every day if the value isn't 0
-
-create event PromotionDaysRemaining
-on schedule every 1 day
-do update Ads set DaysToPromote = DaysToPromote - 1 
-where DaysToPromote > 0;
+3. Trigger to decrement "Days to Promote" every day if the value isn't 0 (DONE)
 
 Ratings:
 1. Ensure a rating can't be over 5 (DONE)
 
 Overall:
-1. Trigger to send payment info to some kind of backup
+1. Trigger to send payment info to some kind of backup (WAITING ON STAN THE MAN)
 
 
 set global event_scheduler = ON;
@@ -25,3 +20,8 @@ select AdID
 from (select * from Ads join Users on Ads.PostingUserID = Users.UserID) as AdsAndUsers
 where DaysToPromote <= 0 and datediff(now(), adddate(PostingDate,
   if(MembershipPlan = 'Premuim', 30, if(MembershipPlan = 'Silver', 14, 7)))) >= 0);
+
+create event PromotionDaysRemaining
+on schedule every 1 day
+do update Ads set DaysToPromote = DaysToPromote - 1 
+where DaysToPromote > 0;
