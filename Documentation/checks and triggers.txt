@@ -1,13 +1,15 @@
 Ads:
-1. Trigger for expired ads
-2. Personals shouldn't be under the "selling" category
+1. Trigger for expired ads (DONE)
+2. Personals shouldn't be under the "selling" category (DONE)
 3. Trigger to decrement "Days to Promote" every day if the value isn't 0
 
-Rented Spaces:
-1. Trigger to prevent users from renting a space for a given StoreID for hours which exceed a maximum of 8 hours
+create event PromotionDaysRemaining
+on schedule every 1 day
+do update Ads set DaysToPromote = DaysToPromote - 1 
+where DaysToPromote > 0;
 
 Ratings:
-1. Ensure a rating can't be over 5
+1. Ensure a rating can't be over 5 (DONE)
 
 Overall:
 1. Trigger to send payment info to some kind of backup
