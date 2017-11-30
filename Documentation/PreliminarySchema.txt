@@ -104,4 +104,12 @@ begin
     end if;
 end;//
 
+create trigger RejectRating before insert on Ratings
+for each row
+begin
+  if new.Rating < 1  or new.Rating > 5 then
+    signal sqlstate '45000' set message_text = "Rating out of range.";
+    end if;
+end;//
+
 delimiter ;
