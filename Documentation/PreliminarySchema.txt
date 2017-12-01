@@ -82,6 +82,25 @@ create table Payments
   foreign key (RentedSpaceID) references RentedSpaces(RentedSpaceID)
 );
 
+
+create table ExternalBackupPayments
+(
+  PaymentID int not null,
+  PayingUserID varchar(63) not null,
+  RentedSpaceID int, /* May be null in case of buying Promotion/Membership */
+  AmountInCADCents int not null,
+  CardNumber char(16) not null,
+  CardExpiryDate date not null,
+  CardSecurityCode char(3) not null,
+  CardholderName varchar(127) not null,
+  CardCompany enum('MasterCard', 'Visa', 'American Express', 'Discover') not null,
+  CardType enum('Debit', 'Credit') not null,
+  PaymentDate datetime,
+  primary key (PaymentID),
+  foreign key (PayingUserID) references Users(UserID),
+  foreign key (RentedSpaceID) references RentedSpaces(RentedSpaceID)
+);
+
 create table Ratings
 (
   RatingID int not null auto_increment,
@@ -112,4 +131,26 @@ begin
     end if;
 end;//
 
+create event BackupPayments
+on schedule at '2017-11-30 11:00:00' + interval 1 day
+do begin
+  delete from ExternalBackupPayments;
+  insert into ExternalBackupPayments
+    select * from Payments;
+end;//
+
 delimiter ;
+
+create event DeleteOldAds
+on schedule every 1 day
+do delete from Ads
+where AdID in (
+select AdID
+from (select * from Ads join Users on Ads.PostingUserID = Users.UserID) as AdsAndUsers
+where DaysToPromote <= 0 and datediff(now(), adddate(PostingDate,
+  if(MembershipPlan = 'Premuim', 30, if(MembershipPlan = 'Silver', 14, 7)))) >= 0);
+
+create event PromotionDaysRemaining
+on schedule every 1 day
+do update Ads set DaysToPromote = DaysToPromote - 1 
+where DaysToPromote > 0;
