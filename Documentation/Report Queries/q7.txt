@@ -1,8 +1,21 @@
-//K so here I'm producing 4 rows with 3 columns. 
-//The columns are the location, the sum of the payments, and whether the sum of the payments come from weekends
+//K so here I'm producing 4 rows with 5 columns. 
+//The columns are the location, whether the ads are displayed on weekeds, the sum of the costs to rent the spaces, the sum of the ad costs and the profitability (cost ads - cost rent)
 //There are two rows per strategic location (one row for isWeekend, one row for not isWeekend)
-Select StrategicLocation, (if(DAYOFWEEK(Payments.PaymentDate) = 7 or DAYOFWEEK(Payments.PaymentDate) = 1, 1, 0)) as isWeekend, sum(Payments.AmountInCADCents) sumPayments from RentedSpaces
-	inner join Payments on Payments.RentedSpaceID = RentedSpaces.RentedSpaceID
-    inner join Stores on Stores.StoreID = RentedSpaces.StoreID
-    where Stores.StrategicLocation in ('SL1','SL4')
-    group by StrategicLocation, isWeekend
+Select Results.*, (Results.sumAdPrices - Results.sumPayments) Profitability from
+	( 
+		Select 
+				StrategicLocation, 
+				if(DAYOFWEEK(RentedSpaces.DateRented) = 7 or DAYOFWEEK(RentedSpaces.DateRented) = 1, 1, 0) as isWeekend, 
+				if(
+					DAYOFWEEK(RentedSpaces.DateRented) = 7 or DAYOFWEEK(RentedSpaces.DateRented) = 1, -- If it's a weekend, use weekend rates. else use weekday rates
+					sum(RentedSpaces.HoursRented*15 + if (RentedSpaces.DeliveryServices = 1, RentedSpaces.HoursRented*10, 0)), -- if there's delivery services, add delivery service rates
+					sum(RentedSpaces.HoursRented*10 + if (RentedSpaces.DeliveryServices = 1, RentedSpaces.HoursRented*5, 0))
+				) as sumPayments, 
+				sum(Ads.PriceInCADCents) as sumAdPrices 
+			from RentedSpaces
+			inner join Payments on Payments.RentedSpaceID = RentedSpaces.RentedSpaceID
+			inner join Stores on Stores.StoreID = RentedSpaces.StoreID
+			inner join Ads on Ads.AdID = RentedSpaces.AdID
+			where Stores.StrategicLocation in ('SL1','SL2')
+			group by StrategicLocation, isWeekend
+	) Results
