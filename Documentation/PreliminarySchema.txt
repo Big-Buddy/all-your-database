@@ -131,6 +131,15 @@ begin
     end if;
 end;//
 
+create trigger RejectRentedSpace before insert on RentedSpaces
+for each row
+begin
+  if new.AdID is null or (select AdType from Ads where AdID = new.AdID) is null
+		or (select AdType from Ads where AdID = new.AdID) = 'Buy' then
+    signal sqlstate '45000' set message_text = "Rented Spaces can only host sell ads.";
+    end if;
+end;//
+
 create event BackupPayments
 on schedule at '2017-11-30 11:00:00' + interval 1 day
 do begin
