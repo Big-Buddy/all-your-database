@@ -1,31 +1,31 @@
 PaymentID,PayingUserID,RentedSpaceID,AmountInCADCents,CardNumber,CardExpiryDate,CardSecurityCode,CardholderName,CardCompany,CardType,PaymentDate
-1,my_life_is_survival_horror,null,1000,9.36694E+15,2020-01-01,178,Wanda Walsh,,Visa,2017-01-04
-2,not_a_drug_dealer,null,5000,9.11802E+15,2020-01-02,805,Katherine Allen,,Mastercard,2017-01-05
-3,dark_messiah,null,1000,2.54424E+15,2020-01-03,112,Kurt Hanson,,American Express,2017-01-07
-4,blood_and_bacon,null,1000,3.97304E+15,2020-01-04,376,Ginger Larson,,Discover,2017-01-08
-5,prepare_to_dunk,null,1000,3.72048E+15,2020-01-05,637,Adrian Jenkins,,Visa,2017-01-10
-6,serious_samson,null,5000,7.68834E+15,2020-01-06,586,Shelly Howard,,Mastercard,2017-01-11
-7,fallout_isnt_that_great,null,1000,6.31668E+15,2020-01-07,307,Elisa Christensen,,American Express,2017-01-13
-8,rocket_league_is_a_visual_novel,null,5000,1.54236E+15,2020-01-08,739,Laurie Fox,,Discover,2017-01-14
-9,aliens_vs_zimbabwe,null,1000,7.19233E+15,2020-01-09,697,Jamie Newman,,Visa,2017-01-19
-10,aliens_vs_zimbabwe,null,5000,6.00654E+15,2020-01-10,714,Glenn Davidson,,Mastercard,2017-01-20
-11,my_life_is_survival_horror,1,17000,9.31094E+15,2020-01-11,383,Wanda Walsh,,American Express,2017-01-03
-12,my_life_is_survival_horror,3,8000,6.66878E+15,2020-01-12,763,Wanda Walsh,,Discover,2017-01-04
-13,my_life_is_survival_horror,5,8000,6.89493E+15,2020-01-13,152,Wanda Walsh,,Visa,2017-01-05
-14,my_life_is_survival_horror,7,8000,2.51776E+15,2020-01-14,773,Wanda Walsh,,Mastercard,2017-01-06
-15,my_life_is_survival_horror,9,12000,4.26489E+15,2020-01-15,991,Wanda Walsh,,American Express,2017-01-07
-16,my_life_is_survival_horror,11,12000,3.07426E+15,2020-01-16,975,Wanda Walsh,,Discover,2017-01-08
-17,my_life_is_survival_horror,13,8000,4.00797E+15,2020-01-17,542,Wanda Walsh,,Visa,2017-01-09
-18,my_life_is_survival_horror,15,8000,2.22365E+15,2020-01-18,823,Wanda Walsh,,Mastercard,2017-01-10
-19,my_life_is_survival_horror,17,8000,7.10789E+15,2020-01-19,941,Wanda Walsh,,American Express,2017-01-11
-20,my_life_is_survival_horror,19,8000,1.59676E+15,2020-01-20,150,Wanda Walsh,,Discover,2017-01-12
-21,serious_samson,2,9000,9.70946E+15,2020-01-21,960,Vanessa Herrera,,Visa,2017-01-16
-22,serious_samson,4,9000,9.74925E+15,2020-01-22,584,Vanessa Herrera,,Mastercard,2017-01-17
-23,serious_samson,6,9000,8.22895E+15,2020-01-23,830,Vanessa Herrera,,American Express,2017-01-18
-24,serious_samson,8,9000,6.79285E+15,2020-01-24,253,Vanessa Herrera,,Discover,2017-01-19
-25,serious_samson,10,9000,4.77356E+15,2020-01-25,952,Vanessa Herrera,,Visa,2017-01-20
-26,serious_samson,12,15000,9.75427E+15,2020-01-26,242,Vanessa Herrera,,Mastercard,2017-01-21
-27,serious_samson,14,15000,7.16545E+15,2020-01-27,935,Vanessa Herrera,,American Express,2017-01-22
-28,serious_samson,16,9000,9.81553E+15,2020-01-28,158,Vanessa Herrera,,Discover,2017-01-23
-29,serious_samson,18,9000,1.14845E+15,2020-01-29,671,Vanessa Herrera,,Visa,2017-01-24
-30,serious_samson,20,9000,8.04484E+15,2020-01-30,705,Vanessa Herrera,,Mastercard,2017-01-25
+1,my-life-is-survival-horror,,1000,0843065502988806,2020-01-01,178,Wanda Walsh,Visa,Credit,2017-01-04
+2,not-a-drug-dealer,,5000,5018754410750838,2020-01-02,805,Katherine Allen,Mastercard,Credit,2017-01-05
+3,dark-messiah,,1000,6806082066763681,2020-01-03,112,Kurt Hanson,American Express,Credit,2017-01-07
+4,blood-and-bacon,,1000,0442810600176467,2020-01-04,376,Ginger Larson,Discover,Credit,2017-01-08
+5,prepare-to-dunk,,1000,0177946722808477,2020-01-05,637,Adrian Jenkins,Visa,Credit,2017-01-10
+6,serious-samson,,5000,1224042967809802,2020-01-06,586,Shelly Howard,Mastercard,Credit,2017-01-11
+7,fallout-isnt-that-great,,1000,2417456979726711,2020-01-07,307,Elisa Christensen,American Express,Credit,2017-01-13
+8,rocket-league-is-a-visual-novel,,5000,9278570453372441,2020-01-08,739,Laurie Fox,Discover,Credit,2017-01-14
+9,aliens-vs-zimbabwe,,1000,9449912989573880,2020-01-09,697,Jamie Newman,Visa,Credit,2017-01-19
+10,aliens-vs-zimbabwe,,5000,7311081348111520,2020-01-10,714,Glenn Davidson,Mastercard,Credit,2017-01-20
+11,my-life-is-survival-horror,1,17000,6978251547554178,2020-01-11,383,Wanda Walsh,American Express,Credit,2017-01-03
+12,my-life-is-survival-horror,3,8000,6955950112214111,2020-01-12,763,Wanda Walsh,Discover,Credit,2017-01-04
+13,my-life-is-survival-horror,5,8000,5202143370315456,2020-01-13,152,Wanda Walsh,Visa,Credit,2017-01-05
+14,my-life-is-survival-horror,7,8000,9099020316943359,2020-01-14,773,Wanda Walsh,Mastercard,Credit,2017-01-06
+15,my-life-is-survival-horror,9,12000,5956067969675360,2020-01-15,991,Wanda Walsh,American Express,Credit,2017-01-07
+16,my-life-is-survival-horror,11,12000,1140077843987190,2020-01-16,975,Wanda Walsh,Discover,Credit,2017-01-08
+17,my-life-is-survival-horror,13,8000,4557647426790070,2020-01-17,542,Wanda Walsh,Visa,Credit,2017-01-09
+18,my-life-is-survival-horror,15,8000,8249307341173461,2020-01-18,823,Wanda Walsh,Mastercard,Credit,2017-01-10
+19,my-life-is-survival-horror,17,8000,4803616826130662,2020-01-19,941,Wanda Walsh,American Express,Credit,2017-01-11
+20,my-life-is-survival-horror,19,8000,1571459371936032,2020-01-20,150,Wanda Walsh,Discover,Credit,2017-01-12
+21,serious-samson,2,9000,1212500501131886,2020-01-21,960,Vanessa Herrera,Visa,Credit,2017-01-16
+22,serious-samson,4,9000,6145214887837421,2020-01-22,584,Vanessa Herrera,Mastercard,Credit,2017-01-17
+23,serious-samson,6,9000,4104657558633889,2020-01-23,830,Vanessa Herrera,American Express,Credit,2017-01-18
+24,serious-samson,8,9000,5347893930781229,2020-01-24,253,Vanessa Herrera,Discover,Credit,2017-01-19
+25,serious-samson,10,9000,2005549014263593,2020-01-25,952,Vanessa Herrera,Visa,Credit,2017-01-20
+26,serious-samson,12,15000,3667069941993375,2020-01-26,242,Vanessa Herrera,Mastercard,Credit,2017-01-21
+27,serious-samson,14,15000,1218560432838740,2020-01-27,935,Vanessa Herrera,American Express,Credit,2017-01-22
+28,serious-samson,16,9000,0389782954507885,2020-01-28,158,Vanessa Herrera,Discover,Credit,2017-01-23
+29,serious-samson,18,9000,0531903091399565,2020-01-29,671,Vanessa Herrera,Visa,Credit,2017-01-24
+30,serious-samson,20,9000,5761390541543479,2020-01-30,705,Vanessa Herrera,Mastercard,Credit,2017-01-25

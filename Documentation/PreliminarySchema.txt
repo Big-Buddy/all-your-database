@@ -4,8 +4,8 @@ create table Users
   Password varchar(127) not null,
   UserType enum('Regular', 'StoreManager', 'Admin') not null,
   MembershipPlan enum('Normal', 'Silver', 'Premium') not null default 'Normal',
-  Phone varchar(20),
-  Email varchar(127),
+  Phone varchar(20) not null,
+  Email varchar(127) not null,
   AddressStreet varchar(255) not null,
   AddressCity enum('Montreal', 'Quebec City', 'Toronto', 'Ottawa') not null,
   AddressProvince enum('Quebec', 'Ontario') not null,
@@ -72,9 +72,9 @@ create table Payments
   AmountInCADCents int not null,
   CardNumber char(16) not null,
   CardExpiryDate date not null,
-  CardSecurityCode char(3) not null,
+  CardSecurityCode char(3), /* May be null in case of debit payment */
   CardholderName varchar(127) not null,
-  CardCompany enum('MasterCard', 'Visa', 'American Express', 'Discover') not null,
+  CardCompany enum('MasterCard', 'Visa', 'American Express', 'Discover'), /* May be null in case of debit payment */
   CardType enum('Debit', 'Credit') not null,
   PaymentDate datetime,
   primary key (PaymentID),

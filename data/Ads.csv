@@ -1,21 +1,21 @@
 AdID,PostingUserID,PostingDate,DaysToPromote,AdType,Title,Description,PriceInCADCents,Category
-1,teh_tom,2017-01-01,0,Buy,buying a copy of 1984,Need a copy of this so I can put it on my shelf and not read it.,1000,Books
+1,teh-tom,2017-01-01,0,Buy,buying a copy of 1984,Need a copy of this so I can put it on my shelf and not read it.,1000,Books
 2,frankie,2017-01-02,0,Sell,selling my guitar,I didn't get as many girls as I thought I would playing this so I'm putting it up for sale.,3000,MusicalInstruments
-3,my_life_is_survival_horror,2017-01-03,60,Sell,renting white vans,"These are top of the line vans that we have acquired through police auctions. Tinted windows, extremely secured to prevent breaking-in/escaping. You ain't gonna find vans like these anywhere!",5000,Car
-4,my_life_is_survival_horror,2017-01-04,7,Buy,need a tutor for my son,"He's failed gym class for the third time, please someone help!",2000,Tutors
-5,not_a_drug_dealer,2017-01-05,30,Buy,buying books on horticulture,My friend Ricky is an aspiring herbalist/shaman and really needs these books. Preferably at a grade-10 reading level or lower.,2000,Books
+3,my-life-is-survival-horror,2017-01-03,60,Sell,renting white vans,"These are top of the line vans that we have acquired through police auctions. Tinted windows, extremely secured to prevent breaking-in/escaping. You ain't gonna find vans like these anywhere!",5000,Car
+4,my-life-is-survival-horror,2017-01-04,7,Buy,need a tutor for my son,"He's failed gym class for the third time, please someone help!",2000,Tutors
+5,not-a-drug-dealer,2017-01-05,30,Buy,buying books on horticulture,My friend Ricky is an aspiring herbalist/shaman and really needs these books. Preferably at a grade-10 reading level or lower.,2000,Books
 6,totally-postal,2017-01-06,0,Sell,selling stun gun,Zap zap watchin' mother truckers go flat on their back!,4000,BuySellElectronics
-7,dark_messiah,2017-01-07,7,Sell,selling fedora collection,"Over 1000 fedoras for classy gentlemen like myself :^) - all in good condition, only partially tipped.",2000,Clothing
-8,blood_and_bacon,2017-01-08,30,Buy,looking for love 35/m,Looking for something great in the worst place!,null,MenSeekingWomen
-9,kangz_and_kweens,2017-01-09,0,Buy,buying durags,Trying to keep all the toxic avenger chemicals I use to straighten my hair from getting on my pillow at night.,500,Clothing
-10,prepare_to_dunk,2017-01-10,7,Buy,looking for financial servitude 39/m,I have money and no self-respect.,null,MenSeekingWomen
-11,serious_samson,2017-01-11,30,Sell,selling copies of windows 98,Nostalgia has never been so... Slow.,200,BuySellElectronics
+7,dark-messiah,2017-01-07,7,Sell,selling fedora collection,"Over 1000 fedoras for classy gentlemen like myself :^) - all in good condition, only partially tipped.",2000,Clothing
+8,blood-and-bacon,2017-01-08,30,Buy,looking for love 35/m,Looking for something great in the worst place!,,MenSeekingWomen
+9,kangz-and-kweens,2017-01-09,0,Buy,buying durags,Trying to keep all the toxic avenger chemicals I use to straighten my hair from getting on my pillow at night.,500,Clothing
+10,prepare-to-dunk,2017-01-10,7,Buy,looking for financial servitude 39/m,I have money and no self-respect.,,MenSeekingWomen
+11,serious-samson,2017-01-11,30,Sell,selling copies of windows 98,Nostalgia has never been so... Slow.,200,BuySellElectronics
 12,freedum,2017-01-12,0,Buy,looking for someone to plan my dog's birthday,My wife and I don't have children so we figured to fill the void in our life we'd just spoil our pets.,10000,EventPlanners
-13,fallout_isnt_that_great,2017-01-13,7,Sell,"2 1/2 for rent, kinda smells","Someone unloaded a chicken-milk bomb somewhere in the apartment, but it's fully furnished!",40000,Apartment
-14,rocket_league_is_a_visual_novel,2017-01-14,30,Buy,buying books on how to git gud,HOW DO I PVP?!,1000,Books
-15,south_park_ruined_my_life,2017-01-15,0,Buy,looking for a photographer,Hiring a professional photographer for the launch of my website goat-se.com to promote the goat summer extravaganza!,5000,Photographers
-16,serious_samson,2017-01-16,60,Sell,we sell used clothing,Bed bugs and staph infections sold separately!,1000,Clothing
-17,sigurd566,2017-01-17,0,Buy,looking for a fellow finger painter,Looking for a platonic relationship where we can finger paint using only pink jellybeans.,null,WomenSeekingWomen
-18,probst_the_despoiler,2017-01-18,0,Buy,looking for a computer architecture book that isn't crap,"I'm not going to insult your intelligence by telling you what book I want because the only acceptable book on this topic would have me as an author!... Even though I don't write anything, ever.",100000000,Books
-19,aliens_vs_zimbabwe,2017-01-19,7,Buy,looking to rent a wedding dress,"Going to need it for a couple of nights, my waifu and I are celebrating the first time I watched Moshi Moshi Desu Desu Adventure.",50000,WeddingDresses
-20,aliens_vs_zimbabwe,2017-01-20,30,Buy,buying life-size anime girl,Must be self-cleaning and non-judgemental.,1000,BuySellElectronics
+13,fallout-isnt-that-great,2017-01-13,7,Sell,"2 1/2 for rent, kinda smells","Someone unloaded a chicken-milk bomb somewhere in the apartment, but it's fully furnished!",40000,Apartment
+14,rocket-league-is-a-visual-novel,2017-01-14,30,Buy,buying books on how to git gud,HOW DO I PVP?!,1000,Books
+15,south-park-ruined-my-life,2017-01-15,0,Buy,looking for a photographer,Hiring a professional photographer for the launch of my website goat-se.com to promote the goat summer extravaganza!,5000,Photographers
+16,serious-samson,2017-01-16,60,Sell,we sell used clothing,Bed bugs and staph infections sold separately!,1000,Clothing
+17,sigurd566,2017-01-17,0,Buy,looking for a fellow finger painter,Looking for a platonic relationship where we can finger paint using only pink jellybeans.,,WomenSeekingWomen
+18,probst-the-despoiler,2017-01-18,0,Buy,looking for a computer architecture book that isn't crap,"I'm not going to insult your intelligence by telling you what book I want because the only acceptable book on this topic would have me as an author!... Even though I don't write anything, ever.",100000000,Books
+19,aliens-vs-zimbabwe,2017-01-19,7,Buy,looking to rent a wedding dress,"Going to need it for a couple of nights, my waifu and I are celebrating the first time I watched Moshi Moshi Desu Desu Adventure.",50000,WeddingDresses
+20,aliens-vs-zimbabwe,2017-01-20,30,Buy,buying life-size anime girl,Must be self-cleaning and non-judgemental.,1000,BuySellElectronics
