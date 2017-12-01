@@ -1,0 +1,8 @@
+//K so here I'm producing 4 rows with 3 columns. 
+//The columns are the location, the sum of the payments, and whether the sum of the payments come from weekends
+//There are two rows per strategic location (one row for isWeekend, one row for not isWeekend)
+Select StrategicLocation, (if(DAYOFWEEK(Payments.PaymentDate) = 7 or DAYOFWEEK(Payments.PaymentDate) = 1, 1, 0)) as isWeekend, sum(Payments.AmountInCADCents) sumPayments from RentedSpaces
+	inner join Payments on Payments.RentedSpaceID = RentedSpaces.RentedSpaceID
+    inner join Stores on Stores.StoreID = RentedSpaces.StoreID
+    where Stores.StrategicLocation in ('SL1','SL4')
+    group by StrategicLocation, isWeekend
