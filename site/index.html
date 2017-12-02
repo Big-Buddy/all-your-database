@@ -87,19 +87,27 @@
         	else{
         		//no errors, proceed with login attempt
         		$.ajax({
-		            url: '/php/login.php',
+		            url: '/php/scripts/login.php',
 		            type: 'POST',
 					data: {
-		                username: username,
+		                email: username,
                         password: password
                     },
 		            success: function(response) {
 		                //if response indicates correct credentials...
-		                //add user session
-		                //redirect to /landing.html
+		                response = JSON.parse(response);
+		                if(response[0].userType){
+		                	//add user session
+		                	createCookie("user_type",response[0].userType,30);
+		                	//redirect to /landing.html
+		                	window.location.href="/landing.html";		                	
+		                }
 		            },
 		            error: function(err){
-		            	alert("There was an error while trying to login: " + JSON.stringify(err));
+		            	console.log("There was an error while trying to login: " + JSON.stringify(err));
+		            	if(JSON.parse(err.responseText)){
+		            		alert(JSON.parse(err.responseText).message);
+		            	}
 		            }
 		        });
         	}        	

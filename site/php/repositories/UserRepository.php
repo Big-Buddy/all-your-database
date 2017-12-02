@@ -12,7 +12,7 @@
         public function authenticateUser($email, $password)
         {
             $sql = "SELECT * FROM Users ";
-            $sql .= "WHERE email='$email' AND password='$password'";
+            $sql .= "WHERE email='$email' AND password='$password';";
             $result = $this->connection->query($sql);
             closeConnection($this->connection);
             return $result;

@@ -26,11 +26,11 @@
 <script>
 	$(document).ready(function(){
 		//determine user status
-		if(readCookie("user_type") == "user"){
+		if(readCookie("user_type") == "Regular" || readCookie("user_type") == "StoreManager"){
 			$("#user_container").show();
 			$("#admin_container").hide();
 		}
-		else if(readCookie("user_type") == "admin"){
+		else if(readCookie("user_type") == "Admin"){
 			$("#admin_container").show();
 			$("#user_container").hide();
 		}

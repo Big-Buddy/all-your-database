@@ -1,4 +1,6 @@
 <?php
+
+    error_reporting(0);
     require_once '../repositories/UserRepository.php';
 
     $email = $_POST['email'];
@@ -8,7 +10,6 @@
 
     $result = $userRepository->authenticateUser($email, $password);
     $isSuccess = false;
-
     $array = [];
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
