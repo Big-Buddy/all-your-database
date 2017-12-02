@@ -1,4 +1,4 @@
-Select Results.*, (Results.sumAdPrices - Results.sumPayments) Profitability from
+Select Results.*, (Results.sumAdPrices - Results.sumPayments) profitability from
 	( 
 		Select 
 				StrategicLocation, 
@@ -10,9 +10,8 @@ Select Results.*, (Results.sumAdPrices - Results.sumPayments) Profitability from
 				) as sumPayments, 
 				sum(Ads.PriceInCADCents) as sumAdPrices 
 			from RentedSpaces
-			inner join Payments on Payments.RentedSpaceID = RentedSpaces.RentedSpaceID
 			inner join Stores on Stores.StoreID = RentedSpaces.StoreID
 			inner join Ads on Ads.AdID = RentedSpaces.AdID
-			where Stores.StrategicLocation in ('SL1','SL2')
+			where Stores.StrategicLocation in ('SL1','SL4')
 			group by StrategicLocation, isWeekend
 	) Results
