@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="3cf326c3-d363-436e-b410-70afbb408ef2" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/site/php/repositories/ReportRepository.php" afterPath="$PROJECT_DIR$/site/php/repositories/ReportRepository.php" />
-      <change beforePath="$PROJECT_DIR$/site/php/scripts/report2.php" afterPath="$PROJECT_DIR$/site/php/scripts/report2.php" />
-      <change beforePath="$PROJECT_DIR$/site/test.html" afterPath="$PROJECT_DIR$/site/test.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -15,11 +13,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="report3.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/site/php/scripts/report3.php">
+      <file leaf-file-name="report5.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/site/php/scripts/report5.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="744">
-              <caret line="34" column="2" lean-forward="true" selection-start-line="34" selection-start-column="2" selection-end-line="34" selection-end-column="2" />
+            <state relative-caret-position="312">
+              <caret line="13" column="36" lean-forward="false" selection-start-line="13" selection-start-column="36" selection-end-line="13" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -34,9 +32,10 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/site/test.html" />
-        <option value="$PROJECT_DIR$/site/php/repositories/ReportRepository.php" />
         <option value="$PROJECT_DIR$/site/php/scripts/report2.php" />
         <option value="$PROJECT_DIR$/site/php/scripts/report3.php" />
+        <option value="$PROJECT_DIR$/site/php/repositories/ReportRepository.php" />
+        <option value="$PROJECT_DIR$/site/php/scripts/report5.php" />
       </list>
     </option>
   </component>
@@ -140,12 +139,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1512184916354</updated>
-      <workItem from="1512184917807" duration="739000" />
+      <workItem from="1512184917807" duration="948000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="739000" />
+    <option name="totallyTimeSpent" value="948000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="2860" y="0" width="2911" height="791" extended-state="0" />
@@ -198,33 +197,61 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/site/php/repositories/ReportRepository.php">
+    <entry file="file://$PROJECT_DIR$/site/php/scripts/report2.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="40" column="40" lean-forward="false" selection-start-line="40" selection-start-column="40" selection-end-line="40" selection-end-column="40" />
-          <folding>
-            <marker date="1512185447165" expanded="true" signature="303:376" ph="SELECT numAd... " />
-            <marker date="1512185447165" expanded="true" signature="1074:1145" ph="SELECT * fro... Ads" />
-            <marker date="1512185447165" expanded="true" signature="1080:1145" ph="Select * fro... Ads" />
-            <marker date="1512185447165" expanded="true" signature="1346:1859" ph="Select * fro... Users" />
-            <marker date="1512185447165" expanded="true" signature="1431:1709" ph="Select disti... Ads" />
-            <marker date="1512185447165" expanded="true" signature="2056:2149" ph="SELECT * FRO... Ads" />
-          </folding>
+        <state relative-caret-position="700">
+          <caret line="32" column="0" lean-forward="true" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/site/php/scripts/report2.php">
+    <entry file="file://$PROJECT_DIR$/site/php/scripts/report1.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="628">
-          <caret line="32" column="0" lean-forward="true" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/site/php/scripts/report4.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="18" column="54" lean-forward="true" selection-start-line="18" selection-start-column="54" selection-end-line="18" selection-end-column="54" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/site/php/scripts/report3.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="744">
-          <caret line="34" column="2" lean-forward="true" selection-start-line="34" selection-start-column="2" selection-end-line="34" selection-end-column="2" />
+        <state relative-caret-position="384">
+          <caret line="16" column="14" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/site/php/repositories/ReportRepository.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="652">
+          <caret line="67" column="27" lean-forward="true" selection-start-line="67" selection-start-column="27" selection-end-line="67" selection-end-column="27" />
+          <folding>
+            <marker date="1512185782006" expanded="true" signature="303:376" ph="SELECT numAd... " />
+            <marker date="1512185782006" expanded="true" signature="1074:1145" ph="SELECT * fro... Ads" />
+            <marker date="1512185782006" expanded="true" signature="1080:1145" ph="Select * fro... Ads" />
+            <marker date="1512185782006" expanded="true" signature="1346:1859" ph="Select * fro... Users" />
+            <marker date="1512185782006" expanded="true" signature="1431:1709" ph="Select disti... Ads" />
+            <marker date="1512185782006" expanded="true" signature="2056:2149" ph="SELECT * FRO... Ads" />
+            <marker date="1512185782006" expanded="true" signature="2349:3286" ph="Select numRa... max" />
+            <marker date="1512185782006" expanded="true" signature="2502:2803" ph="Select max(R... PostingUserID" />
+            <marker date="1512185782006" expanded="true" signature="2580:2713" ph="select Posti... Ads" />
+            <marker date="1512185782006" expanded="true" signature="2909:3006" ph="select Posti... Ads" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/site/php/scripts/report5.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="312">
+          <caret line="13" column="36" lean-forward="false" selection-start-line="13" selection-start-column="36" selection-end-line="13" selection-end-column="36" />
           <folding />
         </state>
       </provider>
