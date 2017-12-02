@@ -14,12 +14,25 @@
 <script>
     $(document).ready(function() {
         $.ajax({
-            url: '/php/scripts/report4.php',
-            type: 'GET',
+            url: '/php/scripts/login.php',
+            type: 'POST',
             data: {
-                username: 'adriel@comp.com',
-                password: 'comp353'
+                email: 'sakusha@verizon.net',
+                password: 'lol1'
             },
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(response) {
+                var errorMessage = JSON.parse(response.responseText).message; //refer to the script to see error msg
+                var statusCode = response.status;
+                console.log(errorMessage);
+                console.log(statusCode);
+            }
+        });
+        $.ajax({
+            url: '/php/scripts/report8.php',
+            type: 'GET',
             success: function(response) {
                 console.log(response);
             },
