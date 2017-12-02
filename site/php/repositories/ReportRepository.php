@@ -21,6 +21,22 @@
         }
 
         public function report2() {
+            $sql = "SELECT * FROM Ads WHERE PostingDate >= addDate(now(), INTERVAL -10 DAY)";
+            $result = $this->connection->query($sql);
+            closeConnection($this->connection);
+            return $result;
+        }
+
+        public function report3() {
+            $sql =  "Select * from Users
+                        inner join (
+                            Select distinct PostingUserID from Ads
+                                where AdType = 'Sell'
+                                and Category = 'Clothing'
+                                and description like '%jacket%'
+                                and description like '%winter%'
+                        ) jacketSellers on Users.UserID = jacketSellers.PostingUserID
+                        where 	Users.AddressProvince = 'Quebec'";
             $result = $this->connection->query($sql);
             closeConnection($this->connection);
             return $result;
