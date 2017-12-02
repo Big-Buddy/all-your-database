@@ -93,7 +93,6 @@
                                 where Stores.StrategicLocation in ('SL1','SL2')
                                 group by StrategicLocation, isWeekend
                         ) Results";
-            var_dump($sql);
             return $this->returnResult($sql);
         }
 
