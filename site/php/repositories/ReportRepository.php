@@ -115,6 +115,78 @@
             return $this->returnResult($sql);
         }
 
+        public function report10Admin() {
+            $sql = "Select Users.UserID, Users.Email, ('Yes') as isAdmin, ('Yes') as canDoAdminStuff from Users
+                    where UserType = 'Admin'";
+            return $this->returnResult($sql);
+        }
+
+        public function report10Buyer() {
+            $sql = "Select 
+                        Users.UserID, 
+                        Users.Email, 
+                        count(distinct Ads.AdID) numAdsBuying, 
+                        if(sum(Ads.PriceInCADCents) is null, 0, sum(Ads.PriceInCADCents)) priceAllAds,
+                        if(sum(Payments.AmountInCADCents) is null, 0, sum(Payments.AmountInCADCents)) sumAllPayments
+                    from Users
+                    inner join Ads on Users.UserID = Ads.PostingUserID
+                    left join Payments on Payments.PayingUserID = Users.UserID
+                    where Users.UserType = 'Regular'
+                    and Ads.AdType = 'Buy'
+                    group by PostingUserID";
+            return $this->returnResult($sql);
+
+        }
+
+        public function report10Manager() {
+            $sql = "Select 
+                            ManagerUserID, 
+                            Users.Email,
+                            count(*) numStores,
+                            sum(Payments.AmountInCADCents) sumPaymentsReceived,
+                            sum(Ads.PriceInCADCents) sumAdPricesInStore
+                        from Users
+                        inner join Stores on Stores.ManagerUserID = Users.UserID
+                        inner join RentedSpaces on RentedSpaces.StoreID = Stores.StoreID
+                        inner join Ads on Ads.AdID = RentedSpaces.AdID
+                        inner join Payments on Payments.RentedSpaceID = RentedSpaces.RentedSpaceID
+                        where Users.UserType = 'StoreManager'
+                        group by Stores.ManagerUserID
+                    ";
+            return $this->returnResult($sql);
+
+        }
+
+        public function report10Seller() {
+            $sql = "Select  
+                        Results.UserID,
+                        Results.Email,
+                        Results.numAds,
+                        if(Results.sumServicePayments is null, 0, Results.sumServicePayments) sumServicePayments,
+                        if(Results.sumAdPrices is null, 0, Results.sumAdPrices) sumAdPrices,        
+                        if(Results.sumAdPrices is null, 0, Results.sumAdPrices) - if(Results.sumServicePayments is null, 0, Results.sumServicePayments) profitability 
+                    from ( 
+                        Select 
+                                Users.UserID,
+                                Users.Email,
+                                count(distinct Ads.AdID) numAds,
+                                if(
+                                    DAYOFWEEK(RentedSpaces.DateRented) = 7 or DAYOFWEEK(RentedSpaces.DateRented) = 1, 
+                                    sum(RentedSpaces.HoursRented*15 + if (RentedSpaces.DeliveryServices = 1, RentedSpaces.HoursRented*10, 0)), 
+                                    sum(RentedSpaces.HoursRented*10 + if (RentedSpaces.DeliveryServices = 1, RentedSpaces.HoursRented*5, 0))
+                                ) as sumServicePayments, 
+                                sum(Ads.PriceInCADCents) as sumAdPrices 
+                            from Users
+                            inner join Ads on Ads.PostingUserID = Users.UserID
+                            left join RentedSpaces on RentedSpaces.AdID = Ads.AdID
+                            where Users.UserType = 'Regular'
+                            and Ads.AdType = 'Sell'
+                            group by Ads.PostingUserID
+                    ) Results";
+            return $this->returnResult($sql);
+
+        }
+
         public function returnResult($sql) {
             $result = $this->connection->query($sql);
             closeConnection($this->connection);
