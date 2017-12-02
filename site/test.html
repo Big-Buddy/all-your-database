@@ -14,11 +14,20 @@
 <script>
     $(document).ready(function() {
         $.ajax({
-            url: '/php/scripts/login.php',
+            url: '/php/scripts/register.php',
             type: 'POST',
             data: {
-                email: 'sakusha@verizon.net',
-                password: 'lol1'
+                userID: 'charizard18',
+                password: 'lol1',
+                userType: 'Regular',
+                membershipPlan: 'Normal',
+                phone: 'asd',
+                email: 'asd',
+                addressStreet: 'asd',
+                addressCity: 'Montreal',
+                addressProvince: 'Quebec',
+                addressCountry: 'CA',
+                addressPostalCode: 'asd'
             },
             success: function(response) {
                 console.log(response);

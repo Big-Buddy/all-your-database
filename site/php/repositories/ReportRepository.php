@@ -9,7 +9,8 @@
             $this->connection = openConnection();
         }
 
-        public function report1() {
+        public function report1() 
+        {
 	        $sql = "SELECT numAdsCat.PostingUserID, maxAdsCat.Category, maxAdsCat.maxAds FROM ";
             $sql .= "( SELECT MAX(numAds) maxAds, Category FROM ( SELECT count(*) numAds, Category, PostingUserID FROM Ads GROUP BY PostingUserID, Category ) numAdsCat GROUP BY Category ) ";
             $sql .= "maxAdsCat INNER JOIN ";
@@ -18,12 +19,14 @@
             return $this->returnResult($sql);
         }
 
-        public function report2() {
+        public function report2() 
+        {
             $sql = "SELECT * FROM Ads WHERE PostingDate >= addDate(now(), INTERVAL -10 DAY)";
             return $this->returnResult($sql);
         }
 
-        public function report3() {
+        public function report3() 
+        {
             $sql =  "Select * from Users
                         inner join (
                             Select distinct PostingUserID from Ads
@@ -36,12 +39,14 @@
             return $this->returnResult($sql);
         }
 
-        public function report4() {
+        public function report4() 
+        {
         	$sql = "SELECT * FROM Ads WHERE Category IN ('RentElectronics', 'Car', 'Apartment', 'WeddingDresses')";
             return $this->returnResult($sql);
         }
 
-        public function report5() {
+        public function report5() 
+        {
             $sql = "Select numRatingsCat.PostingUserID, maxRatingsCat.Category, maxRatingsCat.maxRating,  Users.*
                         from (
                             Select max(Rating) maxRating, Category from (
@@ -58,7 +63,8 @@
             return $this->returnResult($sql);
         }
 
-        public function report6() {
+        public function report6() 
+        {
             $sql = "Select ManagerUserID, Stores.StoreID, sum(Payments.AmountInCadCents) sumPayments, count(*) numPayments from Stores
                             inner join RentedSpaces on RentedSpaces.StoreID = Stores.StoreID
                         inner join Payments on Payments.RentedSpaceID = RentedSpaces.RentedSpaceID
@@ -69,7 +75,8 @@
             return $this->returnResult($sql);
         }
 
-        public function report7() {
+        public function report7() 
+        {
             $sql = "Select Results.*, (Results.sumAdPrices - Results.sumPayments) Profitability from
                         ( 
                             Select 
@@ -91,7 +98,8 @@
             return $this->returnResult($sql);
         }
 
-        public function report8() {
+        public function report8() 
+        {
             $sql = "Select Stores.StoreID, Stores.StoreName, Ads.Category from Stores
                         inner join Users on Users.UserID = Stores.ManagerUserID
                     inner join RentedSpaces on RentedSpaces.StoreID = Stores.StoreID
@@ -101,7 +109,8 @@
             return $this->returnResult($sql);
         }
 
-        public function report9() {
+        public function report9() 
+        {
             $sql = "Select DateRented, 
                             if(
                                 DAYOFWEEK(RentedSpaces.DateRented) = 7 or DAYOFWEEK(RentedSpaces.DateRented) = 1,
@@ -115,13 +124,15 @@
             return $this->returnResult($sql);
         }
 
-        public function report10Admin() {
+        public function report10Admin() 
+        {
             $sql = "Select Users.UserID, Users.Email, ('Yes') as isAdmin, ('Yes') as canDoAdminStuff from Users
                     where UserType = 'Admin'";
             return $this->returnResult($sql);
         }
 
-        public function report10Buyer() {
+        public function report10Buyer() 
+        {
             $sql = "Select 
                         Users.UserID, 
                         Users.Email, 
@@ -138,7 +149,8 @@
 
         }
 
-        public function report10Manager() {
+        public function report10Manager() 
+        {
             $sql = "Select 
                             ManagerUserID, 
                             Users.Email,
@@ -157,7 +169,8 @@
 
         }
 
-        public function report10Seller() {
+        public function report10Seller() 
+        {
             $sql = "Select  
                         Results.UserID,
                         Results.Email,
@@ -187,7 +200,8 @@
 
         }
 
-        public function returnResult($sql) {
+        public function returnResult($sql) 
+        {
             $result = $this->connection->query($sql);
             closeConnection($this->connection);
             return $result;
