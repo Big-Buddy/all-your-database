@@ -20,5 +20,19 @@
             return $result;
         }
 
+        public function report2() {
+            $result = $this->connection->query($sql);
+            closeConnection($this->connection);
+            return $result;
+        }
+
+        public function report4() {
+        	$sql = "SELECT * FROM Ads WHERE Category IN ('RentElectronics', 'Car', 'Apartment', 'WeddingDresses')";
+            $result = $this->connection->query($sql);
+            closeConnection($this->connection);
+            return $result;
+
+        }
+
     }
- ?>
+ ?>	
