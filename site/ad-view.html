@@ -25,8 +25,22 @@
 		$("#city").html(city).css('textTransform', 'capitalize');
 
 		//retrieve relevant ads from DB
-		//format respones
-		//$("#ads_container").html(formatted_response);
+		$.ajax({
+            url: '/php/scripts/getAds.php',
+            type: 'POST',
+			data: {
+                
+            },
+            success: function(response) {
+                //ads retrieved
+                //format respones
+				//$("#ads_container").html(formatted_response);                
+            },
+            error: function(err){
+            	
+            }
+        });
+		
 	});
 </script>
 </html>

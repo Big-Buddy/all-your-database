@@ -36,6 +36,8 @@
 				-->
 			</div>
 			<a class="btn" id="send_pending_payments">Send pending payments to external processing department</a>
+			<br/>
+			<br/>
 			<a class="btn" href="/reports.html">Generate a report</a>
 		</div>
 	</div>
@@ -43,11 +45,11 @@
 <script>
 	$(document).ready(function(){
 		//determine user status
-		if(readCookie("user_type") == "user"){
+		if(readCookie("user_type") == "Regular" || readCookie("user_type") == "StoreManager"){
 			$("#user_container").show();
 			$("#admin_container").hide();
 		}
-		else if(readCookie("user_type") == "admin"){
+		else if(readCookie("user_type") == "Admin"){
 			$("#admin_container").show();
 			$("#user_container").hide();
 		}
