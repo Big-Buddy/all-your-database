@@ -14,11 +14,19 @@
 	    public $addressCountry;
 	    public $addressPostalCode;
 
-	    public function authenticateUser()
+	    public function authenticateUser($email, $password)
 	    {
             $userRepository = new UserRepository();
-            $result = $userRepository->authenticateUser($this->email, $this->password);
-	    	return $result->fetch_assoc();
+            $result = $userRepository->authenticateUser($email, $password);
+            if ($result->num_rows > 0) {
+            	while ($row = $result->fetch_assoc()) {
+            		$this->email = $row["email"];
+            		$this->password = $row["password"];
+            	}
+            	return 'success';
+            } else {
+            	return null;
+            }
 	    }
 	}
 ?>
