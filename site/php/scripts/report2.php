@@ -27,6 +27,6 @@
           echo json_encode($array);
       } else {
           header('HTTP/1.1 500 Server Error');
-          die(json_encode(array('message' => 'No Value was returned')));
+          die(json_encode(array('message' => 'No value was returned')));
       }
 ?>
