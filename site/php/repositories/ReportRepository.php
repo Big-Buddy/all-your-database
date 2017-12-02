@@ -41,7 +41,7 @@
             return $this->returnResult($sql);
         }
 
-        public function report5() {
+        public function report5($city) {
             $sql = "Select numRatingsCat.PostingUserID, maxRatingsCat.Category, maxRatingsCat.maxRating,  Users.*
                         from (
                             Select max(Rating) maxRating, Category from (
@@ -54,16 +54,16 @@
                             (select PostingUserID, adID, Rating, Category from Ads inner join Ratings on AdIDBeingRated = adID) numRatingsCat
                         on numRatingsCat.Category = maxRatingsCat.Category and numRatingsCat.Rating = maxRatingsCat.maxRating
                         inner join Users on Users.UserID = numRatingsCat.PostingUserID
-                        where AddressCity like '%%'";
+                        where AddressCity like '$city'";
             return $this->returnResult($sql);
         }
 
-        public function report6() {
+        public function report6($manager) {
             $sql = "Select ManagerUserID, Stores.StoreID, sum(Payments.AmountInCadCents) sumPayments, count(*) numPayments from Stores
                             inner join RentedSpaces on RentedSpaces.StoreID = Stores.StoreID
                         inner join Payments on Payments.RentedSpaceID = RentedSpaces.RentedSpaceID
                         inner join Ads on Ads.AdID = RentedSpaces.AdID
-                            where ManagerUserID like '%%'
+                            where ManagerUserID like '$manager'
                         group by ManagerUserID, Stores.StoreID
                         order by sumPayments desc";
             return $this->returnResult($sql);
@@ -76,8 +76,8 @@
                                     StrategicLocation, 
                                     if(DAYOFWEEK(RentedSpaces.DateRented) = 7 or DAYOFWEEK(RentedSpaces.DateRented) = 1, 1, 0) as isWeekend, 
                                     if(
-                                        DAYOFWEEK(RentedSpaces.DateRented) = 7 or DAYOFWEEK(RentedSpaces.DateRented) = 1, -- If it's a weekend, use weekend rates. else use weekday rates
-                                        sum(RentedSpaces.HoursRented*15 + if (RentedSpaces.DeliveryServices = 1, RentedSpaces.HoursRented*10, 0)), -- if there's delivery services, add delivery service rates
+                                        DAYOFWEEK(RentedSpaces.DateRented) = 7 or DAYOFWEEK(RentedSpaces.DateRented) = 1, 
+                                        sum(RentedSpaces.HoursRented*15 + if (RentedSpaces.DeliveryServices = 1, RentedSpaces.HoursRented*10, 0)),
                                         sum(RentedSpaces.HoursRented*10 + if (RentedSpaces.DeliveryServices = 1, RentedSpaces.HoursRented*5, 0))
                                     ) as sumPayments, 
                                     sum(Ads.PriceInCADCents) as sumAdPrices 
@@ -88,6 +88,7 @@
                                 where Stores.StrategicLocation in ('SL1','SL2')
                                 group by StrategicLocation, isWeekend
                         ) Results";
+            var_dump($sql);
             return $this->returnResult($sql);
         }
 

@@ -10,25 +10,63 @@
 	<div class="container">
 		<a id="list_users_most_ads" class="btn">List the users with the most ads</a>
 		<br />
+		<br />
 		<a id="list_recent_ads" class="btn">List the ads posted within the past 10 days</a>
+		<br />
 		<br />
 		<a id="list_users_selling_mens_jackets" class="btn">User details for users selling men's jackets in Quebec</a>
 		<br />
+		<br />
 		<a id="list_rent_items" class="btn">List all the "rent" items</a>
 		<br />
+		<br />
 		<a id="list_highest_rated" class="btn">List the highest rated items based on city and province</a>
-		 <!-- TODO: capture city and region -->
+				 <br/>
+				 <br/>
+				 <div id="province_container">
+					<select id="province">
+						<option selected disabled>Select a province..</option>
+						<option value="on">Ontario</option>
+						<option value="qc">Quebec</option>
+					</select>
+				</div>
+				<div id="cities_on_container" class="hidden-content">
+					City:
+					<br />
+					<select id="on_city">
+						<option selected disabled>Select a city..</option>
+						<option value="Ottawa">Ottawa</option>
+						<option value="Toronto">Toronto</option>
+					</select>
+				</div>
+				<div id="cities_qc_container" class="hidden-content">
+					City:
+					<br />
+					<select id="qc_city">
+						<option selected disabled>Select a city..</option>
+						<option value="Montreal">Montreal</option>
+						<option value="Quebec City">Quebec City</option>
+					</select>
+				</div>
+		<br />
 		<br />
 		<a id="list_daily_revenue" class="btn">Get the daily revenue and number of transactions by given store manager (past 15 days)</a>
-		<!-- TODO: capture store manager -->
+			<br/>
+			<br/>
+			Manager ID:
+			<input type="text" id="manager"/>
+		<br />
 		<br />
 		<a id="list_store_rent_profitability" class="btn">Get the store rent profitability SL-1 SL-4 on weekends or weekdays</a>
+		<br />
 		<br />
 		<a id="list_store_item_types" class="btn">List the types of items sold by each store in given province</a>
 		<!-- TODO: capture province -->
 		<br />
+		<br />
 		<a id="list_seller_delivery_costs" class="btn">List a given seller's upcoming 7 day delivery fees, and past 7 day fees</a>
 		<!-- TODO: capture seller -->
+		<br />
 		<br />
 
 		<!-- TODO: one more report of our choice -->
@@ -40,5 +78,202 @@
 </body>
 <script>	
 // Onclick for each "button", performing necessary SQL query and putting formatted response insite report_view_container
+$(document).ready(function(){	
+
+	$("#list_users_most_ads").on("click", function(e){
+		$.ajax({
+            url: '/php/scripts/report1.php',
+            type: 'POST',			
+            success: function(response) {
+                //returns userID, category and # of ads
+                response = JSON.parse(response);
+
+                var report_html = "<table><tr class='report-table-header'><td>User</td><td>Category</td><td>Ads</td></tr>";
+                for(var i=0; i<response.length;i++){
+                	report_html += "<tr><td>"+response[i].postingUserID+"</td><td>"+response[i].category+"</td><td>"+response[i].maxAds+"</td></tr>";
+                }
+                report_html += "</table>";
+                $("#report_view_container").html(report_html);
+            },
+            error: function(err){
+            	console.log("There was an error:" + JSON.stringify(err));
+            	if(JSON.parse(err.responseText)){
+            		alert(JSON.parse(err.responseText).message);
+            	}
+            }
+        });
+	});
+	$("#list_recent_ads").on("click", function(e){
+		$.ajax({
+            url: '/php/scripts/report2.php',
+            type: 'POST',			
+            success: function(response) {
+                //returns AdID, PostingUserID, PostingDate, DaysToPromote, AdType, Title, Description, PriceInCADCentes, Category
+                response = JSON.parse(response);
+
+                var report_html = "<table><tr class='report-table-header'><td>AdID</td><td>PostingUserID</td><td>PostingDate</td><td>DaysToPromote</td><td>AdType</td><td>Title</td><td>Description</td><td>PriceInCADCentes</td><td>Category</td></tr>";
+                for(var i=0; i<response.length;i++){
+                	var price = response[i].priceInCADCentes;
+                	if(price == null){
+                		price = "-";
+                	}
+                	report_html += "<tr><td>"+response[i].adID+"</td><td>"+response[i].postingUserId+"</td><td>"+response[i].postingDate+"</td><td>"+response[i].daysToPromote+"</td><td>"+response[i].adType+"</td><td>"+response[i].title+"</td><td>"+response[i].description+"</td><td>"+price+"</td><td>"+response[i].category+"</td></tr>";
+                }
+                report_html += "</table>";
+                $("#report_view_container").html(report_html);
+            },
+            error: function(err){
+            	console.log("There was an error:" + JSON.stringify(err));
+            	if(JSON.parse(err.responseText)){
+            		alert(JSON.parse(err.responseText).message);
+            	}
+            }
+        });
+	});
+	$("#list_users_selling_mens_jackets").on("click", function(e){
+		$.ajax({
+            url: '/php/scripts/report3.php',
+            type: 'POST',			
+            success: function(response) {
+                //returns user object
+                response = JSON.parse(response);
+
+                var report_html = "<table><tr class='report-table-header'><td>userID</td><td>password</td><td>userType</td><td>membershipPlan</td><td>phone</td><td>email</td><td>addressStreet</td><td>addressCity</td><td>addressProvince</td><td>addressCountry</td><td>addressPostalCode</td></tr>";
+                for(var i=0; i<response.length;i++){                	
+                	report_html += "<tr><td>"+response[i].userID+"</td><td>"+response[i].password+"</td><td>"+response[i].userType+"</td><td>"+response[i].membershipPlan+"</td><td>"+response[i].phone+"</td><td>"+response[i].email+"</td><td>"+response[i].addressStreet+"</td><td>"+response[i].addressCity+"</td><td>"+response[i].addressProvince+"</td><td>"+response[i].addressCountry+"</td><td>"+response[i].addressPostalCode+"</td></tr>";
+                }
+                report_html += "</table>";
+                $("#report_view_container").html(report_html);
+            },
+            error: function(err){
+            	console.log("There was an error:" + JSON.stringify(err));
+            	if(JSON.parse(err.responseText)){
+            		alert(JSON.parse(err.responseText).message);
+            	}
+            }
+        });
+	});
+	$("#list_rent_items").on("click", function(e){
+		$.ajax({
+            url: '/php/scripts/report4.php',
+            type: 'POST',			
+            success: function(response) {
+                //returns user object
+                response = JSON.parse(response);
+
+                var report_html = "<table><tr class='report-table-header'><td>adID</td><td>postingUserID</td><td>postingDate</td><td>daysToPromote</td><td>adType</td><td>title</td><td>description</td><td>priceInCADCents</td><td>category</td></tr>";
+                for(var i=0; i<response.length;i++){                	
+                	report_html += "<tr><td>"+response[i].adID+"</td><td>"+response[i].postingUserID+"</td><td>"+response[i].postingDate+"</td><td>"+response[i].daysToPromote+"</td><td>"+response[i].adType+"</td><td>"+response[i].title+"</td><td>"+response[i].description+"</td><td>"+response[i].priceInCADCents+"</td><td>"+response[i].category+"</td></tr>";
+                }
+                report_html += "</table>";
+                $("#report_view_container").html(report_html);
+            },
+            error: function(err){
+            	console.log("There was an error:" + JSON.stringify(err));
+            	if(JSON.parse(err.responseText)){
+            		alert(JSON.parse(err.responseText).message);
+            	}
+            }
+        });
+	});
+	
+	//capture city
+	var city = "";
+	$("#province").change(function(){
+		if($(this).val() == "on"){
+			$("#cities_on_container").show();
+			$("#cities_qc_container").hide();
+		}
+		else if($(this).val() == "qc"){
+			$("#cities_qc_container").show();
+			$("#cities_on_container").hide();
+		}
+	});
+	$("#on_city").change(function(){
+		city = $(this).val();
+	});
+	$("#qc_city").change(function(){
+		city = $(this).val();
+	});
+	$("#list_highest_rated").on("click", function(e){
+		$.ajax({
+            url: '/php/scripts/report5.php',
+            type: 'POST',
+            data: {
+                city: city
+            },			
+            success: function(response) {
+                //returns userID, category and # of ads
+                response = JSON.parse(response);
+
+                var report_html = "<table><tr class='report-table-header'><td>postingUserID</td><td>category</td><td>maxRating</td><td>userID</td><td>password</td><td>userType</td><td>membershipPlan</td><td>phone</td><td>email</td><td>addressStreet</td><td>addressCity</td><td>addressProvince</td><td>addressCountry</td><td>addressPostalCode</td></tr>";
+                for(var i=0; i<response.length;i++){
+                	report_html += "<tr><td>"+response[i].postingUserID+"</td><td>"+response[i].category+"</td><td>"+response[i].maxRating+"</td><td>"+response[i].userID+"</td><td>"+response[i].password+"</td><td>"+response[i].userType+"</td><td>"+response[i].membershipPlan+"</td><td>"+response[i].phone+"</td><td>"+response[i].email+"</td><td>"+response[i].addressStreet+"</td><td>"+response[i].addressCity+"</td><td>"+response[i].addressProvince+"</td><td>"+response[i].addressCountry+"</td><td>"+response[i].addressPostalCode+"</td></tr>";
+                }
+                report_html += "</table>";
+                $("#report_view_container").html(report_html);
+            },
+            error: function(err){
+            	console.log("There was an error:" + JSON.stringify(err));
+            	if(JSON.parse(err.responseText)){
+            		alert(JSON.parse(err.responseText).message);
+            	}
+            }
+        });
+	});
+	
+	
+	$("#list_daily_revenue").on("click", function(e){
+		//capture manager
+		var manager = $("#manager").val();
+		$.ajax({
+            url: '/php/scripts/report6.php',
+            type: 'POST',
+            data: {
+                manager: manager
+            },			
+            success: function(response) {
+                //returns userID, category and # of ads
+                response = JSON.parse(response);
+
+                var report_html = "<table><tr class='report-table-header'><td>managerUserID</td><td>storeID</td><td>sumPayments</td><td>numPayments</td></tr>";
+                for(var i=0; i<response.length;i++){
+                	report_html += "<tr><td>"+response[i].managerUserID+"</td><td>"+response[i].storeID+"</td><td>"+response[i].sumPayments+"</td><td>"+response[i].numPayments+"</td></tr>";
+                }
+                report_html += "</table>";
+                $("#report_view_container").html(report_html);
+            },
+            error: function(err){
+            	console.log("There was an error:" + JSON.stringify(err));
+            	if(JSON.parse(err.responseText)){
+            		alert(JSON.parse(err.responseText).message);
+            	}
+            }
+        });
+	});
+	$("#list_store_rent_profitability").on("click", function(e){
+		$.ajax({
+            url: '/php/scripts/report7.php',
+            type: 'POST',			
+            success: function(response) {
+                //returns user object
+                response = JSON.parse(response);
+
+                var report_html = "<table><tr class='report-table-header'><td>strategicLocation</td><td>isWeekend</td><td>sumPayments</td><td>sumAdPrices</td><td>profitability</td></tr>";
+                for(var i=0; i<response.length;i++){                	
+                	report_html += "<tr><td>"+response[i].strategicLocation+"</td><td>"+response[i].isWeekend+"</td><td>"+response[i].sumPayments+"</td><td>"+response[i].sumAdPrices+"</td><td>"+response[i].profitability+"</td></tr>";
+                }
+                report_html += "</table>";
+                $("#report_view_container").html(report_html);
+            },
+            error: function(err){
+            	console.log("There was an error:" + JSON.stringify(err));
+            	if(JSON.parse(err.responseText)){
+            		alert(JSON.parse(err.responseText).message);
+            	}
+            }
+        });
+	});
+});
 </script>
 </html>
