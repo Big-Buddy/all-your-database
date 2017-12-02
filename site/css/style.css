@@ -73,3 +73,16 @@ a.btn{
 .error-msg{
 	color:red;
 }
+.report-table-header{
+	font-size: 20px;
+	font-weight: bold;
+}
+#report_view_container table{
+	width: 80%;
+	margin: auto;
+	margin-bottom: 100px;
+}
+#report_view_container td {
+    border: 1px solid black;
+    padding: 3px;
+}

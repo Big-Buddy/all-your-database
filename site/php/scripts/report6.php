@@ -2,7 +2,8 @@
 require_once '../repositories/ReportRepository.php';
 
 $reportRepository = new ReportRepository();
-$result = $reportRepository->report6();
+$manager = $_POST['manager'];
+$result = $reportRepository->report6($manager);
 $isSuccess = false;
 
 $array = [];
@@ -22,6 +23,6 @@ if ($isSuccess) {
     echo json_encode($array);
 } else {
     header('HTTP/1.1 500 Server Error');
-    die(json_encode(array('message' => 'Something went wrong on our side')));
+    die(json_encode(array('message' => 'Please specify a valid manager ID')));
 }
 ?>
