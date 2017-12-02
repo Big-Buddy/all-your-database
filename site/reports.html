@@ -8,18 +8,14 @@
 </head>
 <body>
 	<div class="container">
-		<a id="list_users_most_ads" class="btn">List the users with the most ads</a>
-		<br />
-		<br />
+		<a id="list_users_most_ads" class="btn">List the users with the most ads</a>		
+		<hr>
 		<a id="list_recent_ads" class="btn">List the ads posted within the past 10 days</a>
-		<br />
-		<br />
-		<a id="list_users_selling_mens_jackets" class="btn">User details for users selling men's jackets in Quebec</a>
-		<br />
-		<br />
+		<hr>
+		<a id="list_users_selling_mens_jackets" class="btn">User details for users selling men's jackets in Quebec</a>		
+		<hr>
 		<a id="list_rent_items" class="btn">List all the "rent" items</a>
-		<br />
-		<br />
+		<hr>
 		<a id="list_highest_rated" class="btn">List the highest rated items based on city and province</a>
 				 <br/>
 				 <br/>
@@ -47,28 +43,31 @@
 						<option value="Montreal">Montreal</option>
 						<option value="Quebec City">Quebec City</option>
 					</select>
-				</div>
-		<br />
-		<br />
+				</div>		
+		<hr>
 		<a id="list_daily_revenue" class="btn">Get the daily revenue and number of transactions by given store manager (past 15 days)</a>
 			<br/>
 			<br/>
 			Manager ID:
 			<input type="text" id="manager"/>
-		<br />
-		<br />
+		<hr>
 		<a id="list_store_rent_profitability" class="btn">Get the store rent profitability SL-1 SL-4 on weekends or weekdays</a>
-		<br />
-		<br />
+		<hr>
 		<a id="list_store_item_types" class="btn">List the types of items sold by each store in given province</a>
-		<!-- TODO: capture province -->
-		<br />
-		<br />
+		<br/>
+		<br/>
+			<div id="province_by_store_container">
+				<select id="province_by_store">					
+					<option selected value="Ontario">Ontario</option>
+					<option value="Quebec">Quebec</option>
+				</select>
+			</div>
+		<hr>
 		<a id="list_seller_delivery_costs" class="btn">List a given seller's upcoming 7 day delivery fees, and past 7 day fees</a>
-		<!-- TODO: capture seller -->
-		<br />
-		<br />
-
+		<br/>
+		<br/>
+			<input type="text" id="seller"/>
+		<hr>
 		<!-- TODO: one more report of our choice -->
 		
 		<div id="report_view_container">
@@ -262,6 +261,64 @@ $(document).ready(function(){
                 var report_html = "<table><tr class='report-table-header'><td>strategicLocation</td><td>isWeekend</td><td>sumPayments</td><td>sumAdPrices</td><td>profitability</td></tr>";
                 for(var i=0; i<response.length;i++){                	
                 	report_html += "<tr><td>"+response[i].strategicLocation+"</td><td>"+response[i].isWeekend+"</td><td>"+response[i].sumPayments+"</td><td>"+response[i].sumAdPrices+"</td><td>"+response[i].profitability+"</td></tr>";
+                }
+                report_html += "</table>";
+                $("#report_view_container").html(report_html);
+            },
+            error: function(err){
+            	console.log("There was an error:" + JSON.stringify(err));
+            	if(JSON.parse(err.responseText)){
+            		alert(JSON.parse(err.responseText).message);
+            	}
+            }
+        });
+	});
+
+	$("#list_store_item_types").on("click", function(e){
+		//capture province
+		var province = $("#province_by_store").val();
+		$.ajax({
+            url: '/php/scripts/report8.php',
+            type: 'POST',
+            data: {
+                province: province
+            },			
+            success: function(response) {
+                //returns userID, category and # of ads
+                response = JSON.parse(response);
+
+                var report_html = "<table><tr class='report-table-header'><td>storeID</td><td>storeName</td><td>category</td></tr>";
+                for(var i=0; i<response.length;i++){
+                	report_html += "<tr><td>"+response[i].storeID+"</td><td>"+response[i].storeName+"</td><td>"+response[i].category+"</td></tr>";
+                }
+                report_html += "</table>";
+                $("#report_view_container").html(report_html);
+            },
+            error: function(err){
+            	console.log("There was an error:" + JSON.stringify(err));
+            	if(JSON.parse(err.responseText)){
+            		alert(JSON.parse(err.responseText).message);
+            	}
+            }
+        });
+	});
+
+	$("#list_seller_delivery_costs").on("click", function(e){
+		//capture seller
+		var seller = $("#seller").val();
+		$.ajax({
+            url: '/php/scripts/report9.php',
+            type: 'POST',
+            data: {
+                seller: seller
+            },			
+            success: function(response) {
+                //returns userID, category and # of ads
+                response = JSON.parse(response);
+
+                var report_html = "<table><tr class='report-table-header'><td>dateRented</td><td>deliveryCosts</td></tr>";
+                for(var i=0; i<response.length;i++){
+                	report_html += "<tr><td>"+response[i].dateRented+"</td><td>"+response[i].deliveryCosts+"</td></tr>";
                 }
                 report_html += "</table>";
                 $("#report_view_container").html(report_html);

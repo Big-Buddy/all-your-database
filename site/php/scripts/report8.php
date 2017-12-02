@@ -2,7 +2,8 @@
 require_once '../repositories/ReportRepository.php';
 
 $reportRepository = new ReportRepository();
-$result = $reportRepository->report8();
+$province = $_POST['province'];
+$result = $reportRepository->report8($province);
 $isSuccess = false;
 
 $array = [];
