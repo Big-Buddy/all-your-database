@@ -19,7 +19,7 @@ create table Ads
   AdID int not null auto_increment,
   PostingUserID varchar(63) not null,
   PostingDate date not null,
-  DaysToPromote int not null default 0,
+  DaysToPromote int not null default 0, /* == position */
   AdType enum('Buy', 'Sell') not null,
   Title varchar(255) not null,
   Description varchar(2047) not null,
@@ -138,6 +138,10 @@ begin
 		or (select AdType from Ads where AdID = new.AdID) = 'Buy' then
     signal sqlstate '45000' set message_text = "Rented Spaces can only host sell ads.";
     end if;
+
+  if (select sum(HoursRented) from RentedSpaces where DateRented = new.DateRented and StoreID = new.StoreID) + new.HoursRented > 8 then
+    signal sqlstate '45000' set message_text = "Cannot schedule a slot in a Store for more than 8 hours in a day.";
+    end if;
 end;//
 
 create event BackupPayments
@@ -148,16 +152,57 @@ do begin
     select * from Payments;
 end;//
 
-delimiter ;
-
 create event DeleteOldAds
 on schedule every 1 day
-do delete from Ads
-where AdID in (
-select AdID
-from (select * from Ads join Users on Ads.PostingUserID = Users.UserID) as AdsAndUsers
+do begin
+
+update Payments set RentedSpaceID = null
+where RentedSpaceID in (
+select RentedSpaceID
+from Ads join Users on Ads.PostingUserID = Users.UserID
+  join RentedSpaces on RentedSpaces.AdID = Ads.AdID
 where DaysToPromote <= 0 and datediff(now(), adddate(PostingDate,
   if(MembershipPlan = 'Premuim', 30, if(MembershipPlan = 'Silver', 14, 7)))) >= 0);
+
+update ExternalBackupPayments set RentedSpaceID = null
+where RentedSpaceID in (
+select RentedSpaceID
+from Ads join Users on Ads.PostingUserID = Users.UserID
+  join RentedSpaces on RentedSpaces.AdID = Ads.AdID
+where DaysToPromote <= 0 and datediff(now(), adddate(PostingDate,
+  if(MembershipPlan = 'Premuim', 30, if(MembershipPlan = 'Silver', 14, 7)))) >= 0);
+
+delete from RentedSpaces
+where AdID in (
+select AdID
+from Ads join Users on Ads.PostingUserID = Users.UserID
+where DaysToPromote <= 0 and datediff(now(), adddate(PostingDate,
+  if(MembershipPlan = 'Premuim', 30, if(MembershipPlan = 'Silver', 14, 7)))) >= 0);
+
+delete from Images
+where AdID in (
+select AdID
+from Ads join Users on Ads.PostingUserID = Users.UserID
+where DaysToPromote <= 0 and datediff(now(), adddate(PostingDate,
+  if(MembershipPlan = 'Premuim', 30, if(MembershipPlan = 'Silver', 14, 7)))) >= 0);
+
+delete from Ratings
+where AdIDBeingRated in (
+select AdID
+from Ads join Users on Ads.PostingUserID = Users.UserID
+where DaysToPromote <= 0 and datediff(now(), adddate(PostingDate,
+  if(MembershipPlan = 'Premuim', 30, if(MembershipPlan = 'Silver', 14, 7)))) >= 0);
+
+delete from Ads
+where AdID in (
+select AdID
+from Ads join Users on Ads.PostingUserID = Users.UserID
+where DaysToPromote <= 0 and datediff(now(), adddate(PostingDate,
+  if(MembershipPlan = 'Premuim', 30, if(MembershipPlan = 'Silver', 14, 7)))) >= 0);
+
+end;//
+
+delimiter ;
 
 create event PromotionDaysRemaining
 on schedule every 1 day
