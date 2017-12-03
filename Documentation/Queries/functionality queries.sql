@@ -54,3 +54,8 @@ INSERT INTO Payments (PayingUserID, RentedSpaceID, AmountInCADCents, CardNumber,
 VALUE (THIS_USER, RENTED_SPACE_THAT_WAS_JUST_INSERTED, TOTAL_COST, CARD_NUM, CARD_EXP, CARD_CODE, CARD_NAME, CARD_COMP, "Credit", THE_DATE);
 
 
+/*Update membership*/
+Update Users
+set MembershipPlan = $NewPlan
+where UserID = $UserID
+
