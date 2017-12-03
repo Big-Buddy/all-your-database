@@ -55,6 +55,12 @@ VALUE (THIS_USER, RENTED_SPACE_THAT_WAS_JUST_INSERTED, TOTAL_COST, CARD_NUM, CAR
 
 
 /*Update membership*/
+/*Only do step 2 if step 1 runs successfuly!*/
+/*Step 1: Send payment to DB */
+INSERT INTO Payments (PayingUserID, RentedSpaceID, AmountInCADCents, CardNumber, CardExpiryDate, CardSecurityCode, CardholderName, CardCompany, CardType, PaymentDate)
+VALUE ($UserID, NULL, $TotalCost, $CardNum, $CardExp, $CardCode, $CardholderName, $CardCompany, "Credit", now());
+
+/*Step 2: update membership */
 Update Users
 set MembershipPlan = $NewPlan
 where UserID = $UserID
