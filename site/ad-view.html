@@ -39,10 +39,10 @@
             	console.log(JSON.stringify(response,4,'\t'));
                 //ads retrieved
                 //format respones
-                var formatted_response = "<table><tr class='report-table-header'><td>Title</td><td>Description</td><td>Seller</td><td>Rate Product</td></tr>";
+                var formatted_response = "<table><tr class='report-table-header'><td>Title</td><td>Description</td><td>Price</td><td>Seller</td><td>Ad Type</td><td>Address</td><td>Rate Product</td></tr>";
                 for(var i=0; i<response.length;i++){
-                	formatted_response += "<tr><td>"+response[i].title+"</td><td>"+response[i].description+"</td><td class='view_ads_for view_"+response[i].userID+"'>"+response[i].userID+
-                			"</td><td>Rate Product <div class='rating'>"+
+                	formatted_response += "<tr><td>"+response[i].title+"</td><td>"+response[i].description+"</td><td>$"+response[i].priceInCADCents/100+"</td><td class='view_ads_for view_"+response[i].userID+"'>"+response[i].userID+
+                			"</td><td>"+response[i].adType+"</td><td>"+response[i].addressStreet+" "+response[i].addressCity+" "+response[i].addressProvince+" "+response[i].addressCountry+" "+response[i].addressPostalCode+"</td><td>Rate Product <div class='rating'>"+
 							    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_5' value='5'><label for='rate_"+response[i].adID+"_5'></label></span>"+
 							    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_4' value='4'><label for='rate_"+response[i].adID+"_4'></label></span>"+
 							    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_3' value='3'><label for='rate_"+response[i].adID+"_3'></label></span>"+
