@@ -37,3 +37,20 @@ WHERE AdID = AD_BEING_DELETED;
 
 DELETE FROM Ads
 WHERE AdID = AD_BEING_DELETED;
+
+/* Post an ad and insert and supporting data (Payments, rentedspaces), THE SEQUENCE OF THESE INSERTS IS IMPORTANT! */
+/* Standard ad insert */
+INSERT INTO Ads (PostingUserID, PostingDate, DaysToPromote, AdType, Title, Description, PriceInCADCents, Category)
+VALUES (THIS_USER, THE_DATE, SELECTED_PROMOTION, TYPE_OF_AD, TITLE, DESCRIPTION, PRICE, SELECTED_CATEGORY); /* SELECTED_PROMOTION is 0 in the case that no promotion is chosen, price can be zero in any case BUT in the case of "XseekingY type ad" is MUST be zero */
+INSERT INTO Images (FilePath, AdID)
+VALUES (THE_PATH, THE_AD_THAT_WAS_JUST_INSERTED);
+
+/* If the user wants to rent a physical space for their ad, extra form to select a space, date, and # of hours to rent, and if they want delivery services to be enabled, THIS INFO NEEDS TO BE STORED FOR THE PAYMENT */
+INSERT INTO RentedSpaces (AdID, StoreID, DateRented, HoursRented, DeliveryServices)
+VALUES (AD_THAT_WAS_JUST_INSERTED, SELECTED_STORE, THE_DATE, NUM_HOURS, DELIVERY_01);
+
+/* If a promotion or rented space is selected, extra form to submit payment info */
+INSERT INTO Payments (PayingUserID, RentedSpaceID, AmountInCADCents, CardNumber, CardExpiryDate, CardSecurityCode, CardholderName, CardCompany, CardType, PaymentDate)
+VALUE (THIS_USER, RENTED_SPACE_THAT_WAS_JUST_INSERTED, TOTAL_COST, CARD_NUM, CARD_EXP, CARD_CODE, CARD_NAME, CARD_COMP, "Credit", THE_DATE);
+
+
