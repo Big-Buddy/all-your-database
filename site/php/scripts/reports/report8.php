@@ -1,5 +1,5 @@
 <?php
-require_once '../repositories/ReportRepository.php';
+require_once '../../repositories/ReportRepository.php';
 
 $reportRepository = new ReportRepository();
 $province = $_POST['province'];

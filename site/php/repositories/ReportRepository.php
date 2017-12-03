@@ -1,6 +1,6 @@
 <?php
     // The 10 MySQL queries for the report
-    require '../Connection.php';
+    require '../../Connection.php';
 
     class ReportRepository {
         private $connection;

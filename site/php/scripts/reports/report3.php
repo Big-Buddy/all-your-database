@@ -1,6 +1,6 @@
 <?php
 error_reporting(0);
-require_once '../repositories/ReportRepository.php';
+require_once '../../repositories/ReportRepository.php';
 
 $reportRepository = new ReportRepository();
 $result = $reportRepository->report3();

@@ -167,7 +167,7 @@
         	else{
         		//no errors, proceed with signup attempt
         		$.ajax({
-		            url: '/php/register.php',
+		            url: '/php/scripts/register.php',
 		            type: 'POST',
 					data: {
 		                userID: username,
@@ -186,11 +186,10 @@
 		                //if response indicates correct credentials...
 		                response = JSON.parse(response);
 		               
-		                	// //add user session
-		                	// createCookie("user_type",response[0].userType,30);
-		                	// //redirect to /landing.html
-		                	// window.location.href="/landing.html";		                	
-		                }
+	                	// //add user session
+	                	createCookie("user_type",response.userType,30);
+	                	// //redirect to /landing.html
+	                	window.location.href="/landing.html";		                
 		            },
 		            error: function(err){
 		            	console.log("There was an error while trying to sign up: " + JSON.stringify(err));
