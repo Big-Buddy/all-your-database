@@ -41,7 +41,7 @@
                 //format respones
                 var formatted_response = "<table><tr class='report-table-header'><td>Title</td><td>Description</td><td>Seller</td><td>Rate Product</td></tr>";
                 for(var i=0; i<response.length;i++){
-                	formatted_response += "<tr><td>"+response[i].title+"</td><td>"+response[i].description+"</td><td>"+response[i].userID+
+                	formatted_response += "<tr><td>"+response[i].title+"</td><td>"+response[i].description+"</td><td class='view_ads_for view_"+response[i].userID+"'>"+response[i].userID+
                 			"</td><td>Rate Product <div class='rating'>"+
 							    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_5' value='5'><label for='rate_"+response[i].adID+"_5'></label></span>"+
 							    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_4' value='4'><label for='rate_"+response[i].adID+"_4'></label></span>"+
@@ -76,6 +76,47 @@
 
 	        alert("Rating received, thank you!");
 	    }); 
+
+	    //view ads for a specific user
+	    $('body').on("click", ".view_ads_for", function () {
+	        //get username
+	        var username = $(this).attr("class").split(" ")[1].split("view_")[1];
+	        if(username != "" || username != null || username != undefined){
+	        	//retrieve relevant ads from DB
+				$.ajax({
+		            url: '/php/scripts/view-ads-user.php',
+		            type: 'POST',
+					data: {
+		                username:username
+		            },
+		            success: function(response) {
+		            	response = JSON.parse(response);
+		            	console.log(JSON.stringify(response,4,'\t'));
+		                //ads retrieved
+		                //format respones
+		                var formatted_response = "<table><tr class='report-table-header'><td>Title</td><td>Description</td><td>Seller</td><td>Rate Product</td></tr>";
+		                for(var i=0; i<response.length;i++){
+		                	formatted_response += "<tr><td>"+response[i].title+"</td><td>"+response[i].description+"</td><td class='view_ads_for view_"+response[i].userID+"'>"+response[i].userID+
+		                			"</td><td>Rate Product <div class='rating'>"+
+									    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_5' value='5'><label for='rate_"+response[i].adID+"_5'></label></span>"+
+									    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_4' value='4'><label for='rate_"+response[i].adID+"_4'></label></span>"+
+									    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_3' value='3'><label for='rate_"+response[i].adID+"_3'></label></span>"+
+									    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_2' value='2'><label for='rate_"+response[i].adID+"_2'></label></span>"+
+									    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_1' value='1'><label for='rate_"+response[i].adID+"_1'></label></span>"+
+									"</div></td></tr>";
+		                }
+		                formatted_response += "</table>";
+						$("#ocn_container").html(formatted_response);  				              
+		            },
+		            error: function(err){
+		            	console.log("There was an error retrieving ads:" + JSON.stringify(err));
+		            	if(JSON.parse(err.responseText)){
+		            		alert(JSON.parse(err.responseText).message);
+		            	}
+		            }
+		        });
+	        }
+	    });
 		
 	});
 </script>

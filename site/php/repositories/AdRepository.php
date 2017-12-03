@@ -19,6 +19,15 @@ class AdRepository {
         return $result;
     }
 
+    public function getAdsForUser($username)
+    {
+        $sql = "SELECT * FROM Ads ";
+        $sql .= "INNER JOIN Users ON Ads.PostingUserID = Users.UserID ";
+        $sql .= "WHERE PostingUserID='$username';";
+        $result = $this->connection->query($sql);
+        $this->closeConnection();
+        return $result;
+    }
     public function returnResult($sql)
     {
         $result = $this->connection->query($sql);
