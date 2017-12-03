@@ -1,6 +1,6 @@
 <?php
     // The 10 MySQL queries for the report
-    require '../Connection.php';
+    require '../../Connection.php';
 
     class ReportRepository {
         private $connection;
@@ -93,7 +93,6 @@
                                 where Stores.StrategicLocation in ('SL1','SL2')
                                 group by StrategicLocation, isWeekend
                         ) Results";
-            var_dump($sql);
             return $this->returnResult($sql);
         }
 

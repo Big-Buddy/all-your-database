@@ -81,7 +81,7 @@ $(document).ready(function(){
 
 	$("#list_users_most_ads").on("click", function(e){
 		$.ajax({
-            url: '/php/scripts/report1.php',
+            url: '/php/scripts/reports/report1.php',
             type: 'POST',			
             success: function(response) {
                 //returns userID, category and # of ads
@@ -104,7 +104,7 @@ $(document).ready(function(){
 	});
 	$("#list_recent_ads").on("click", function(e){
 		$.ajax({
-            url: '/php/scripts/report2.php',
+            url: '/php/scripts/reports/report2.php',
             type: 'POST',			
             success: function(response) {
                 //returns AdID, PostingUserID, PostingDate, DaysToPromote, AdType, Title, Description, PriceInCADCentes, Category
@@ -131,7 +131,7 @@ $(document).ready(function(){
 	});
 	$("#list_users_selling_mens_jackets").on("click", function(e){
 		$.ajax({
-            url: '/php/scripts/report3.php',
+            url: '/php/scripts/reports/report3.php',
             type: 'POST',			
             success: function(response) {
                 //returns user object
@@ -154,7 +154,7 @@ $(document).ready(function(){
 	});
 	$("#list_rent_items").on("click", function(e){
 		$.ajax({
-            url: '/php/scripts/report4.php',
+            url: '/php/scripts/reports/report4.php',
             type: 'POST',			
             success: function(response) {
                 //returns user object
@@ -196,7 +196,7 @@ $(document).ready(function(){
 	});
 	$("#list_highest_rated").on("click", function(e){
 		$.ajax({
-            url: '/php/scripts/report5.php',
+            url: '/php/scripts/reports/report5.php',
             type: 'POST',
             data: {
                 city: city
@@ -226,7 +226,7 @@ $(document).ready(function(){
 		//capture manager
 		var manager = $("#manager").val();
 		$.ajax({
-            url: '/php/scripts/report6.php',
+            url: '/php/scripts/reports/report6.php',
             type: 'POST',
             data: {
                 manager: manager
@@ -252,7 +252,7 @@ $(document).ready(function(){
 	});
 	$("#list_store_rent_profitability").on("click", function(e){
 		$.ajax({
-            url: '/php/scripts/report7.php',
+            url: '/php/scripts/reports/report7.php',
             type: 'POST',			
             success: function(response) {
                 //returns user object
@@ -278,7 +278,7 @@ $(document).ready(function(){
 		//capture province
 		var province = $("#province_by_store").val();
 		$.ajax({
-            url: '/php/scripts/report8.php',
+            url: '/php/scripts/reports/report8.php',
             type: 'POST',
             data: {
                 province: province
@@ -307,7 +307,7 @@ $(document).ready(function(){
 		//capture seller
 		var seller = $("#seller").val();
 		$.ajax({
-            url: '/php/scripts/report9.php',
+            url: '/php/scripts/reports/report9.php',
             type: 'POST',
             data: {
                 seller: seller
