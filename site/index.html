@@ -11,8 +11,8 @@
 		<h1>Please log in to continue</h1>
 		<table class="input-form">	
 			<tr>
-				<td>Username:</td>
-				<td><input type="text" name="username" id="username" /></td>
+				<td>Email:</td>
+				<td><input type="text" name="email" id="email" /></td>
 			</tr>	
 			<tr>
 				<td>Password:</td>
@@ -73,13 +73,13 @@
         				LOGIN
 		****************************************/
         $("#login_btn").on('click', function(e){
-        	var username = $("#username").val();
+        	var email = $("#email").val();
         	var password = $("#password").val();
         	var isError = false;
         	$("#login-error").hide();
 
         	//validation
-        	if(username == "" || username == null || username == undefined){
+        	if(email == "" || email == null || email == undefined){
         		isError = true;
         	}
         	if(password == "" || password == null || password == undefined){
@@ -94,7 +94,7 @@
 		            url: '/php/scripts/login.php',
 		            type: 'POST',
 					data: {
-		                email: username,
+		                email: email,
                         password: password
                     },
 		            success: function(response) {
@@ -102,7 +102,8 @@
 		                response = JSON.parse(response);
 		                if(response[0].userType){
 		                	//add user session
-		                	createCookie("user_type",response[0].userType,30);
+		                	createCookie("user_type",response[0].userType,30);		                	
+	                		createCookie("username", response[0].userID, 30);
 		                	//redirect to /landing.html
 		                	window.location.href="/landing.html";		                	
 		                }
@@ -188,6 +189,7 @@
 		               
 	                	// //add user session
 	                	createCookie("user_type",response.userType,30);
+	                	createCookie("username", response.userID, 30);
 	                	// //redirect to /landing.html
 	                	window.location.href="/landing.html";		                
 		            },

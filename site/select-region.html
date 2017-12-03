@@ -24,8 +24,8 @@
 			<br />
 			<select id="on_city">
 				<option selected disabled>Select a city..</option>
-				<option value="ottawa">Ottawa</option>
-				<option value="toronto">Toronto</option>
+				<option value="Ottawa">Ottawa</option>
+				<option value="Toronto">Toronto</option>
 			</select>
 		</div>
 		<div id="cities_qc_container" class="hidden-content">
@@ -33,8 +33,8 @@
 			<br />
 			<select id="qc_city">
 				<option selected disabled>Select a city..</option>
-				<option value="montreal">Montreal</option>
-				<option value="quebec_city">Quebec City</option>
+				<option value="Montreal">Montreal</option>
+				<option value="Quebec City">Quebec City</option>
 			</select>
 		</div>
 		<div id="category_container" class="hidden-content">
@@ -42,10 +42,30 @@
 			<br />
 			<select id="category">
 				<option selected disabled>Select a category..</option>
-				<option value="buy_sell">Buy and Sell</option>
-				<option value="services">Services</option>
-				<option value="rent">Rent</option>
-				<option value="personals">Personals</option>
+				<optgroup label="Buy/Sell">
+					<option value="Clothing">Clothing</option>
+					<option value="Books">Books</option>
+					<option value="BuySellElectronics">Electronics</option>
+					<option value="MusicalInstruments">Musical Instruments</option>
+				</optgroup>
+				<optgroup label="Services">
+					<option value="Tutors">Tutors</option>
+					<option value="EventPlanners">Event Planners</option>
+					<option value="Photographers">Photographers</option>
+					<option value="PersonalTrainers">Personal Trainers</option>
+				</optgroup>
+				<optgroup label="Rent">
+					<option value="RentElectronics">Electronics</option>
+					<option value="Car">Car</option>
+					<option value="Apartment">Apartment</option>
+					<option value="WeddingDresses">Wedding Dresses</option>
+				</optgroup>
+				<optgroup label="Personals">
+					<option value="MenSeekingWomen">Men Seeking Women</option>
+					<option value="WomenSeekingMen">Women Seeking Men</option>
+					<option value="MenSeekingMen">Men Seeking Men</option>
+					<option value="WomenSeekingWomen">Women Seeking Women</option>
+				</optgroup>
 			</select>
 		</div>
 		<br />
@@ -63,12 +83,12 @@ $(document).ready(function(){
 		if($(this).val() == "on"){
 			$("#cities_on_container").show();
 			$("#cities_qc_container").hide();
-			province = "on";
+			province = "Ontario";
 		}
 		else if($(this).val() == "qc"){
 			$("#cities_qc_container").show();
 			$("#cities_on_container").hide();
-			province = "qc";
+			province = "Quebec";
 		}
 	});
 	//on city select, make category available

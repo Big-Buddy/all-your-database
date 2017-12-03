@@ -9,7 +9,7 @@
 <body>
 	<div class="container">
 		<h1>You are viewing <span id="category"></span> ads in <span id="city"></span></h1>
-		<div id="ads_container">
+		<div id="ocn_container">
 			<!-- Formatted list of ads (html) goes here -->
 			<!-- Each ad has format: Title - description - seller's name with link to their ads - rate product btn-->
 			<!-- For admins, each ad has format: Title - description - alter ad btn - remove ad btn -->
@@ -21,25 +21,61 @@
 		//get city and category
 		var city = getUrlParameter("city");
 		var category = getUrlParameter("category");		
+		var province = getUrlParameter("province");
 		$("#category").html(category);
 		$("#city").html(city).css('textTransform', 'capitalize');
 
 		//retrieve relevant ads from DB
 		$.ajax({
-            url: '/php/scripts/getAds.php',
+            url: '/php/scripts/view-ads.php',
             type: 'POST',
 			data: {
-                
+                province: province,
+				city: city,
+				category: category
             },
             success: function(response) {
+            	response = JSON.parse(response);
+            	console.log(JSON.stringify(response,4,'\t'));
                 //ads retrieved
                 //format respones
-				//$("#ads_container").html(formatted_response);                
+                var formatted_response = "<table><tr class='report-table-header'><td>Title</td><td>Description</td><td>Seller</td><td>Rate Product</td></tr>";
+                for(var i=0; i<response.length;i++){
+                	formatted_response += "<tr><td>"+response[i].title+"</td><td>"+response[i].description+"</td><td>"+response[i].userID+
+                			"</td><td>Rate Product <div class='rating'>"+
+							    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_5' value='5'><label for='rate_"+response[i].adID+"_5'></label></span>"+
+							    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_4' value='4'><label for='rate_"+response[i].adID+"_4'></label></span>"+
+							    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_3' value='3'><label for='rate_"+response[i].adID+"_3'></label></span>"+
+							    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_2' value='2'><label for='rate_"+response[i].adID+"_2'></label></span>"+
+							    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_1' value='1'><label for='rate_"+response[i].adID+"_1'></label></span>"+
+							"</div></td></tr>";
+                }
+                formatted_response += "</table>";
+				$("#ocn_container").html(formatted_response);  				              
             },
             error: function(err){
-            	
+            	console.log("There was an error retrieving ads:" + JSON.stringify(err));
+            	if(JSON.parse(err.responseText)){
+            		alert(JSON.parse(err.responseText).message);
+            	}
             }
         });
+
+		// Rating
+	    $(".rating input:radio").attr("checked", false);
+
+	    $('body').on("click", ".rating input", function () {
+	        $(".rating span").removeClass('checked');
+	        $(this).parent().addClass('checked');
+	    });
+
+	    $('body').on("change", "input:radio", function(){
+	        var adID = $(this).attr("id").split("_")[1];
+	        var user_rating_ad = readCookie("username");
+	        //send rating to to ad with adID
+
+	        alert("Rating received, thank you!");
+	    }); 
 		
 	});
 </script>
