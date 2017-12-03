@@ -38,6 +38,7 @@ WHERE AdID = AD_BEING_DELETED;
 DELETE FROM Ads
 WHERE AdID = AD_BEING_DELETED;
 
+/***************************************************************************************/
 /* Post an ad and insert and supporting data (Payments, rentedspaces), THE SEQUENCE OF THESE INSERTS IS IMPORTANT! */
 /* Standard ad insert */
 INSERT INTO Ads (PostingUserID, PostingDate, DaysToPromote, AdType, Title, Description, PriceInCADCents, Category)
@@ -52,5 +53,19 @@ VALUES (AD_THAT_WAS_JUST_INSERTED, SELECTED_STORE, THE_DATE, NUM_HOURS, DELIVERY
 /* If a promotion or rented space is selected, extra form to submit payment info */
 INSERT INTO Payments (PayingUserID, RentedSpaceID, AmountInCADCents, CardNumber, CardExpiryDate, CardSecurityCode, CardholderName, CardCompany, CardType, PaymentDate)
 VALUE (THIS_USER, RENTED_SPACE_THAT_WAS_JUST_INSERTED, TOTAL_COST, CARD_NUM, CARD_EXP, CARD_CODE, CARD_NAME, CARD_COMP, "Credit", THE_DATE);
+/****************************************************************************/
 
+/***********************************************************************/
+/* Update existing ad info, also allow user to purchase a promotion/rented space for their ad */
+UPDATE Ads
+SET DaysToPromote = NEW_PROMOTION, Title = NEW_TITLE, Description = NEW_DESCRIPTION, PriceInCADCents = NEW_PRICE, Category = NEW_CATEGORY
+WHERE AdID = THIS_AD;
+/* If the user HAS selected a rented space insert new row about it */
+INSERT INTO RentedSpaces (AdID, StoreID, DateRented, HoursRented, DeliveryServices)
+VALUES (THIS_AD, SELECTED_STORE, THE_DATE, NUM_HOURS, DELIVERY_01);
+/* If a promotion or rented space is selected, extra form to submit payment info */
+INSERT INTO Payments (PayingUserID, RentedSpaceID, AmountInCADCents, CardNumber, CardExpiryDate, CardSecurityCode, CardholderName, CardCompany, CardType, PaymentDate)
+VALUE (THIS_USER, RENTED_SPACE_THAT_WAS_JUST_INSERTED, TOTAL_COST, CARD_NUM, CARD_EXP, CARD_CODE, CARD_NAME, CARD_COMP, "Credit", THE_DATE);
+
+/***********************************************************************/
 
