@@ -10,16 +10,7 @@
 	<div class="container">
 		<div id="user_container">
 			Your ads:
-			<div id="user_ads_container">
-				<!-- to be populated with DB information -->
-				<!-- 
-				List all ads, expired or current
-				format of each ad is as follows:
-				(for current ads)
-				Title - description - position in list - edit ad btn - delete ad btn - purchase promotion btn
-				(for expired ads)
-				Title - description - "expired" 
-				-->
+			<div id="ocn_container">				
 			</div>
 			<br/>
 			<a id="user_membership_pay" class="btn" href="/membership-payment.html">Select Membership and Payment</a>
@@ -48,6 +39,31 @@
 		if(readCookie("user_type") == "Regular" || readCookie("user_type") == "StoreManager"){
 			$("#user_container").show();
 			$("#admin_container").hide();
+			// show my ads			
+			var username = readCookie("username");
+			$.ajax({
+	            url: '/php/scripts/view-ads-user.php',
+	            type: 'POST',
+				data: {
+	                username:username
+	            },
+	            success: function(response) {
+	            	response = JSON.parse(response);
+	            	console.log(JSON.stringify(response,4,'\t'));
+	                //ads retrieved
+	                //format respones
+	                var formatted_response = "<table><tr class='report-table-header'><td>Title</td><td>Description</td><td>Price</td><td>Ad Type</td><td>Address</td><td>Edit</td><td>Delete</td></tr>";
+	                for(var i=0; i<response.length;i++){
+	                	formatted_response += "<tr><td>"+response[i].title+"</td><td>"+response[i].description+"</td><td>$"+response[i].priceInCADCents/100+"</td><td>"+response[i].adType+"</td><td>"+response[i].addressStreet+" "+response[i].addressCity+" "+response[i].addressProvince+" "+response[i].addressCountry+" "+response[i].addressPostalCode+"</td><td><a class='btn edit_ad' data-adid='"+response[i].adID+"'>Edit</a></td><td><a class='btn delete_ad' data-adid='"+response[i].adID+"'>Delete</a></td></tr>";
+	                }
+	                formatted_response += "</table>";
+					$("#ocn_container").html(formatted_response);  				              
+	            },
+	            error: function(err){
+	            	console.log("There was an error retrieving ads:" + JSON.stringify(err));
+	            	$("#ocn_container").html("<p>You don't have any ads.</p>"); 
+	            }
+	        });
 		}
 		else if(readCookie("user_type") == "Admin"){
 			$("#admin_container").show();
@@ -57,6 +73,32 @@
 		// 	//not logged in, redirect to index.html
 		// 	redirectOut();
 		// }
+
+
+		//delete ad event listener
+		$("body").on("click", ".delete_ad", function(){
+			var adID = $(this).attr("data-adid");
+			$.ajax({
+	            url: '/php/scripts/delete-ad.php',
+	            type: 'POST',
+				data: {
+	                adID:adID
+	            },
+	            success: function(response) {
+	            	response = JSON.parse(response);
+	            	if(response[0].code == "0"){
+	            		alert(response[0].message);	
+	            		location.reload();
+	            	}	              
+	            },
+	            error: function(err){
+	            	console.log("There was an error while trying to delete ad: " + JSON.stringify(err));
+		            	if(JSON.parse(err.responseText)){
+		            		alert(JSON.parse(err.responseText).message);
+		            	}
+	            }
+	        });
+		})
 	});
 </script>
 </html>
