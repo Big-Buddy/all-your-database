@@ -122,13 +122,99 @@
 			</div>
 		</form>
 		<hr>
-		<a id="ad_submit" class="btn">Submit</a>
+		<div id="payment-container" class="hidden-content">
+			<table class="input-form input-form-large">
+				<tr>
+					<td>Card Number</td>
+					<td><input type="text" name="card_number" id="card_number"/></td>
+				</tr>
+				<tr>
+					<td>Card Expiry Date</td>
+					<td><input type="text" name="card_expiry" id="card_expiry"/></td>
+				</tr>	
+				<tr>
+					<td>Card Security Code</td>
+					<td><input type="text" name="card_security" id="card_security"/></td>
+				</tr>
+				<tr>
+					<td>Cardholder Name</td>
+					<td><input type="text" name="card_name" id="card_name"/></td>
+				</tr>
+				<tr>
+					<td>Card Type</td>
+					<td>
+						<select id="card_type">						
+							<option selected value="Credit">Credit</option>
+							<option value="Debit">Debit</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Card Company</td>
+					<td>
+						<select id="card_company">						
+							<option selected value="Mastercard">Mastercard</option>
+							<option value="Visa">Visa</option>
+							<option value="American Express">American Express</option>
+							<option value="Discover">Discover</option>
+							<option value="null">Debit/Other</option>
+						</select>
+					</td>
+				</tr>									
+				<tr>
+					<td>Amount Due:</td>
+					<td>$<span id="amount_due">0</span></td>
+				</tr>			
+				
+			</table>
+		</div>
+		<a id="ad_submit" class="btn" style="margin-bottom:50px;">Submit</a>
 	</div>
 </body>
 <script>			
 
 	$(document).ready(function(){
-
+		var amount_due_promo = 0;
+		var amount_due_rent = 0;
+		$('input:radio[name="promo"]').change(function(){
+			if($(this).val()!="0"){
+				//show payment
+        		$("#payment-container").show();
+        		switch($(this).val()){
+        			case "7":
+        				amount_due_promo = 10;	
+        				$("#amount_due").text(amount_due_promo + amount_due_rent);	
+        				break;		
+        			case "30":
+        				amount_due_promo = 50;	
+        				$("#amount_due").text(amount_due_promo + amount_due_rent);	
+        				break;
+        			case "60":
+        				amount_due_promo = 90;	
+        				$("#amount_due").text(amount_due_promo + amount_due_rent);	
+        				break;
+        		}
+			}
+			else if($('input:radio[name="rent"]:checked').val() == "no_rental"){		
+				$("#payment-container").hide();
+			}
+			if($(this).val()=="0"){
+				amount_due_promo = 0;		
+				$("#amount_due").text(amount_due_promo + amount_due_rent);	
+			}
+		});
+		$('input:radio[name="rent"]').change(function(){
+			if($(this).val()!="no_rental"){
+				//show payment
+        		$("#payment-container").show();
+			}
+			else if($('input:radio[name="promo"]:checked').val() == "0"){
+				amount_due_promo = 0;	
+				$("#payment-container").hide();
+			}
+			//todo: calculate rental $$
+		});
+		
 		/****************************************
         				AD SUBMIT
 		****************************************/
@@ -212,11 +298,11 @@
         		if($('input:radio[name="promo"]:checked').val() != '0'){
         			//buying promotion
         			isPromoting = true;
-        			daysToPromote = $('input:radio[name="promo"]:checked').val()
+        			daysToPromote = $('input:radio[name="promo"]:checked').val();        			
         		}
         		if($('input:radio[name="rent"]:checked').val() != 'no_rental'){
         			//renting space
-        			isRenting = true;
+        			isRenting = true;        			
         		}
 
         		//post the ad

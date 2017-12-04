@@ -8,9 +8,17 @@
 </head>
 <body>
 	<div class="container">
-		Current membership:
+		Current membership is highlighted in green
 		<br/>
-		<div id="current_membership">
+		<br/>
+		<div id="normal_membership">
+			Normal Plan: Any Ad is visible for 7 days.
+		</div>
+		<div id="silver_membership">
+			Silver Plan: Any Ad is visible for 14 days.
+		</div>
+		<div id="plantinum_membership">
+			Premium Plan:Any Ad is visible for 30 days.
 		</div>
 	</div>
 </body>
@@ -28,7 +36,16 @@
 	            //if response indicates correct credentials...
 	            response = JSON.parse(response);
 	            var membershipPlan = response[0].membershipPlan;
-	            $("#current_membership").html(membershipPlan);
+	            if(membershipPlan == "Premium"){
+	            	$("#plantinum_membership").css("background-color","lightgreen");
+	            }
+	            else if(membershipPlan == "Silver"){
+	            	$("#silver_membership").css("background-color","lightgreen");
+	            }
+	            else{
+	            	//normal
+	            	$("#normal_membership").css("background-color","lightgreen");
+	            }
 	        },
 	        error: function(err){
 	        	console.log("There was an error while trying to get user info: " + JSON.stringify(err));
