@@ -8,8 +8,8 @@ $username = $_POST['username'];
 $adRepository = new AdRepository();
 
 $result = $adRepository->getAdsForUser($username);
-
 $array =[];
+$adIDarr = [];
 $isSuccess = false;
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
@@ -34,10 +34,23 @@ if ($result->num_rows > 0) {
         $object->addressProvince = $row["AddressProvince"];
         $object->addressCountry = $row["AddressCountry"];
         $object->addressPostalCode = $row["AddressPostalCode"];
+        //get rank
+        array_push($adIDarr, $object->adID);        
         array_push($array, $object);
     }
     $isSuccess = true;
 }
+
+//for each ad ID, get its rank on page
+foreach($adIDarr as $key=>$id){
+    $subresult = $adRepository->getAdRank($id);
+    if($subresult->num_rows > 0){
+        while($subrow = $subresult->fetch_assoc()){
+            $array[$key]->positionInCategories = $subrow["PositionInCategories"];
+        }
+    }
+}
+
 
 if ($isSuccess) {
     echo json_encode($array);
@@ -47,3 +60,5 @@ if ($isSuccess) {
 }
 
 ?>
+
+

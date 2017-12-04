@@ -3,7 +3,7 @@
 
 $(document).ready(function(){
     //load the footer and nav bar
-    var header = "<div class='header-bar'>OCN Portal</div>";
+    var header = "<div class='header-bar'><a href='/landing'>OCN Portal</a></div>";
     var footer = "<div class='footer-bar'>&copy; 2017 Concordia University</div>";
     $('body').prepend(header);
     $('body').append(footer);

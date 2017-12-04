@@ -34,6 +34,20 @@ class AdRepository {
         $this->closeConnection();
         return $result;
     }
+    public function getAdRank($adID){
+        $sql = "SET @Position=0; ";
+        $sql .= "SELECT AdPos.PositionInCategories from Ads
+                inner join (
+                    Select AdID, PostingUserID, Category, PostingDate,
+                    @Position:= if(@prevCat != Category, 0, @Position+1) as PositionInCategories, 
+                    @prevCat:=Category
+                    from Ads
+                    order by Category, PostingDate desc) AdPos on AdPos.AdID = Ads.AdID
+                where Ads.AdID = '$adID';";
+        $result = $this->connection->multi_query($sql);
+        $this->closeConnection();
+        return $result;
+    }
     public function getAdsForAdID($adID)
     {
         $sql = "SELECT * FROM Ads ";
