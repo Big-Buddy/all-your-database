@@ -19,11 +19,7 @@ $object->category = $_POST["category"];
 //
 //$object->filePath = $_POST["filePath"];
 //
-//$object->storeID = $_POST["storeID"];
-//$object->dateRented = $_POST["dateRented"];
-//$object->hoursRented = $_POST["hoursRented"];
-//$object->membershipPlan = $_POST["membershipPlan"];
-//$object->deliveryServices = $_POST["deliveryServices"];
+
 //
 if($object->isRenting == "true" || $object->isPromoting == "true"){
 	$object->amountInCADCents = $_POST["amountInCADCents"];
@@ -34,7 +30,12 @@ if($object->isRenting == "true" || $object->isPromoting == "true"){
 	$object->cardCompany = $_POST["cardCompany"];
 	$object->cardType = $_POST["cardType"];
 }
-
+if($object->isRenting == "true"){
+	$object->storeID = $_POST["storeID"];
+	$object->dateRented = $_POST["dateRented"];
+	$object->hoursRented = $_POST["hoursRented"];
+	$object->deliveryServices = $_POST["deliveryServices"];
+}
 
 
 // $object->postingUserID = 'teh-tom';

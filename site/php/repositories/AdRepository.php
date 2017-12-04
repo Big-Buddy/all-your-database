@@ -108,7 +108,7 @@ class AdRepository {
         }
 
         if ($ad->isRenting != 'false') {
-            $sqlInsertRentedSpace = "INSERT INTO `rentedspaces`(AdID`, `StoreID`, `DateRented`, `HoursRented`, `DeliveryServices`) ";
+            $sqlInsertRentedSpace = "INSERT INTO `rentedspaces`(`AdID`, `StoreID`, `DateRented`, `HoursRented`, `DeliveryServices`) ";
             $sqlInsertRentedSpace .= "VALUES ('$adID','$ad->storeID', '$ad->dateRented', '$ad->hoursRented', '$ad->deliveryServices'); ";
             $result = $this->returnResult($sqlInsertRentedSpace);
 

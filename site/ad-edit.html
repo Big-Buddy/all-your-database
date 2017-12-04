@@ -172,6 +172,7 @@
 
 	$(document).ready(function(){
 		//are we editing an ad?
+		var isEditing = false;
 		if(getUrlParameter('adID')){
 			var adID = getUrlParameter('adID');
 			//load ad information
@@ -190,6 +191,7 @@
 					$("#title").val(response.title);
 					$("#description").val(response.description);
 					$("#address").val(response.addressStreet);
+					isEditing = true;
 	                	              
 	            },
 	            error: function(err){
@@ -233,14 +235,18 @@
 			if($(this).val()!="no_rental"){
 				//show payment
         		$("#payment-container").show();
+        		amount_due_rent = $("#hours_rented").val() * 10;
+        		$("#amount_due").text(amount_due_promo + amount_due_rent);
 			}
 			else if($('input:radio[name="promo"]:checked').val() == "0"){
-				amount_due_promo = 0;	
+				amount_due_rent = 0;	
 				$("#payment-container").hide();
 			}
-			//todo: calculate rental $$
 		});
-		
+		$("#hours_rented").on("change", function(){
+			amount_due_rent = $("#hours_rented").val() * 10;
+			$("#amount_due").text(amount_due_promo + amount_due_rent);
+		})
 		/****************************************
         				AD SUBMIT
 		****************************************/
@@ -276,7 +282,7 @@
 			var dateRented = null;
 			var hoursRented = null;
 			var membershipPlan = null;
-			var deliveryServices = null;
+			var deliveryServices = 0;
 			// var amountInCADCents = "1000";
 			// var cardNumber = "0843065502988806";
 			// var cardExpiryDate = "2020-01-02";
@@ -330,7 +336,7 @@
         			isPromoting = true;
         			daysToPromote = $('input:radio[name="promo"]:checked').val();    
         			//need CC validation
-        			amountInCADCents = $("#amount_due").text();
+        			amountInCADCents = $("#amount_due").text() * 100;
         			cardNumber = $("#card_number").val();
 					cardExpiryDate = $("#card_expiry").val();
 					cardSecurityCode = $("#card_security").val();
@@ -354,13 +360,16 @@
         			//renting space
         			isRenting = true;   
         			//need CC validation  
-        			amountInCADCents = $("#amount_due").text();
+        			amountInCADCents = $("#amount_due").text() * 100;
         			cardNumber = $("#card_number").val();
 					cardExpiryDate = $("#card_expiry").val();
 					cardSecurityCode = $("#card_security").val();
 					cardholderNumber = $("#card_name").val();
 					cardCompany = $("#card_company").val();
 					cardType = $("#card_type").val();
+					storeID = $("#selected_store").val();
+					dateRented = $("#rental_date").val();
+					hoursRented = $("#hours_rented").val();
         			if(cardNumber == "" || cardNumber == null || cardNumber == undefined){
 		        		cardError = true;
 		        	}
@@ -379,47 +388,92 @@
         		}
         		else{
 	        		//post the ad
-	        		$.ajax({
-			            url: '/php/scripts/post-ad.php',
-			            type: 'POST',
-						data: {
-							isPromoting: isPromoting,
-							isRenting:isRenting,
-							postingUserID : postingUserID,
-							postingDate : postingDate,
-							adType:category,
-							title: title,
-							description: description,
-							priceInCADCents: price,
-							category:subCategory,
-							daysToPromote: daysToPromote,
-							filePath:filePath,
-							storeID:storeID,
-							dateRented:dateRented,
-							hoursRented:hoursRented,
-							membershipPlan:membershipPlan,
-							deliveryServices:deliveryServices,
-							amountInCADCents:amountInCADCents,
-							cardNumber:cardNumber,
-							cardExpiryDate:cardExpiryDate,
-							cardSecurityCode:cardSecurityCode,
-							cardholderNumber:cardholderNumber,
-							cardCompany:cardCompany,
-							cardType:cardType
-						},
-			            success: function(response) {
-			            	response = JSON.parse(response);
-			            	alert(response.message);
-			            	window.location.href = "/profile.html";
-			            			              
-			            },
-			            error: function(response) {
-			                var errorMessage = JSON.parse(response.responseText).message; //refer to the script to see error msg
-			                var statusCode = response.status;
-			                console.log(errorMessage);
-			                console.log(statusCode);
-			            }
-			        });
+	        		if(!isEditing){
+		        		$.ajax({
+				            url: '/php/scripts/post-ad.php',
+				            type: 'POST',
+							data: {
+								isPromoting: isPromoting,
+								isRenting:isRenting,
+								postingUserID : postingUserID,
+								postingDate : postingDate,
+								adType:category,
+								title: title,
+								description: description,
+								priceInCADCents: price,
+								category:subCategory,
+								daysToPromote: daysToPromote,
+								filePath:filePath,
+								storeID:storeID,
+								dateRented:dateRented,
+								hoursRented:hoursRented,								
+								deliveryServices:deliveryServices,
+								amountInCADCents:amountInCADCents,
+								cardNumber:cardNumber,
+								cardExpiryDate:cardExpiryDate,
+								cardSecurityCode:cardSecurityCode,
+								cardholderNumber:cardholderNumber,
+								cardCompany:cardCompany,
+								cardType:cardType
+							},
+				            success: function(response) {
+				            	response = JSON.parse(response);
+				            	alert(response.message);
+				            	window.location.href = "/profile.html";
+				            			              
+				            },
+				            error: function(response) {
+				                var errorMessage = JSON.parse(response.responseText).message; //refer to the script to see error msg
+				                var statusCode = response.status;
+				                console.log(errorMessage);
+				                console.log(statusCode);
+				            }
+				        });
+					}
+					else{
+						//editing an ad
+						$.ajax({
+				            url: '/php/scripts/edit-ad.php',
+				            type: 'POST',
+							data: {
+								isPromoting: isPromoting,
+								isRenting:isRenting,
+								postingUserID : postingUserID,
+								postingDate : postingDate,
+								adType:category,
+								title: title,
+								description: description,
+								priceInCADCents: price,
+								category:subCategory,
+								daysToPromote: daysToPromote,
+								filePath:filePath,
+								storeID:storeID,
+								dateRented:dateRented,
+								hoursRented:hoursRented,
+								membershipPlan:membershipPlan,
+								deliveryServices:deliveryServices,
+								amountInCADCents:amountInCADCents,
+								cardNumber:cardNumber,
+								cardExpiryDate:cardExpiryDate,
+								cardSecurityCode:cardSecurityCode,
+								cardholderNumber:cardholderNumber,
+								cardCompany:cardCompany,
+								cardType:cardType
+							},
+				            success: function(response) {
+				            	response = JSON.parse(response);
+				            	alert(response.message);
+				            	window.location.href = "/profile.html";
+				            			              
+				            },
+				            error: function(response) {
+				                var errorMessage = JSON.parse(response.responseText).message; //refer to the script to see error msg
+				                var statusCode = response.status;
+				                console.log(errorMessage);
+				                console.log(statusCode);
+				            }
+				        });
+					}
 				}	    
 					
         	}        	
