@@ -20,16 +20,12 @@
 		<!-- Admin section -->
 		<div id="admin_container" class="hidden-content">
 			<div id="admin_payments_container">
-				<!-- to be populated with DB information -->
-				<!-- 
-				List of user payments with details
-				(format to be determined...)
-				-->
+				
 			</div>
 			<a class="btn" id="send_pending_payments">Send pending payments to external processing department</a>
 			<br/>
 			<br/>
-			<a class="btn" href="/reports.html">Generate a report</a>
+			<a class="btn" href="/reports.html" style="margin-bottom:100px;">Generate a report</a>
 		</div>
 	</div>
 </body>
@@ -68,6 +64,31 @@
 		else if(readCookie("user_type") == "Admin"){
 			$("#admin_container").show();
 			$("#user_container").hide();
+
+			//get list of payments
+			$.ajax({
+	            url: '/php/scripts/reports/list-of-payments.php',
+	            type: 'POST',
+				data: {
+	            },
+	            success: function(response) {
+	            	response = JSON.parse(response);
+	            	console.log(JSON.stringify(response,4,'\t'));
+	                //ads retrieved
+	                //format respones
+	                var formatted_response = "<table><tr class='report-table-header'><td>Payment ID</td><td>Paying User ID</td><td>Rented Space ID</td><td>Amount</td><td>Card Number</td><td>Card Expiry Date</td><td>Card Security Code</td><td>Cardholder Name</td><td>Card Company</td><td>Card Type</td><td>Payment Date</td></tr>";
+	                for(var i=0; i<response.length;i++){
+	                	formatted_response += "<tr><td>"+response[i].paymentID+"</td><td>"+response[i].payingUserID+"</td><td>"+response[i].rentedSpaceID+"</td><td>$"+response[i].amountInCADCents/100+"</td><td>"+response[i].cardNumber+"</td><td>"+response[i].cardExpiryDate+"</td><td>"+response[i].cardSecurityCode+"</td><td>"+response[i].cardholderName+"</td><td>"+response[i].cardCompany+"</td><td>"+response[i].cardType+"</td><td>"+response[i].paymentDate+"</td></tr>";
+	                }
+	                formatted_response += "</table>";
+					$("#admin_payments_container").html(formatted_response);  				              
+	            },
+	            error: function(err){
+	            	console.log("There was an error retrieving ads:" + JSON.stringify(err));
+	            	$("#admin_payments_container").html("<p>You don't have any ads.</p>"); 
+	            }
+	        });
+			$("#admin_payments_container").html();
 		}
 		// else{
 		// 	//not logged in, redirect to index.html

@@ -195,12 +195,21 @@
             return $this->returnResult($sql);
 
         }
-
+        public function listOfPayments(){
+            $sql = "SELECT * FROM Payments ORDER BY PaymentDate ASC;";
+            $result = $this->connection->query($sql);
+            $this->closeConnection();
+            return $result;
+        }
         public function returnResult($sql) 
         {
             $result = $this->connection->query($sql);
             closeConnection($this->connection);
             return $result;
+        }
+         public function closeConnection()
+        {
+            closeConnection($this->connection);
         }
 
     }
