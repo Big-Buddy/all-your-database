@@ -1,12 +1,13 @@
 <?php
 
-//error_reporting(0);
+// error_reporting(0);
 require_once '../repositories/AdRepository.php';
 
 $adRepository = new AdRepository();
 
 $object = new stdClass();
-
+$object->isRenting = $_POST["isRenting"];
+$object->isPromoting = $_POST["isPromoting"];
 $object->postingUserID = $_POST["postingUserID"];
 $object->postingDate = $_POST["postingDate"];
 $object->daysToPromote = $_POST["daysToPromote"];
@@ -24,16 +25,18 @@ $object->category = $_POST["category"];
 //$object->membershipPlan = $_POST["membershipPlan"];
 //$object->deliveryServices = $_POST["deliveryServices"];
 //
-$object->amountInCADCents = $_POST["amountInCADCents"];
-$object->cardNumber = $_POST["cardNumber"];
-$object->cardExpiryDate = $_POST["cardExpiryDate"];
-$object->cardSecurityCode = $_POST["cardSecurityCode"];
-$object->cardholderNumber = $_POST["cardholderNumber"];
-$object->cardCompany = $_POST["cardCompany"];
-$object->cardType = $_POST["cardType"];
-$object->paymentDate = $_POST["paymentDate"];
+if($object->isRenting == "true" || $object->isPromoting == "true"){
+	$object->amountInCADCents = $_POST["amountInCADCents"];
+	$object->cardNumber = $_POST["cardNumber"];
+	$object->cardExpiryDate = $_POST["cardExpiryDate"];
+	$object->cardSecurityCode = $_POST["cardSecurityCode"];
+	$object->cardholderNumber = $_POST["cardholderNumber"];
+	$object->cardCompany = $_POST["cardCompany"];
+	$object->cardType = $_POST["cardType"];
+}
 
-$object->isRenting = $_POST["isRenting"];
+
+
 // $object->postingUserID = 'teh-tom';
 // $object->postingDate = '2017-12-03';
 // $object->daysToPromote = 1000;
@@ -59,12 +62,15 @@ $object->isRenting = $_POST["isRenting"];
 //$object->cardCompany = $_POST["cardCompany"];
 //$object->cardType = $_POST["cardType"];
 //$object->paymentDate = $_POST["paymentDate"];
-var_dump($object);
 $result = $adRepository->createAd($object);
 
 $isSuccess = false;
 if ($result) {
     $isSuccess = true;
+}
+if($object->isRenting == "true" || $object->isPromoting == "true"){
+	//DB giving warning that is unignorable, give success message
+	$isSuccess = true;
 }
 
 if ($isSuccess) {

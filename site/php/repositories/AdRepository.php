@@ -35,7 +35,7 @@ class AdRepository {
         return $result;
     }
     public function getAdRank($adID){
-        $sql = "SET @Position=0; ";
+        $sql = "SET @Position = 0; ";
         $sql .= "SELECT AdPos.PositionInCategories from Ads
                 inner join (
                     Select AdID, PostingUserID, Category, PostingDate,
@@ -125,7 +125,7 @@ class AdRepository {
 
         if ($ad->daysToPromote != '0') {
             $sqlInsertPayment = "INSERT INTO `payments`(`PayingUserID`, `RentedSpaceID`, `AmountInCADCents`, `CardNumber`, `CardExpiryDate`, `CardSecurityCode`, `CardholderName`, `CardCompany`, `CardType`, `PaymentDate`) ";
-            $sqlInsertPayment .= "VALUES ('$ad->postingUserID', '$rentedSpaceID', '$ad->amountInCADCents', '$ad->cardNumber', '$ad->cardExpiryDate', '$ad->cardSecurityCode', '$ad->cardholderNumber', '$ad->cardCompany', '$ad->cardType', '$ad->paymentDate') ";
+            $sqlInsertPayment .= "VALUES ('$ad->postingUserID', '$rentedSpaceID', '$ad->amountInCADCents', '$ad->cardNumber', '$ad->cardExpiryDate', '$ad->cardSecurityCode', '$ad->cardholderNumber', '$ad->cardCompany', '$ad->cardType', now()) ";
             $result = $this->returnResult($sqlInsertPayment);
         }
 

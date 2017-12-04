@@ -28,7 +28,7 @@
 					</select>
 				</td>
 			</tr>
-			<tr>
+			<!-- <tr>
 				<td>Owner or Business</td>
 				<td>
 					<select id="for_sale_by">						
@@ -45,7 +45,7 @@
 						<option value="instore">In-Store</option>
 					</select>
 				</td>
-			</tr>	
+			</tr>	 -->
 			<tr>
 				<td>Title</td>
 				<td><input type="text" name="title" id="title" /> </td>
@@ -53,11 +53,7 @@
 			<tr>
 				<td>Description</td>
 				<td><input type="text" name="description" id="description" /></td>
-			</tr>
-			<tr>
-				<td>Address</td>
-				<td><input type="text" name="address" id="address" /></td>
-			</tr>			
+			</tr>						
 			
 		</table>
 		<p id="ad-error" class="error-msg" style="display:none;">Please enter all fields before submitting.</p>
@@ -129,7 +125,7 @@
 					<td><input type="text" name="card_number" id="card_number"/></td>
 				</tr>
 				<tr>
-					<td>Card Expiry Date</td>
+					<td>Card Expiry Date (YYYY-MM-DD)</td>
 					<td><input type="text" name="card_expiry" id="card_expiry"/></td>
 				</tr>	
 				<tr>
@@ -167,6 +163,7 @@
 				</tr>			
 				
 			</table>
+			<p id="card_error" class="error-msg" style="display:none;">Please enter all fields before submitting.</p>
 		</div>
 		<a id="ad_submit" class="btn" style="margin-bottom:50px;">Submit</a>
 	</div>
@@ -253,11 +250,10 @@
         	var contact_info = $("#contact_info").val();
         	var price = $("#price").val() *100;
         	var category = $("#category").val();
-			var for_sale_by = $("#for_sale_by").val();
-			var availability = $("#availability").val();
+			// var for_sale_by = $("#for_sale_by").val();
+			// var availability = $("#availability").val();
         	var title = $("#title").val();
 			var description = $("#description").val();
-			var address = $("#address").val();
 
 			//Date parsing stuff, ignore....
 			Date.prototype.yyyymmdd = function() {
@@ -281,14 +277,21 @@
 			var hoursRented = null;
 			var membershipPlan = null;
 			var deliveryServices = null;
-			var amountInCADCents = "1000";
-			var cardNumber = "0843065502988806";
-			var cardExpiryDate = "2020-01-02";
-			var cardSecurityCode = "178";
-			var cardholderNumber = "Wanda Walsh";
-			var cardCompany = "Visa";
-			var cardType = "Credit";
-			var paymentDate = "2017-01-04 00:00:00";
+			// var amountInCADCents = "1000";
+			// var cardNumber = "0843065502988806";
+			// var cardExpiryDate = "2020-01-02";
+			// var cardSecurityCode = "178";
+			// var cardholderNumber = "Wanda Walsh";
+			// var cardCompany = "Visa";
+			// var cardType = "Credit";
+			// var paymentDate = "2017-01-04 00:00:00";
+			var amountInCADCents;
+			var cardNumber;
+			var cardExpiryDate;
+			var cardSecurityCode;
+			var cardholderNumber;
+			var cardCompany;
+			var cardType;
 			var daysToPromote = 0;
 
         	var isError = false;
@@ -305,77 +308,119 @@
         	if(category == "" || category == null || category == undefined){
         		isError = true;
         	}
-        	if(for_sale_by == "" || for_sale_by == null || for_sale_by == undefined){
-        		isError = true;
-        	}
-        	if(availability == "" || availability == null || availability == undefined){
-        		isError = true;
-        	}
+        	// if(for_sale_by == "" || for_sale_by == null || for_sale_by == undefined){
+        	// 	isError = true;
+        	// }
+        	// if(availability == "" || availability == null || availability == undefined){
+        	// 	isError = true;
+        	// }
         	if(title == "" || title == null || title == undefined){
         		isError = true;
         	}
         	if(description == "" || description == null || description == undefined){
         		isError = true;
-        	}
-        	if(address == "" || address == null || address == undefined){
-        		isError = true;
-        	}
+        	}        	
         	if(isError){
         		$("#ad-error").show();
         	}        	
-        	else{        		
+        	else{       
+        		var cardError = false; 		
         		if($('input:radio[name="promo"]:checked').val() != '0'){
         			//buying promotion
         			isPromoting = true;
-        			daysToPromote = $('input:radio[name="promo"]:checked').val();        			
+        			daysToPromote = $('input:radio[name="promo"]:checked').val();    
+        			//need CC validation
+        			amountInCADCents = $("#amount_due").text();
+        			cardNumber = $("#card_number").val();
+					cardExpiryDate = $("#card_expiry").val();
+					cardSecurityCode = $("#card_security").val();
+					cardholderNumber = $("#card_name").val();
+					cardCompany = $("#card_company").val();
+					cardType = $("#card_type").val();
+        			if(cardNumber == "" || cardNumber == null || cardNumber == undefined){
+		        		cardError = true;
+		        	}
+		        	if(cardExpiryDate == "" || cardExpiryDate == null || cardExpiryDate == undefined || !isValidDate(cardExpiryDate)){
+		        		cardError = true;
+		        	}
+		        	if(cardSecurityCode == "" || cardSecurityCode == null || cardSecurityCode == undefined){
+		        		cardError = true;
+		        	}
+					if(cardholderNumber == "" || cardholderNumber == null || cardholderNumber == undefined){
+		        		cardError = true;
+		        	}    			
         		}
         		if($('input:radio[name="rent"]:checked').val() != 'no_rental'){
         			//renting space
-        			isRenting = true;        			
+        			isRenting = true;   
+        			//need CC validation  
+        			amountInCADCents = $("#amount_due").text();
+        			cardNumber = $("#card_number").val();
+					cardExpiryDate = $("#card_expiry").val();
+					cardSecurityCode = $("#card_security").val();
+					cardholderNumber = $("#card_name").val();
+					cardCompany = $("#card_company").val();
+					cardType = $("#card_type").val();
+        			if(cardNumber == "" || cardNumber == null || cardNumber == undefined){
+		        		cardError = true;
+		        	}
+		        	if(cardExpiryDate == "" || cardExpiryDate == null || cardExpiryDate == undefined || !isValidDate(cardExpiryDate)){
+		        		cardError = true;
+		        	}
+		        	if(cardSecurityCode == "" || cardSecurityCode == null || cardSecurityCode == undefined){
+		        		cardError = true;
+		        	}
+					if(cardholderNumber == "" || cardholderNumber == null || cardholderNumber == undefined){
+		        		cardError = true;
+		        	}     			
         		}
-
-        		//post the ad
-        		$.ajax({
-		            url: '/php/scripts/post-ad.php',
-		            type: 'POST',
-					data: {
-						isPromoting: isPromoting,
-						isRenting:isRenting,
-						postingUserID : postingUserID,
-						postingDate : postingDate,
-						adType:category,
-						title: title,
-						description: description,
-						priceInCADCents: price,
-						category:subCategory,
-						daysToPromote: daysToPromote,
-						filePath:filePath,
-						storeID:storeID,
-						dateRented:dateRented,
-						hoursRented:hoursRented,
-						membershipPlan:membershipPlan,
-						deliveryServices:deliveryServices,
-						amountInCADCents:amountInCADCents,
-						cardNumber:cardNumber,
-						cardExpiryDate:cardExpiryDate,
-						cardSecurityCode:cardSecurityCode,
-						cardholderNumber:cardholderNumber,
-						cardCompany:cardCompany,
-						cardType:cardType,
-						paymentDate:paymentDate
-					},
-		            success: function(response) {
-		            	response = JSON.parse(response);
-		            			              
-		            },
-		            error: function(response) {
-		                var errorMessage = JSON.parse(response.responseText).message; //refer to the script to see error msg
-		                var statusCode = response.status;
-		                console.log(errorMessage);
-		                console.log(statusCode);
-		            }
-		        });
-		    
+        		if(cardError == true){
+        			$("#card_error").show();
+        		}
+        		else{
+	        		//post the ad
+	        		$.ajax({
+			            url: '/php/scripts/post-ad.php',
+			            type: 'POST',
+						data: {
+							isPromoting: isPromoting,
+							isRenting:isRenting,
+							postingUserID : postingUserID,
+							postingDate : postingDate,
+							adType:category,
+							title: title,
+							description: description,
+							priceInCADCents: price,
+							category:subCategory,
+							daysToPromote: daysToPromote,
+							filePath:filePath,
+							storeID:storeID,
+							dateRented:dateRented,
+							hoursRented:hoursRented,
+							membershipPlan:membershipPlan,
+							deliveryServices:deliveryServices,
+							amountInCADCents:amountInCADCents,
+							cardNumber:cardNumber,
+							cardExpiryDate:cardExpiryDate,
+							cardSecurityCode:cardSecurityCode,
+							cardholderNumber:cardholderNumber,
+							cardCompany:cardCompany,
+							cardType:cardType
+						},
+			            success: function(response) {
+			            	response = JSON.parse(response);
+			            	alert(response.message);
+			            	window.location.href = "/profile.html";
+			            			              
+			            },
+			            error: function(response) {
+			                var errorMessage = JSON.parse(response.responseText).message; //refer to the script to see error msg
+			                var statusCode = response.status;
+			                console.log(errorMessage);
+			                console.log(statusCode);
+			            }
+			        });
+				}	    
 					
         	}        	
         });
@@ -391,5 +436,12 @@
 	        }
 		});
 	});
+	function isValidDate(dateString) {
+	  var regEx = /^\d{4}-\d{2}-\d{2}$/;
+	  if(!dateString.match(regEx)) return false;  // Invalid format
+	  var d = new Date(dateString);
+	  if(!d.getTime()) return false; // Invalid date (or this could be epoch)
+	  return d.toISOString().slice(0,10) === dateString;
+	}
 </script>
 </html>
