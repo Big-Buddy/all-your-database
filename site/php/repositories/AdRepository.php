@@ -13,7 +13,7 @@ class AdRepository {
     {
         $sql = "SELECT * FROM Ads ";
         $sql .= "INNER JOIN Users ON Ads.PostingUserID = Users.UserID ";
-        $sql .= "WHERE AddressProvince='$province' AND AddressCity='$city' AND Category='$category';";
+        $sql .= "WHERE AddressProvince='$province' AND AddressCity='$city' AND Category='$category' ORDER BY Ads.DaysToPromote DESC;";
         $result = $this->connection->query($sql);
         $this->closeConnection();
         return $result;

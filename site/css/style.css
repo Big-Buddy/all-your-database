@@ -77,12 +77,12 @@ a.btn{
 	font-size: 20px;
 	font-weight: bold;
 }
-#report_view_container table, #ocn_container table{
+#report_view_container table, #ocn_container table, #admin_payments_container table{
 	width: 80%;
 	margin: auto;
 	margin-bottom: 100px;
 }
-#report_view_container td, #ocn_container td {
+#report_view_container td, #ocn_container td, #admin_payments_container td{
     border: 1px solid black;
     padding: 3px;
 }
