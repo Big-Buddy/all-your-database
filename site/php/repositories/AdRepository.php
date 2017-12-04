@@ -28,6 +28,15 @@ class AdRepository {
         $this->closeConnection();
         return $result;
     }
+    public function getAdsForAdID($adID)
+    {
+        $sql = "SELECT * FROM Ads ";
+        $sql .= "INNER JOIN Users ON Ads.PostingUserID = Users.UserID ";
+        $sql .= "WHERE AdID='$adID';";
+        $result = $this->connection->query($sql);
+        $this->closeConnection();
+        return $result;
+    }
 
     public function getMostRecentAd()
     {

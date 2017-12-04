@@ -112,10 +112,10 @@
 		        });
 			});
 		}
-		// else{
-		// 	//not logged in, redirect to index.html
-		// 	redirectOut();
-		// }
+		else{
+			//not logged in, redirect to index.html
+			redirectOut();
+		}
 
 
 		//delete ad event listener
@@ -141,7 +141,13 @@
 		            	}
 	            }
 	        });
-		})
+		});
+
+		//edit ad event listener
+		$("body").on("click", ".edit_ad", function(){
+			var adID = $(this).attr("data-adid");
+			window.location.href = "/ad-edit.html?adID=" + adID;
+		});
 	});
 </script>
 </html>
