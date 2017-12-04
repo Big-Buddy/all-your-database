@@ -56,21 +56,33 @@ class AdRepository {
     {
         $adID = null;
         $rentedSpaceID = null;
+
         $sqlInsertAd = "INSERT INTO `ads`(`PostingUserID`, `PostingDate`, `DaysToPromote`, `AdType`, `Title`, `Description`, `PriceInCADCents`, `Category`) ";
-        $sqlInsertAd .= "VALUES ($ad->postingUserID','$ad->postingDate','$ad->daysToPromote','$ad->adType','$ad->title','$ad->description','$ad->priceInCADCents','$ad->category'); ";
+        $sqlInsertAd .= "VALUES ('$ad->postingUserID','$ad->postingDate','$ad->daysToPromote','$ad->adType','$ad->title','$ad->description','$ad->priceInCADCents','$ad->category'); ";
         $resultInsertAd = $this->returnResult($sqlInsertAd);
-
         if ($resultInsertAd) {
-            $adID = "SELECT AdID FROM Ads ORDER BY AdId DESC LIMIT 1";
+            $sql = "SELECT AdID FROM Ads ORDER BY AdId DESC LIMIT 1";
+            $result = $this->returnResult($sql);
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    $adID = $row['AdID'];
+                }
+            }
         }
-
+        
         $sqlInsertImageAndRentedSpace = "INSERT INTO Images ('FilePath', 'AdID') VALUES ('$ad->filePath','$adID'); ";
         $sqlInsertImageAndRentedSpace .= "INSERT INTO `rentedspaces`(AdID`, `StoreID`, `DateRented`, `HoursRented`, `DeliveryServices`) ";
         $sqlInsertImageAndRentedSpace .= "VALUES ('$adID','$ad->storeID', '$ad->dateRented', '$ad->hoursRented', '$ad->deliveryServices'); ";
         $resultInsertRentedSpace = $this->returnResultOfMultiQuery($sqlInsertImageAndRentedSpace);
 
         if ($resultInsertRentedSpace) {
-            $rentedSpaceID = "SELECT RentedSpaceID FROM rentedSpaces ORDER BY RentedSpaceID DESC LIMIT 1";
+            $sql = "SELECT RentedSpaceID FROM rentedSpaces ORDER BY RentedSpaceID DESC LIMIT 1";
+            $result = $this->returnResult($sql);
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    $rentedSpaceID = $row['RentedSpaceID'];
+                }
+            }
         }
 
         $sqlInsertPayment = "INSERT INTO `payments`(`PayingUserID`, `RentedSpaceID`, `AmountInCADCents`, `CardNumber`, `CardExpiryDate`, `CardSecurityCode`, `CardholderName`, `CardCompany`, `CardType`, `PaymentDate`) ";
