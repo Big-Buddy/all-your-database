@@ -90,7 +90,7 @@ a.btn{
 
 .rating {
     float:left;
-    width:160px;
+    width:180px;
 }
 .rating span { float:right; position:relative; }
 .rating span input {

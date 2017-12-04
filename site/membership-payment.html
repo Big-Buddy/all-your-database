@@ -8,9 +8,35 @@
 </head>
 <body>
 	<div class="container">
-		Select/Pay for membership here
+		Current membership:
+		<br/>
+		<div id="current_membership">
+		</div>
 	</div>
 </body>
 <script>
+	$(document).ready(function(){
+		//get current user's membership
+		var username  = readCookie("username");        	
+		$.ajax({
+	        url: '/php/scripts/get-user.php',
+	        type: 'POST',
+			data: {
+	            username:username
+	        },
+	        success: function(response) {
+	            //if response indicates correct credentials...
+	            response = JSON.parse(response);
+	            var membershipPlan = response[0].membershipPlan;
+	            $("#current_membership").html(membershipPlan);
+	        },
+	        error: function(err){
+	        	console.log("There was an error while trying to get user info: " + JSON.stringify(err));
+	        	if(JSON.parse(err.responseText)){
+	        		alert(JSON.parse(err.responseText).message);
+	        	}
+	        }
+	    });            
+	});
 </script>
 </html>

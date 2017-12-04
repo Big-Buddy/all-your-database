@@ -5,8 +5,12 @@ Select Results.*, (Results.sumAdPrices - Results.sumPayments) profitability from
 				if(DAYOFWEEK(RentedSpaces.DateRented) = 7 or DAYOFWEEK(RentedSpaces.DateRented) = 1, 1, 0) as isWeekend, 
 				if(
 					DAYOFWEEK(RentedSpaces.DateRented) = 7 or DAYOFWEEK(RentedSpaces.DateRented) = 1, -- If it's a weekend, use weekend rates. else use weekday rates
-					sum(RentedSpaces.HoursRented*15 + if (RentedSpaces.DeliveryServices = 1, RentedSpaces.HoursRented*10, 0)), -- if there's delivery services, add delivery service rates
-					sum(RentedSpaces.HoursRented*10 + if (RentedSpaces.DeliveryServices = 1, RentedSpaces.HoursRented*5, 0))
+					sum(RentedSpaces.HoursRented*15*
+						if(Stores.StrategicLocation = 1, 1.2, if(Stores.StrategicLocation = 2, 1.15, if(Stores.StrategicLocation = 3, 1.1, 1.05)))
+						+ if (RentedSpaces.DeliveryServices = 1, RentedSpaces.HoursRented*10, 0)), -- if there's delivery services, add delivery service rates
+					sum(RentedSpaces.HoursRented*10*
+						if(Stores.StrategicLocation = 1, 1.2, if(Stores.StrategicLocation = 2, 1.15, if(Stores.StrategicLocation = 3, 1.1, 1.05)))
+						+ if (RentedSpaces.DeliveryServices = 1, RentedSpaces.HoursRented*5, 0))
 				) as sumPayments, 
 				sum(Ads.PriceInCADCents) as sumAdPrices 
 			from RentedSpaces
