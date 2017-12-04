@@ -97,9 +97,27 @@
 		    $('body').on("change", "input:radio", function(){
 		        var adID = $(this).attr("id").split("_")[1];
 		        var user_rating_ad = readCookie("username");
-		        //send rating to to ad with adID
-
-		        alert("Rating received, thank you!");
+		        var rating = $(this).val();
+		        //send rating to ad with adID
+		        $.ajax({
+		            url: '/php/scripts/send-rating.php',
+		            type: 'POST',
+					data: {
+		                username:user_rating_ad,
+		                adID:adID,
+		                rating:rating
+		            },
+		            success: function(response) {
+		            	response = JSON.parse(response);
+		            	alert(response.message);	              
+		            },
+		            error: function(err){
+		            	console.log("There was an error retrieving ads:" + JSON.stringify(err));
+		            	if(JSON.parse(err.responseText)){
+		            		alert(JSON.parse(err.responseText).message);
+		            	}
+		            }
+		        });
 		    }); 
 
 		    //view ads for a specific user

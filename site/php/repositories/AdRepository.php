@@ -144,7 +144,11 @@ class AdRepository {
         $this->closeConnection();
         return $result;
     }
-
+    public function sendRating($adID, $username, $rating){
+        $sql = "INSERT INTO `Ratings`(`AdIDBeingRated`, `UserIDRatingAd`, `Rating`) ";
+        $sql .= "VALUES ('$adID', '$username', '$rating');";
+        return $this->returnResult($sql);
+    }
     public function returnResult($sql)
     {
         $result = $this->connection->query($sql);
