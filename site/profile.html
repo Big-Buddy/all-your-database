@@ -73,7 +73,6 @@
 	            },
 	            success: function(response) {
 	            	response = JSON.parse(response);
-	            	console.log(JSON.stringify(response,4,'\t'));
 	                //ads retrieved
 	                //format respones
 	                var formatted_response = "<table><tr class='report-table-header'><td>Payment ID</td><td>Paying User ID</td><td>Rented Space ID</td><td>Amount</td><td>Card Number</td><td>Card Expiry Date</td><td>Card Security Code</td><td>Cardholder Name</td><td>Card Company</td><td>Card Type</td><td>Payment Date</td></tr>";
@@ -89,6 +88,29 @@
 	            }
 	        });
 			$("#admin_payments_container").html();
+
+
+			//trigger payments event listener
+			$("#send_pending_payments").on("click", function(){
+				$.ajax({
+		            url: '/php/scripts/reports/trigger-payments.php',
+		            type: 'POST',
+					data: {
+		            },
+		            success: function(response) {
+		            	response = JSON.parse(response);
+		            	if(response[0].code == "0"){
+		            		alert(response[0].message);			            		
+		            	}	              
+		            },
+		            error: function(err){
+		            	console.log("There was an error while trying to trigger payments: " + JSON.stringify(err));
+			            	if(JSON.parse(err.responseText)){
+			            		alert(JSON.parse(err.responseText).message);
+			            	}
+		            }
+		        });
+			});
 		}
 		// else{
 		// 	//not logged in, redirect to index.html

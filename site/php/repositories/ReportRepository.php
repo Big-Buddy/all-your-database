@@ -201,6 +201,12 @@
             $this->closeConnection();
             return $result;
         }
+        public function triggerPayments(){
+            $sql = "DELETE FROM ExternalBackupPayments; INSERT INTO ExternalBackupPayments SELECT * FROM Payments;";
+            $result = $this->connection->multi_query($sql);
+            $this->closeConnection();
+            return $result;
+        }
         public function returnResult($sql) 
         {
             $result = $this->connection->query($sql);
