@@ -68,10 +68,9 @@ if ($result) {
 }
 
 if ($isSuccess) {
-    // header('HTTP/1.1 200 Action Script');
     echo json_encode(array('message' => 'Ad successfully inserted'));
 } else {
-    // header('HTTP/1.1 500 Server Error');
+     header('HTTP/1.1 500 Server Error');
     die(json_encode(array('message' => 'Something went wrong on our side')));
 }
 

@@ -32,7 +32,7 @@
     if ($isSuccess) {
         echo json_encode($array);
     } else {
-        header('HTTP/1.1 401 Server Error');
+        header('HTTP/1.1 500 Server Error');
         die(json_encode(array('message' => 'Could not return a user object.')));
     }
 

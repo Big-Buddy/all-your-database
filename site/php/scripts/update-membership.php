@@ -26,7 +26,6 @@ if ($result) {
 }
 
 if ($isSuccess) {
-    header('HTTP/1.1 200 Action Script');
     echo json_encode(array('message' => 'Ad successfully updated'));
 } else {
     header('HTTP/1.1 500 Server Error');

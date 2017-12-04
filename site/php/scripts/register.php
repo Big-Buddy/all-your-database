@@ -20,7 +20,6 @@
     if(!$result) {
         header('HTTP/1.1 401 Client Error');
         die(json_encode(array('message' => 'That username/email is already taken')));
-        return;
     }  else {
         echo json_encode($user);
     }
