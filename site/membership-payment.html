@@ -8,24 +8,70 @@
 </head>
 <body>
 	<div class="container">
-		Current membership is highlighted in green
+		Select Membership:
 		<br/>
 		<br/>
-		<div id="normal_membership">
-			Normal Plan: Any Ad is visible for 7 days.
-		</div>
-		<div id="silver_membership">
-			Silver Plan: Any Ad is visible for 14 days.
-		</div>
-		<div id="plantinum_membership">
-			Premium Plan:Any Ad is visible for 30 days.
-		</div>
+		<select id="membership_list">
+			<option selected value="Normal">Normal Plan: Any Ad is visible for 7 days. (Free)</option>
+			<option value="Silver">Silver Plan: Any Ad is visible for 14 days. ($10)</option>
+			<option value="Premium">Premium Plan:Any Ad is visible for 30 days. ($20)</option>
+		</select>	
+
+		<div id="payment-container" class="hidden-content">
+			<table class="input-form input-form-large">
+				<tr>
+					<td>Card Number</td>
+					<td><input type="text" name="card_number" id="card_number"/></td>
+				</tr>
+				<tr>
+					<td>Card Expiry Date</td>
+					<td><input type="text" name="card_expiry" id="card_expiry"/></td>
+				</tr>	
+				<tr>
+					<td>Card Security Code</td>
+					<td><input type="text" name="card_security" id="card_security"/></td>
+				</tr>
+				<tr>
+					<td>Cardholder Name</td>
+					<td><input type="text" name="card_name" id="card_name"/></td>
+				</tr>
+				<tr>
+					<td>Card Type</td>
+					<td>
+						<select id="card_type">						
+							<option selected value="Credit">Credit</option>
+							<option value="Debit">Debit</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Card Company</td>
+					<td>
+						<select id="card_company">						
+							<option selected value="Mastercard">Mastercard</option>
+							<option value="Visa">Visa</option>
+							<option value="American Express">American Express</option>
+							<option value="Discover">Discover</option>
+							<option value="null">Debit/Other</option>
+						</select>
+					</td>
+				</tr>									
+				<tr>
+					<td>Amount Due:</td>
+					<td>$<span id="amount_due">0</span></td>
+				</tr>			
+				
+			</table>
+			<p id="pay-error" class="error-msg" style="display:none;">Please enter all fields before submitting.</p>
+			<a class="btn" id="pay_btn">Pay</a>
+		</div>			
 	</div>
 </body>
 <script>
 	$(document).ready(function(){
 		//get current user's membership
-		var username  = readCookie("username");        	
+		var username  = readCookie("username");  
+		var wasUpdated =  false;      	
 		$.ajax({
 	        url: '/php/scripts/get-user.php',
 	        type: 'POST',
@@ -37,15 +83,16 @@
 	            response = JSON.parse(response);
 	            var membershipPlan = response[0].membershipPlan;
 	            if(membershipPlan == "Premium"){
-	            	$("#plantinum_membership").css("background-color","lightgreen");
+	            	$("#membership_list").val("Premium").change();
 	            }
 	            else if(membershipPlan == "Silver"){
-	            	$("#silver_membership").css("background-color","lightgreen");
+	            	$("#membership_list").val("Silver").change();
 	            }
 	            else{
 	            	//normal
-	            	$("#normal_membership").css("background-color","lightgreen");
+	            	$("#membership_list").val("Normal").change();
 	            }
+	            wasUpdated = true;
 	        },
 	        error: function(err){
 	        	console.log("There was an error while trying to get user info: " + JSON.stringify(err));
@@ -53,7 +100,94 @@
 	        		alert(JSON.parse(err.responseText).message);
 	        	}
 	        }
-	    });            
+	    }); 
+
+	    //event listener for change
+	    $("#membership_list").on("change", function(){
+	    	//make sure the membership selected is in fact the user's current
+	    	if(wasUpdated){
+	    		var newMembership = $("#membership_list").val();
+	    		if(newMembership == "Silver" || newMembership == "Premium"){
+	    			//show payment
+	    			$("#payment-container").show();
+	    			if(newMembership == "Silver"){
+	    				$("#amount_due").text(10);
+	    			}
+	    			else{
+	    				$("#amount_due").text(20);
+	    			}
+	    		}
+	    		else{
+	    			//hide payment
+	    			$("#payment-container").hide();
+	    			$("#amount_due").text(0);
+	    		}
+	    	}
+	    });   
+
+	    $("#pay_btn").on("click", function(){
+	    	var newMembership = $("#membership_list").val();
+	    	var card_number = $("#card_number").val();
+			var card_expiry = $("#card_expiry").val();
+			var card_security = $("#card_security").val();
+			var card_name = $("#card_name").val();
+			var card_type = $("#card_type").val();
+			var card_company = $("#card_company").val();
+	    	isError = false;
+	    	//validation
+        	if(card_number == "" || card_number == null || card_number == undefined){
+        		isError = true;
+        	}
+        	if(card_expiry == "" || card_expiry == null || card_expiry == undefined){
+        		isError = true;
+        	}
+        	if(card_security == "" || card_security == null || card_security == undefined){
+        		isError = true;
+        	}
+        	if(card_name == "" || card_name == null || card_name == undefined){
+        		isError = true;
+        	}
+        	if(card_type == "" || card_type == null || card_type == undefined){
+        		isError = true;
+        	}
+        	if(card_company == "" || card_company == null || card_company == undefined){
+        		isError = true;
+        	}        	
+        	if(isError){
+        		$("#pay-error").show();
+        	}
+        	else{
+        		//no errors, send payment
+        		var amount = 1000;
+        		$.ajax({
+		            url: '/php/scripts/update-membership.php',
+		            type: 'POST',
+					data: {
+		                username: username,
+		                newPlan:newMembership,
+						AmountInCADCents: amount,
+						CardNumber: card_number,
+						CardExpiryDate: card_expiry,
+						CardSecurityCode: card_security,
+						CardholderName:card_name,
+						CardCompany:card_company,
+						CardType:card_type
+					},
+		            success: function(response) {
+		                //if response indicates correct credentials...
+		                response = JSON.parse(response);
+		               	alert(response);	  
+		               	location.reload();              
+		            },
+		            error: function(err){
+		            	console.log("There was an error while trying to change membership: " + JSON.stringify(err));
+		            	if(JSON.parse(err.responseText)){
+		            		alert(JSON.parse(err.responseText).message);
+		            	}
+		            }
+		        });
+        	}
+	    });
 	});
 </script>
 </html>

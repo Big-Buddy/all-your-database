@@ -32,5 +32,4 @@ if ($isSuccess) {
     header('HTTP/1.1 500 Server Error');
     die(json_encode(array('message' => 'Something went wrong on our end')));
 }
-
 ?>

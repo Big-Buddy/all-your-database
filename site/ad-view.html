@@ -9,10 +9,7 @@
 <body>
 	<div class="container">
 		<h1>You are viewing <span id="category"></span> ads in <span id="city"></span></h1>
-		<div id="ocn_container">
-			<!-- Formatted list of ads (html) goes here -->
-			<!-- Each ad has format: Title - description - seller's name with link to their ads - rate product btn-->
-			<!-- For admins, each ad has format: Title - description - alter ad btn - remove ad btn -->
+		<div id="ocn_container">			
 		</div>
 	</div>
 </body>
@@ -22,101 +19,160 @@
 		var city = getUrlParameter("city");
 		var category = getUrlParameter("category");		
 		var province = getUrlParameter("province");
-		$("#category").html(category);
-		$("#city").html(city).css('textTransform', 'capitalize');
+		if(getUrlParameter("is_admin") == "true"){
+			//must show all ads for all regions.
+			$("#category").html("all");
+			$("#city").html("all cities.");
+			$.ajax({
+	            url: '/php/scripts/view-ads.php',
+	            type: 'POST',
+	            success: function(response) {
+	            	response = JSON.parse(response);
+	            	console.log(JSON.stringify(response,4,'\t'));
+	                //ads retrieved
+	                //format respones
+	                var formatted_response = "<table><tr class='report-table-header'><td>Title</td><td>Description</td><td>Price</td><td>Seller</td><td>Ad Type</td><td>Address</td><td></td></tr>";
+	                for(var i=0; i<response.length;i++){
+	                	formatted_response += "<tr><td>"+response[i].title+"</td><td>"+response[i].description+"</td><td>$"+response[i].priceInCADCents/100+"</td><td class='view_ads_for view_"+response[i].userID+"'>"+response[i].userID+
+	                			"</td><td>"+response[i].adType+"</td><td>"+response[i].addressStreet+" "+response[i].addressCity+" "+response[i].addressProvince+" "+response[i].addressCountry+" "+response[i].addressPostalCode+"</td><td><a class='btn edit_ad' data-adid='"+response[i].adID+"'>Edit</a>&nbsp;<a class='btn delete_ad' data-adid='"+response[i].adID+"'>Delete</a></td></tr>";
+	                }
+	                formatted_response += "</table>";
+					$("#ocn_container").html(formatted_response);  				              
+	            },
+	            error: function(err){
+	            	console.log("There was an error retrieving ads:" + JSON.stringify(err));
+	            	if(JSON.parse(err.responseText)){
+	            		alert(JSON.parse(err.responseText).message);
+	            	}
+	            }
+	        });
+		}
+		else{
+			$("#category").html(category);
+			$("#city").html(city).css('textTransform', 'capitalize');
+			//retrieve relevant ads from DB, depending on region and category
+			$.ajax({
+	            url: '/php/scripts/view-ads.php',
+	            type: 'POST',
+				data: {
+	                province: province,
+					city: city,
+					category: category
+	            },
+	            success: function(response) {
+	            	response = JSON.parse(response);
+	            	console.log(JSON.stringify(response,4,'\t'));
+	                //ads retrieved
+	                //format respones
+	                var formatted_response = "<table><tr class='report-table-header'><td>Title</td><td>Description</td><td>Price</td><td>Seller</td><td>Ad Type</td><td>Address</td><td>Rate Product</td></tr>";
+	                for(var i=0; i<response.length;i++){
+	                	formatted_response += "<tr><td>"+response[i].title+"</td><td>"+response[i].description+"</td><td>$"+response[i].priceInCADCents/100+"</td><td class='view_ads_for view_"+response[i].userID+"'>"+response[i].userID+
+	                			"</td><td>"+response[i].adType+"</td><td>"+response[i].addressStreet+" "+response[i].addressCity+" "+response[i].addressProvince+" "+response[i].addressCountry+" "+response[i].addressPostalCode+"</td><td>Rate Product <div class='rating'>"+
+								    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_5' value='5'><label for='rate_"+response[i].adID+"_5'></label></span>"+
+								    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_4' value='4'><label for='rate_"+response[i].adID+"_4'></label></span>"+
+								    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_3' value='3'><label for='rate_"+response[i].adID+"_3'></label></span>"+
+								    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_2' value='2'><label for='rate_"+response[i].adID+"_2'></label></span>"+
+								    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_1' value='1'><label for='rate_"+response[i].adID+"_1'></label></span>"+
+								"</div></td></tr>";
+	                }
+	                formatted_response += "</table>";
+					$("#ocn_container").html(formatted_response);  				              
+	            },
+	            error: function(err){
+	            	console.log("There was an error retrieving ads:" + JSON.stringify(err));
+	            	if(JSON.parse(err.responseText)){
+	            		alert(JSON.parse(err.responseText).message);
+	            	}
+	            }
+	        });
 
-		//retrieve relevant ads from DB
-		$.ajax({
-            url: '/php/scripts/view-ads.php',
-            type: 'POST',
-			data: {
-                province: province,
-				city: city,
-				category: category
-            },
-            success: function(response) {
-            	response = JSON.parse(response);
-            	console.log(JSON.stringify(response,4,'\t'));
-                //ads retrieved
-                //format respones
-                var formatted_response = "<table><tr class='report-table-header'><td>Title</td><td>Description</td><td>Price</td><td>Seller</td><td>Ad Type</td><td>Address</td><td>Rate Product</td></tr>";
-                for(var i=0; i<response.length;i++){
-                	formatted_response += "<tr><td>"+response[i].title+"</td><td>"+response[i].description+"</td><td>$"+response[i].priceInCADCents/100+"</td><td class='view_ads_for view_"+response[i].userID+"'>"+response[i].userID+
-                			"</td><td>"+response[i].adType+"</td><td>"+response[i].addressStreet+" "+response[i].addressCity+" "+response[i].addressProvince+" "+response[i].addressCountry+" "+response[i].addressPostalCode+"</td><td>Rate Product <div class='rating'>"+
-							    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_5' value='5'><label for='rate_"+response[i].adID+"_5'></label></span>"+
-							    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_4' value='4'><label for='rate_"+response[i].adID+"_4'></label></span>"+
-							    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_3' value='3'><label for='rate_"+response[i].adID+"_3'></label></span>"+
-							    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_2' value='2'><label for='rate_"+response[i].adID+"_2'></label></span>"+
-							    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_1' value='1'><label for='rate_"+response[i].adID+"_1'></label></span>"+
-							"</div></td></tr>";
-                }
-                formatted_response += "</table>";
-				$("#ocn_container").html(formatted_response);  				              
-            },
-            error: function(err){
-            	console.log("There was an error retrieving ads:" + JSON.stringify(err));
-            	if(JSON.parse(err.responseText)){
-            		alert(JSON.parse(err.responseText).message);
-            	}
-            }
-        });
+			// Rating
+		    $(".rating input:radio").attr("checked", false);
 
-		// Rating
-	    $(".rating input:radio").attr("checked", false);
+		    $('body').on("click", ".rating input", function () {
+		        $(".rating span").removeClass('checked');
+		        $(this).parent().addClass('checked');
+		    });
 
-	    $('body').on("click", ".rating input", function () {
-	        $(".rating span").removeClass('checked');
-	        $(this).parent().addClass('checked');
-	    });
+		    $('body').on("change", "input:radio", function(){
+		        var adID = $(this).attr("id").split("_")[1];
+		        var user_rating_ad = readCookie("username");
+		        //send rating to to ad with adID
 
-	    $('body').on("change", "input:radio", function(){
-	        var adID = $(this).attr("id").split("_")[1];
-	        var user_rating_ad = readCookie("username");
-	        //send rating to to ad with adID
+		        alert("Rating received, thank you!");
+		    }); 
 
-	        alert("Rating received, thank you!");
-	    }); 
-
-	    //view ads for a specific user
-	    $('body').on("click", ".view_ads_for", function () {
-	        //get username
-	        var username = $(this).attr("class").split(" ")[1].split("view_")[1];
-	        if(username != "" || username != null || username != undefined){
-	        	//retrieve relevant ads from DB
-				$.ajax({
-		            url: '/php/scripts/view-ads-user.php',
-		            type: 'POST',
-					data: {
-		                username:username
-		            },
-		            success: function(response) {
-		            	response = JSON.parse(response);
-		            	console.log(JSON.stringify(response,4,'\t'));
-		                //ads retrieved
-		                //format respones
-		                var formatted_response = "<table><tr class='report-table-header'><td>Title</td><td>Description</td><td>Seller</td><td>Rate Product</td></tr>";
-		                for(var i=0; i<response.length;i++){
-		                	formatted_response += "<tr><td>"+response[i].title+"</td><td>"+response[i].description+"</td><td class='view_ads_for view_"+response[i].userID+"'>"+response[i].userID+
-		                			"</td><td>Rate Product <div class='rating'>"+
-									    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_5' value='5'><label for='rate_"+response[i].adID+"_5'></label></span>"+
-									    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_4' value='4'><label for='rate_"+response[i].adID+"_4'></label></span>"+
-									    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_3' value='3'><label for='rate_"+response[i].adID+"_3'></label></span>"+
-									    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_2' value='2'><label for='rate_"+response[i].adID+"_2'></label></span>"+
-									    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_1' value='1'><label for='rate_"+response[i].adID+"_1'></label></span>"+
-									"</div></td></tr>";
-		                }
-		                formatted_response += "</table>";
-						$("#ocn_container").html(formatted_response);  				              
-		            },
-		            error: function(err){
-		            	console.log("There was an error retrieving ads:" + JSON.stringify(err));
+		    //view ads for a specific user
+		    $('body').on("click", ".view_ads_for", function () {
+		        //get username
+		        var username = $(this).attr("class").split(" ")[1].split("view_")[1];
+		        if(username != "" || username != null || username != undefined){
+		        	//retrieve relevant ads from DB
+					$.ajax({
+			            url: '/php/scripts/view-ads-user.php',
+			            type: 'POST',
+						data: {
+			                username:username
+			            },
+			            success: function(response) {
+			            	response = JSON.parse(response);
+			            	console.log(JSON.stringify(response,4,'\t'));
+			                //ads retrieved
+			                //format respones
+			                var formatted_response = "<table><tr class='report-table-header'><td>Title</td><td>Description</td><td>Seller</td><td>Rate Product</td></tr>";
+			                for(var i=0; i<response.length;i++){
+			                	formatted_response += "<tr><td>"+response[i].title+"</td><td>"+response[i].description+"</td><td class='view_ads_for view_"+response[i].userID+"'>"+response[i].userID+
+			                			"</td><td>Rate Product <div class='rating'>"+
+										    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_5' value='5'><label for='rate_"+response[i].adID+"_5'></label></span>"+
+										    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_4' value='4'><label for='rate_"+response[i].adID+"_4'></label></span>"+
+										    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_3' value='3'><label for='rate_"+response[i].adID+"_3'></label></span>"+
+										    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_2' value='2'><label for='rate_"+response[i].adID+"_2'></label></span>"+
+										    "<span><input type='radio' name='rating' id='rate_"+response[i].adID+"_1' value='1'><label for='rate_"+response[i].adID+"_1'></label></span>"+
+										"</div></td></tr>";
+			                }
+			                formatted_response += "</table>";
+							$("#ocn_container").html(formatted_response);  				              
+			            },
+			            error: function(err){
+			            	console.log("There was an error retrieving ads:" + JSON.stringify(err));
+			            	if(JSON.parse(err.responseText)){
+			            		alert(JSON.parse(err.responseText).message);
+			            	}
+			            }
+			        });
+		        }
+		    });
+		}
+		//delete ad event listener - for admins
+		$("body").on("click", ".delete_ad", function(){
+			var adID = $(this).attr("data-adid");
+			$.ajax({
+	            url: '/php/scripts/delete-ad.php',
+	            type: 'POST',
+				data: {
+	                adID:adID
+	            },
+	            success: function(response) {
+	            	response = JSON.parse(response);
+	            	if(response[0].code == "0"){
+	            		alert(response[0].message);	
+	            		location.reload();
+	            	}	              
+	            },
+	            error: function(err){
+	            	console.log("There was an error while trying to delete ad: " + JSON.stringify(err));
 		            	if(JSON.parse(err.responseText)){
 		            		alert(JSON.parse(err.responseText).message);
 		            	}
-		            }
-		        });
-	        }
-	    });
+	            }
+	        });
+		});
+
+		//edit ad event listener - for admins
+		$("body").on("click", ".edit_ad", function(){
+			var adID = $(this).attr("data-adid");
+			window.location.href = "/ad-edit.html?adID=" + adID;
+		});
 		
 	});
 </script>

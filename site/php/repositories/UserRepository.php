@@ -52,8 +52,8 @@
             } else {
                 $sqlInsertPayment .= "VALUES ('$object->payingUserID','$object->rentedSpaceID','$object->amountInCADCents','$object->cardNumber','$object->cardExpiryDate','$object->cardSecurityCode','$object->cardholderName', '$object->cardCompany','$object->cardType', NOW())";
             }
-            $resultOfInsert = $this->returnResult($sqlInsertPayment);
-            if ($resultOfInsert) {
+            $result = $this->returnResult($sqlInsertPayment);
+            if ($result) {
                 $sqlUpdateMembership = "UPDATE Users SET MembershipPlan='$object->membershipPlan' WHERE UserID = '$object->payingUserID'";
                 $result = $this->returnResult($sqlUpdateMembership);
             }

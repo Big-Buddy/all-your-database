@@ -13,7 +13,13 @@ class AdRepository {
     {
         $sql = "SELECT * FROM Ads ";
         $sql .= "INNER JOIN Users ON Ads.PostingUserID = Users.UserID ";
-        $sql .= "WHERE AddressProvince='$province' AND AddressCity='$city' AND Category='$category' ORDER BY Ads.DaysToPromote DESC;";
+        if($province && $city && $category){
+            $sql .= "WHERE AddressProvince='$province' AND AddressCity='$city' AND Category='$category' ORDER BY Ads.DaysToPromote ASC;";
+        }
+        else{
+            //show all ads for all regions
+            $sql .= "ORDER BY Ads.DaysToPromote ASC;";
+        }
         $result = $this->connection->query($sql);
         $this->closeConnection();
         return $result;
@@ -24,6 +30,29 @@ class AdRepository {
         $sql = "SELECT * FROM Ads ";
         $sql .= "INNER JOIN Users ON Ads.PostingUserID = Users.UserID ";
         $sql .= "WHERE PostingUserID='$username';";
+        $result = $this->connection->query($sql);
+        $this->closeConnection();
+        return $result;
+    }
+    public function getAdRank($adID){
+        $sql = "SET @Position=0; ";
+        $sql .= "SELECT AdPos.PositionInCategories from Ads
+                inner join (
+                    Select AdID, PostingUserID, Category, PostingDate,
+                    @Position:= if(@prevCat != Category, 0, @Position+1) as PositionInCategories, 
+                    @prevCat:=Category
+                    from Ads
+                    order by Category, PostingDate desc) AdPos on AdPos.AdID = Ads.AdID
+                where Ads.AdID = '$adID';";
+        $result = $this->connection->multi_query($sql);
+        $this->closeConnection();
+        return $result;
+    }
+    public function getAdsForAdID($adID)
+    {
+        $sql = "SELECT * FROM Ads ";
+        $sql .= "INNER JOIN Users ON Ads.PostingUserID = Users.UserID ";
+        $sql .= "WHERE AdID='$adID';";
         $result = $this->connection->query($sql);
         $this->closeConnection();
         return $result;
