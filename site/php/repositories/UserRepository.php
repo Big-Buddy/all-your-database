@@ -41,7 +41,23 @@
 
             return $this->returnResult($sqlCreateNewUser);
         }
+        public function updateMembership($username, $payment, $newPlan){
 
+            /*Update membership*/
+            /*Only do step 2 if step 1 runs successfuly!*/
+            /*Step 1: Send payment to DB */
+            $sql = "INSERT INTO `Payments` (PayingUserID, RentedSpaceID, AmountInCADCents, CardNumber, CardExpiryDate, CardSecurityCode, CardholderName, CardCompany, CardType, PaymentDate) ";
+            $sql .= "VALUES ('$username', NULL, '$payment->amountInCADCents', '$payment->cardNumber', '$payment->cardExpiryDate', '$payment->cardSecurityCode', '$payment->cardholderName', '$payment->cardCompany', '$payment->cardType', now()); ";
+            $result = $this->returnResult($sql);
+            /*Step 2: update membership */
+            if($result){
+                $sql = "Update Users set MembershipPlan = '$newPlan' where UserID = '$username';";
+                $result = $this->connection->query($sql);
+            }
+            
+            $this->closeConnection();
+            return $result;
+        }
         public function returnResult($sql) 
         {
             $result = $this->connection->query($sql);
