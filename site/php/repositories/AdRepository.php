@@ -20,7 +20,7 @@ class AdRepository {
             //show all ads for all regions
             $sql .= "ORDER BY Ads.DaysToPromote ASC;";
         }
-        $result = $this->connection->query($sql);
+        $result = $this->returnResult($sql);
         $this->closeConnection();
         return $result;
     }
@@ -30,7 +30,7 @@ class AdRepository {
         $sql = "SELECT * FROM Ads ";
         $sql .= "INNER JOIN Users ON Ads.PostingUserID = Users.UserID ";
         $sql .= "WHERE PostingUserID='$username';";
-        $result = $this->connection->query($sql);
+        $result = $this->returnResult($sql);
         $this->closeConnection();
         return $result;
     }
@@ -44,7 +44,7 @@ class AdRepository {
                     from Ads
                     order by Category, PostingDate desc) AdPos on AdPos.AdID = Ads.AdID
                 where Ads.AdID = '$adID';";
-        $result = $this->connection->multi_query($sql);
+        $result = $this->returnResultOfMultiQuery($sql);
         $this->closeConnection();
         return $result;
     }
@@ -53,7 +53,7 @@ class AdRepository {
         $sql = "SELECT * FROM Ads ";
         $sql .= "INNER JOIN Users ON Ads.PostingUserID = Users.UserID ";
         $sql .= "WHERE AdID='$adID';";
-        $result = $this->connection->query($sql);
+        $result = $this->returnResult($sql);
         $this->closeConnection();
         return $result;
     }
@@ -68,7 +68,6 @@ class AdRepository {
                 $adID = $row['AdID'];
             }
         }
-        // $this->closeConnection();
         return $adID;
     }
 
@@ -90,7 +89,7 @@ class AdRepository {
 
         $sql .= "DELETE FROM Ads ";
         $sql .= "WHERE AdID = $adID; ";
-        $result = $this->connection->multi_query($sql);          
+        $result = $this->returnResultOfMultiQuery($sql);
         $this->closeConnection();
         return $result;
     }
