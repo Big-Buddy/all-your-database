@@ -20,7 +20,7 @@
 
         public function createNewUser($user) 
         {
-            $sqlCheckIfUserExists = "SELECT * FROM `users` WHERE UserID = 'sakuwsasdha@verizon.net' LIMIT 1";
+            $sqlCheckIfUserExists = "SELECT * FROM `users` WHERE UserID = '$user->userID' OR Email = '$user->email' LIMIT 1";
             $userExists = $this->returnResult($sqlCheckIfUserExists);
             if ($userExists->num_rows > 0) {
                 return false;
