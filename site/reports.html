@@ -96,7 +96,7 @@ $(document).ready(function(){
 
                 var report_html = "<table><tr class='report-table-header'><td>User ID</td><td>Email</td><td>Number of Ads</td><td>Sum of Service Payments</td><td>Sum of Ad Prices</td><td>Profitability</td></tr>";
                 for(var i=0; i<response.length;i++){
-                    report_html += "<tr><td>"+response[i].userID+"</td><td>"+response[i].email+"</td><td>"+response[i].numAds+"</td><td>$"+response[i].sumServicePayments/100+"</td><td>$"+response[i].sumAdPrices/100+"</td><td>"+response[i].profitability+"</td></tr>";
+                    report_html += "<tr><td>"+response[i].userID+"</td><td>"+response[i].email+"</td><td>"+response[i].numAds+"</td><td>"+response[i].sumServicePayments+"</td><td>$"+response[i].sumAdPrices/100+"</td><td>$"+response[i].profitability/100+"</td></tr>";
                 }
                 report_html += "</table>";
                 $("#report_view_container").html(report_html);
