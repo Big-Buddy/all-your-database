@@ -18,6 +18,14 @@
             return $result;
         }
 
+        public function getUserObject($username)
+        {
+            $sql = "SELECT * FROM Users ";
+            $sql .= "WHERE UserID='$username';";
+            $result = $this->connection->query($sql);
+            $this->closeConnection();
+            return $result;
+        }
         public function createNewUser($user) 
         {
             $sqlCheckIfUserExists = "SELECT * FROM `users` WHERE UserID = '$user->userID' OR Email = '$user->email' LIMIT 1";
