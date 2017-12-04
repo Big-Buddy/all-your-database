@@ -7,25 +7,16 @@ $userRepository = new UserRepository();
 
 $object = new stdClass();
 
-//$object->payingUserID = $_POST["payingUserID"];
-//$object->rentedSpaceID = $_POST["rentedSpaceID"];
-//$object->amountInCADCents = $_POST["amountInCADCents"];
-//$object->cardNumber = $_POST["cardNumber"];
-//$object->cardExpiryDate = $_POST["cardExpiryDate"];
-//$object->cardSecurityCode = $_POST["cardSecurityCode"];
-//$object->cardholderNumber = $_POST["cardholderNumber"];
-//$object->cardCompany = $_POST["cardCompany"];
-//$object->cardType = $_POST["cardType"];
-
-$object->payingUserID = 'teh-tom';
-$object->rentedSpaceID = null;
-$object->amountInCADCents = 100;
-$object->cardNumber = '1234123412341234';
-$object->cardExpiryDate = '2017-01-01';
-$object->cardSecurityCode = '123';
-$object->cardholderName = 'adriel';
-$object->cardCompany = 'Visa';
-$object->cardType = 'Debit';
+$object->payingUserID = $_POST["payingUserID"];
+$object->rentedSpaceID = $_POST["rentedSpaceID"];
+$object->amountInCADCents = $_POST["amountInCADCents"];
+$object->cardNumber = $_POST["cardNumber"];
+$object->cardExpiryDate = $_POST["cardExpiryDate"];
+$object->cardSecurityCode = $_POST["cardSecurityCode"];
+$object->cardholderNumber = $_POST["cardholderNumber"];
+$object->cardCompany = $_POST["cardCompany"];
+$object->cardType = $_POST["cardType"];
+$object->membershipPlan = $_POST["membershipPlan"];
 
 $result = $userRepository->updateMembership($object);
 $isSuccess = false;

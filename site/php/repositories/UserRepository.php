@@ -45,14 +45,20 @@
 
         public function updateMembership($object)
         {
-            $sql = "INSERT INTO `payments`(`PayingUserID`, `RentedSpaceID`, `AmountInCADCents`, `CardNumber`, `CardExpiryDate`, `CardSecurityCode`, `CardholderName`, `CardCompany`, `CardType`, `PaymentDate`) ";
+            $sqlInsertPayment = "INSERT INTO `payments`(`PayingUserID`, `RentedSpaceID`, `AmountInCADCents`, `CardNumber`, `CardExpiryDate`, `CardSecurityCode`, `CardholderName`, `CardCompany`, `CardType`, `PaymentDate`) ";
             if ($object->rentedSpaceID == null) {
                 //for some odd reason, if rented space id = null, it does not work, have to directly write null
-                $sql .= "VALUES ('$object->payingUserID',null,'$object->amountInCADCents','$object->cardNumber','$object->cardExpiryDate','$object->cardSecurityCode','$object->cardholderName', '$object->cardCompany','$object->cardType', NOW())";
+                $sqlInsertPayment .= "VALUES ('$object->payingUserID',null,'$object->amountInCADCents','$object->cardNumber','$object->cardExpiryDate','$object->cardSecurityCode','$object->cardholderName', '$object->cardCompany','$object->cardType', NOW())";
             } else {
-                $sql .= "VALUES ('$object->payingUserID','$object->rentedSpaceID','$object->amountInCADCents','$object->cardNumber','$object->cardExpiryDate','$object->cardSecurityCode','$object->cardholderName', '$object->cardCompany','$object->cardType', NOW())";
+                $sqlInsertPayment .= "VALUES ('$object->payingUserID','$object->rentedSpaceID','$object->amountInCADCents','$object->cardNumber','$object->cardExpiryDate','$object->cardSecurityCode','$object->cardholderName', '$object->cardCompany','$object->cardType', NOW())";
             }
-            return $this->returnResult($sql);
+            $resultOfInsert = $this->returnResult($sqlInsertPayment);
+            if ($resultOfInsert) {
+                $sqlUpdateMembership = "UPDATE Users SET MembershipPlan='$object->membershipPlan' WHERE UserID = '$object->payingUserID'";
+                $result = $this->returnResult($sqlUpdateMembership);
+            }
+
+            return $result;
         }
 
         public function returnResult($sql) 
