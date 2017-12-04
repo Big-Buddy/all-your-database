@@ -29,6 +29,20 @@ class AdRepository {
         return $result;
     }
 
+    public function getMostRecentAd()
+    {
+        $adID = null;
+        $sql = "SELECT AdID FROM Ads ORDER BY AdId DESC LIMIT 1";
+        $result = $this->returnResult($sql);
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                $adID = $row['AdID'];
+            }
+        }
+        $this->closeConnection();
+        return $adID;
+    }
+
     public function deleteAd($adID)
     {
         /* Delete an ad and all rows that reference it */
@@ -52,43 +66,41 @@ class AdRepository {
         return $result;
     }
 
-    public function postAd($ad)
+    public function createAd($ad)
     {
         $adID = null;
         $rentedSpaceID = null;
 
         $sqlInsertAd = "INSERT INTO `ads`(`PostingUserID`, `PostingDate`, `DaysToPromote`, `AdType`, `Title`, `Description`, `PriceInCADCents`, `Category`) ";
         $sqlInsertAd .= "VALUES ('$ad->postingUserID','$ad->postingDate','$ad->daysToPromote','$ad->adType','$ad->title','$ad->description','$ad->priceInCADCents','$ad->category'); ";
-        $resultInsertAd = $this->returnResult($sqlInsertAd);
-        if ($resultInsertAd) {
-            $sql = "SELECT AdID FROM Ads ORDER BY AdId DESC LIMIT 1";
-            $result = $this->returnResult($sql);
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    $adID = $row['AdID'];
-                }
-            }
-        }
-        
-        $sqlInsertImageAndRentedSpace = "INSERT INTO Images ('FilePath', 'AdID') VALUES ('$ad->filePath','$adID'); ";
-        $sqlInsertImageAndRentedSpace .= "INSERT INTO `rentedspaces`(AdID`, `StoreID`, `DateRented`, `HoursRented`, `DeliveryServices`) ";
-        $sqlInsertImageAndRentedSpace .= "VALUES ('$adID','$ad->storeID', '$ad->dateRented', '$ad->hoursRented', '$ad->deliveryServices'); ";
-        $resultInsertRentedSpace = $this->returnResultOfMultiQuery($sqlInsertImageAndRentedSpace);
+        $result = $this->returnResult($sqlInsertAd);
 
-        if ($resultInsertRentedSpace) {
-            $sql = "SELECT RentedSpaceID FROM rentedSpaces ORDER BY RentedSpaceID DESC LIMIT 1";
-            $result = $this->returnResult($sql);
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    $rentedSpaceID = $row['RentedSpaceID'];
+        if ($result) {
+            $adID = $this->getMostRecentAd();
+        }
+
+        if ($ad->isRenting) {
+            $sqlInsertRentedSpace = "INSERT INTO `rentedspaces`(AdID`, `StoreID`, `DateRented`, `HoursRented`, `DeliveryServices`) ";
+            $sqlInsertRentedSpace .= "VALUES ('$adID','$ad->storeID', '$ad->dateRented', '$ad->hoursRented', '$ad->deliveryServices'); ";
+            $result = $this->returnResult($sqlInsertRentedSpace);
+
+            if ($result) {
+                $sql = "SELECT RentedSpaceID FROM rentedSpaces ORDER BY RentedSpaceID DESC LIMIT 1";
+                $result = $this->returnResult($sql);
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $rentedSpaceID = $row['RentedSpaceID'];
+                    }
                 }
             }
         }
 
-        $sqlInsertPayment = "INSERT INTO `payments`(`PayingUserID`, `RentedSpaceID`, `AmountInCADCents`, `CardNumber`, `CardExpiryDate`, `CardSecurityCode`, `CardholderName`, `CardCompany`, `CardType`, `PaymentDate`) ";
-        $sqlInsertPayment .= "VALUES ('$ad->postingUserID', '$rentedSpaceID', '$ad->amountInCADCents', '$ad->cardNumber', '$ad->cardExpiryDate', '$ad->cardSecurityCode', '$ad->cardholderNumber', '$ad->cardCompany', '$ad->cardType', '$ad->paymentDate') ";
-        $result = $this->returnResult($sqlInsertPayment);
-        $this->closeConnection();
+        if ($ad->daysToPromote != 0) {
+            $sqlInsertPayment = "INSERT INTO `payments`(`PayingUserID`, `RentedSpaceID`, `AmountInCADCents`, `CardNumber`, `CardExpiryDate`, `CardSecurityCode`, `CardholderName`, `CardCompany`, `CardType`, `PaymentDate`) ";
+            $sqlInsertPayment .= "VALUES ('$ad->postingUserID', '$rentedSpaceID', '$ad->amountInCADCents', '$ad->cardNumber', '$ad->cardExpiryDate', '$ad->cardSecurityCode', '$ad->cardholderNumber', '$ad->cardCompany', '$ad->cardType', '$ad->paymentDate') ";
+            $result = $this->returnResult($sqlInsertPayment);
+        }
+
         return $result;
     }
 
