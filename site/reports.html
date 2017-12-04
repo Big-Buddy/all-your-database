@@ -68,7 +68,14 @@
 		<br/>
 			<input type="text" id="seller"/>
 		<hr>
-		<!-- TODO: one more report of our choice -->
+        <a id="list_admin_stats" class="btn">Get information about administrators</a>
+        <hr>
+        <a id="list_buyer_stats" class="btn">Get information about buyers</a>
+        <hr>
+        <a id="list_manager_stats" class="btn">Get information about managers</a>
+        <hr>
+        <a id="list_seller_stats" class="btn">Get information about sellers</a>
+        <hr>
 		
 		<div id="report_view_container">
 			<!-- to be populated based on the report button that was clicked -->
@@ -78,6 +85,99 @@
 <script>	
 // Onclick for each "button", performing necessary SQL query and putting formatted response insite report_view_container
 $(document).ready(function(){	
+
+    $("#list_seller_stats").on("click", function(e){
+        $.ajax({
+            url: '/php/scripts/reports/report10-seller.php',
+            type: 'POST',           
+            success: function(response) {
+                //returns userID, category and # of ads
+                response = JSON.parse(response);
+
+                var report_html = "<table><tr class='report-table-header'><td>User ID</td><td>Email</td><td>Number of Ads</td><td>Sum of Service Payments</td><td>Sum of Ad Prices</td><td>Profitability</td></tr>";
+                for(var i=0; i<response.length;i++){
+                    report_html += "<tr><td>"+response[i].userID+"</td><td>"+response[i].email+"</td><td>"+response[i].numAds+"</td><td>$"+response[i].sumServicePayments/100+"</td><td>$"+response[i].sumAdPrices/100+"</td><td>"+response[i].profitability+"</td></tr>";
+                }
+                report_html += "</table>";
+                $("#report_view_container").html(report_html);
+            },
+            error: function(err){
+                console.log("There was an error:" + JSON.stringify(err));
+                if(JSON.parse(err.responseText)){
+                    alert(JSON.parse(err.responseText).message);
+                }
+            }
+        });
+    });
+    $("#list_manager_stats").on("click", function(e){
+        $.ajax({
+            url: '/php/scripts/reports/report10-manager.php',
+            type: 'POST',           
+            success: function(response) {
+                //returns userID, category and # of ads
+                response = JSON.parse(response);
+
+                var report_html = "<table><tr class='report-table-header'><td>Manager UserID</td><td>Email</td><td>Number of Stores</td><td>Sum of Payments Received</td><td>Sum of Ad Prices In Store</td></tr>";
+                for(var i=0; i<response.length;i++){
+                    report_html += "<tr><td>"+response[i].managerUserID+"</td><td>"+response[i].email+"</td><td>"+response[i].numStores+"</td><td>$"+response[i].sumPaymentsReceived/100+"</td><td>$"+response[i].sumAdPricesInStore/100+"</td></tr>";
+                }
+                report_html += "</table>";
+                $("#report_view_container").html(report_html);
+            },
+            error: function(err){
+                console.log("There was an error:" + JSON.stringify(err));
+                if(JSON.parse(err.responseText)){
+                    alert(JSON.parse(err.responseText).message);
+                }
+            }
+        });
+    });
+    $("#list_admin_stats").on("click", function(e){
+        $.ajax({
+            url: '/php/scripts/reports/report10-admin.php',
+            type: 'POST',           
+            success: function(response) {
+                //returns userID, category and # of ads
+                response = JSON.parse(response);
+
+                var report_html = "<table><tr class='report-table-header'><td>UserID</td><td>Email</td><td>Is Admin?</td><td>Can Do Admin Stuff?</td></tr>";
+                for(var i=0; i<response.length;i++){
+                    report_html += "<tr><td>"+response[i].userID+"</td><td>"+response[i].email+"</td><td>"+response[i].isAdmin+"</td><td>"+response[i].canDoAdminStuff+"</td></tr>";
+                }
+                report_html += "</table>";
+                $("#report_view_container").html(report_html);
+            },
+            error: function(err){
+                console.log("There was an error:" + JSON.stringify(err));
+                if(JSON.parse(err.responseText)){
+                    alert(JSON.parse(err.responseText).message);
+                }
+            }
+        });
+    });
+    $("#list_buyer_stats").on("click", function(e){
+        $.ajax({
+            url: '/php/scripts/reports/report10-buyer.php',
+            type: 'POST',           
+            success: function(response) {
+                //returns userID, category and # of ads
+                response = JSON.parse(response);
+
+                var report_html = "<table><tr class='report-table-header'><td>User ID</td><td>Email</td><td>Number of Buying Ads</td><td>Price of All Ads</td><td>Sum of All Payments</td></tr>";
+                for(var i=0; i<response.length;i++){
+                    report_html += "<tr><td>"+response[i].userID+"</td><td>"+response[i].email+"</td><td>"+response[i].numAdsBuying+"</td><td>$"+response[i].priceAllAds/100+"</td><td>$"+response[i].sumAllPayments/100+"</td></tr>";
+                }
+                report_html += "</table>";
+                $("#report_view_container").html(report_html);
+            },
+            error: function(err){
+                console.log("There was an error:" + JSON.stringify(err));
+                if(JSON.parse(err.responseText)){
+                    alert(JSON.parse(err.responseText).message);
+                }
+            }
+        });
+    });
 
 	$("#list_users_most_ads").on("click", function(e){
 		$.ajax({
