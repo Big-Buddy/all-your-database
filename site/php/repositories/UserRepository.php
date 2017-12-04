@@ -26,6 +26,7 @@
             $this->closeConnection();
             return $result;
         }
+
         public function createNewUser($user) 
         {
             $sqlCheckIfUserExists = "SELECT * FROM `users` WHERE UserID = '$user->userID' OR Email = '$user->email' LIMIT 1";
@@ -40,6 +41,18 @@
             '$user->addressCity','$user->addressProvince','$user->addressCountry','$user->addressPostalCode');";
 
             return $this->returnResult($sqlCreateNewUser);
+        }
+
+        public function updateMembership($object)
+        {
+            $sql = "INSERT INTO `payments`(`PayingUserID`, `RentedSpaceID`, `AmountInCADCents`, `CardNumber`, `CardExpiryDate`, `CardSecurityCode`, `CardholderName`, `CardCompany`, `CardType`, `PaymentDate`) ";
+            if ($object->rentedSpaceID == null) {
+                //for some odd reason, if rented space id = null, it does not work, have to directly write null
+                $sql .= "VALUES ('$object->payingUserID',null,'$object->amountInCADCents','$object->cardNumber','$object->cardExpiryDate','$object->cardSecurityCode','$object->cardholderName', '$object->cardCompany','$object->cardType', NOW())";
+            } else {
+                $sql .= "VALUES ('$object->payingUserID','$object->rentedSpaceID','$object->amountInCADCents','$object->cardNumber','$object->cardExpiryDate','$object->cardSecurityCode','$object->cardholderName', '$object->cardCompany','$object->cardType', NOW())";
+            }
+            return $this->returnResult($sql);
         }
 
         public function returnResult($sql) 
