@@ -57,11 +57,7 @@
 			<tr>
 				<td>Address</td>
 				<td><input type="text" name="address" id="address" /></td>
-			</tr>
-			<tr>
-				<td>Image</td>
-				<td><input type="file" name="pic" id="pic" accept="image/*"></td>
-			</tr>
+			</tr>			
 			
 		</table>
 		<p id="ad-error" class="error-msg" style="display:none;">Please enter all fields before submitting.</p>
@@ -71,10 +67,10 @@
 		A promotion package increases the rank of your ad. The packages available are:
 		<br/>
 		<form>
-			<input type="radio" value="no_promo" name="promo" checked/> No Promotion<br/>
-			<input type="radio" value="7_promo" name="promo"/> 7 days promotion - 10$<br/>
-			<input type="radio" value="30_promo" name="promo"/> 30 days - 50$<br/>
-			<input type="radio" value="60_promo" name="promo"/> 60 days - 90$<br/>
+			<input type="radio" value="0" name="promo" checked/> No Promotion<br/>
+			<input type="radio" value="7" name="promo"/> 7 days promotion - 10$<br/>
+			<input type="radio" value="30" name="promo"/> 30 days - 50$<br/>
+			<input type="radio" value="60" name="promo"/> 60 days - 90$<br/>
 		</form>
 		<hr>
 		<h3>Rent Physical Space (Optional)</h3>
@@ -126,15 +122,99 @@
 			</div>
 		</form>
 		<hr>
-		<a id="ad_submit" class="btn">Submit</a>
+		<div id="payment-container" class="hidden-content">
+			<table class="input-form input-form-large">
+				<tr>
+					<td>Card Number</td>
+					<td><input type="text" name="card_number" id="card_number"/></td>
+				</tr>
+				<tr>
+					<td>Card Expiry Date</td>
+					<td><input type="text" name="card_expiry" id="card_expiry"/></td>
+				</tr>	
+				<tr>
+					<td>Card Security Code</td>
+					<td><input type="text" name="card_security" id="card_security"/></td>
+				</tr>
+				<tr>
+					<td>Cardholder Name</td>
+					<td><input type="text" name="card_name" id="card_name"/></td>
+				</tr>
+				<tr>
+					<td>Card Type</td>
+					<td>
+						<select id="card_type">						
+							<option selected value="Credit">Credit</option>
+							<option value="Debit">Debit</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Card Company</td>
+					<td>
+						<select id="card_company">						
+							<option selected value="Mastercard">Mastercard</option>
+							<option value="Visa">Visa</option>
+							<option value="American Express">American Express</option>
+							<option value="Discover">Discover</option>
+							<option value="null">Debit/Other</option>
+						</select>
+					</td>
+				</tr>									
+				<tr>
+					<td>Amount Due:</td>
+					<td>$<span id="amount_due">0</span></td>
+				</tr>			
+				
+			</table>
+		</div>
+		<a id="ad_submit" class="btn" style="margin-bottom:50px;">Submit</a>
 	</div>
 </body>
 <script>			
 
 	$(document).ready(function(){
-		//get URL params
-		var category = getUrlParameter("category");		
-
+		var amount_due_promo = 0;
+		var amount_due_rent = 0;
+		$('input:radio[name="promo"]').change(function(){
+			if($(this).val()!="0"){
+				//show payment
+        		$("#payment-container").show();
+        		switch($(this).val()){
+        			case "7":
+        				amount_due_promo = 10;	
+        				$("#amount_due").text(amount_due_promo + amount_due_rent);	
+        				break;		
+        			case "30":
+        				amount_due_promo = 50;	
+        				$("#amount_due").text(amount_due_promo + amount_due_rent);	
+        				break;
+        			case "60":
+        				amount_due_promo = 90;	
+        				$("#amount_due").text(amount_due_promo + amount_due_rent);	
+        				break;
+        		}
+			}
+			else if($('input:radio[name="rent"]:checked').val() == "no_rental"){		
+				$("#payment-container").hide();
+			}
+			if($(this).val()=="0"){
+				amount_due_promo = 0;		
+				$("#amount_due").text(amount_due_promo + amount_due_rent);	
+			}
+		});
+		$('input:radio[name="rent"]').change(function(){
+			if($(this).val()!="no_rental"){
+				//show payment
+        		$("#payment-container").show();
+			}
+			else if($('input:radio[name="promo"]:checked').val() == "0"){
+				amount_due_promo = 0;	
+				$("#payment-container").hide();
+			}
+			//todo: calculate rental $$
+		});
+		
 		/****************************************
         				AD SUBMIT
 		****************************************/
@@ -149,7 +229,6 @@
         	var title = $("#title").val();
 			var description = $("#description").val();
 			var address = $("#address").val();
-			var pic = $("#pic").val();
 
 			//Date parsing stuff, ignore....
 			Date.prototype.yyyymmdd = function() {
@@ -173,14 +252,14 @@
 			var hoursRented = null;
 			var membershipPlan = null;
 			var deliveryServices = null;
-			var amountInCADCents = null;
-			var cardNumber = null;
-			var cardExpiryDate = null;
-			var cardSecurityCode = null;
-			var cardholderNumber = null;
-			var cardCompany = null;
-			var cardType = null;
-			var paymentDate = null;
+			var amountInCADCents = "1000";
+			var cardNumber = "0843065502988806";
+			var cardExpiryDate = "2020-01-02";
+			var cardSecurityCode = "178";
+			var cardholderNumber = "Wanda Walsh";
+			var cardCompany = "Visa";
+			var cardType = "Credit";
+			var paymentDate = "2017-01-04 00:00:00";
 			var daysToPromote = 0;
 
         	var isError = false;
@@ -212,21 +291,18 @@
         	if(address == "" || address == null || address == undefined){
         		isError = true;
         	}
-        	if(pic == "" || pic == null || pic == undefined){
-        		isError = true;
-        	}
-        	// console.log("contact_info:" + contact_info + "price:" + price + "category:" +category+ "for_sale_by:" +for_sale_by+"availability:"+ availability+"title:" +title+ "description:"+ description + "address:" +address+"pic:"+pic);
         	if(isError){
         		$("#ad-error").show();
         	}        	
         	else{        		
-        		if($('input:radio[name="promo"]').val() != 'no_promo'){
+        		if($('input:radio[name="promo"]:checked').val() != '0'){
         			//buying promotion
         			isPromoting = true;
+        			daysToPromote = $('input:radio[name="promo"]:checked').val();        			
         		}
-        		if($('input:radio[name="promo"]').val() != 'no_rental'){
+        		if($('input:radio[name="rent"]:checked').val() != 'no_rental'){
         			//renting space
-        			isRenting = true;
+        			isRenting = true;        			
         		}
 
         		//post the ad

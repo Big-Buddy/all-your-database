@@ -39,7 +39,7 @@ class AdRepository {
                 $adID = $row['AdID'];
             }
         }
-        $this->closeConnection();
+        // $this->closeConnection();
         return $adID;
     }
 
@@ -79,7 +79,7 @@ class AdRepository {
             $adID = $this->getMostRecentAd();
         }
 
-        if ($ad->isRenting) {
+        if ($ad->isRenting != 'false') {
             $sqlInsertRentedSpace = "INSERT INTO `rentedspaces`(AdID`, `StoreID`, `DateRented`, `HoursRented`, `DeliveryServices`) ";
             $sqlInsertRentedSpace .= "VALUES ('$adID','$ad->storeID', '$ad->dateRented', '$ad->hoursRented', '$ad->deliveryServices'); ";
             $result = $this->returnResult($sqlInsertRentedSpace);
@@ -95,7 +95,7 @@ class AdRepository {
             }
         }
 
-        if ($ad->daysToPromote != 0) {
+        if ($ad->daysToPromote != '0') {
             $sqlInsertPayment = "INSERT INTO `payments`(`PayingUserID`, `RentedSpaceID`, `AmountInCADCents`, `CardNumber`, `CardExpiryDate`, `CardSecurityCode`, `CardholderName`, `CardCompany`, `CardType`, `PaymentDate`) ";
             $sqlInsertPayment .= "VALUES ('$ad->postingUserID', '$rentedSpaceID', '$ad->amountInCADCents', '$ad->cardNumber', '$ad->cardExpiryDate', '$ad->cardSecurityCode', '$ad->cardholderNumber', '$ad->cardCompany', '$ad->cardType', '$ad->paymentDate') ";
             $result = $this->returnResult($sqlInsertPayment);
