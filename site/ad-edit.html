@@ -22,12 +22,9 @@
 			<tr>
 				<td>Category</td>
 				<td>
-					<select id="category">
-						<!-- this field is set based on select-region page -->						
-						<option selected value="buy-sell">Buy/Sell</option>
-						<option value="services">Services</option>
-						<option value="rent">Rent</option>
-						<option value="personals">Personals</option>
+					<select id="category">					
+						<option selected value="buy">Buy</option>
+						<option value="sell">Sell</option>
 					</select>
 				</td>
 			</tr>
@@ -68,37 +65,84 @@
 			
 		</table>
 		<p id="ad-error" class="error-msg" style="display:none;">Please enter all fields before submitting.</p>
+		<hr>
+		<h3>Purchase Promotion (Optional)</h3>
+		<br/>
+		A promotion package increases the rank of your ad. The packages available are:
+		<br/>
+		<form>
+			<input type="radio" value="no_promo" name="promo" checked/> No Promotion<br/>
+			<input type="radio" value="7_promo" name="promo"/> 7 days promotion - 10$<br/>
+			<input type="radio" value="30_promo" name="promo"/> 30 days - 50$<br/>
+			<input type="radio" value="60_promo" name="promo"/> 60 days - 90$<br/>
+		</form>
+		<hr>
+		<h3>Rent Physical Space (Optional)</h3>
+		<form>
+			<input type="radio" value="no_rental" name="rent" checked/> I do not wish to rent a store.<br/>
+			<input type="radio" value="rental" name="rent"/> I wish to rent a store.<br/>
+			<div id="rental_container" class="hidden-content">
+				Store Name:
+				<br/>
+				<select id="selected_store">
+					<option selected value="1">Warehouse 1</option>
+					<option value="2">Warehouse 2</option>
+					<option value="3">Warehouse 3</option>
+					<option value="4">Warehouse 4</option>
+					<option value="5">Warehouse 5</option>
+					<option value="6">Warehouse 6</option>
+					<option value="7">Warehouse 7</option>
+					<option value="8">Warehouse 8</option>
+					<option value="9">Warehouse 9</option>
+					<option value="10">Warehouse 10</option>
+					<option value="11">Warehouse 11</option>
+					<option value="12">Warehouse 12</option>					
+					<option value="13">Warehouse 13</option>
+					<option value="14">Warehouse 14</option>
+					<option value="15">Warehouse 15</option>
+					<option value="16">Warehouse 16</option>
+					<option value="17">Warehouse 17</option>
+					<option value="18">Warehouse 18</option>
+					<option value="19">Warehouse 19</option>
+					<option value="20">Warehouse 20</option>
+				</select>
+				<br/>
+				Date (YYYY-MM-DD):
+				<br>
+				<input type="text" id="rental_date" />
+				<br/>
+				Hours Rented:
+				<br>
+				<select id="hours_rented">
+					<option selected value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+				</select>
+			</div>
+		</form>
+		<hr>
 		<a id="ad_submit" class="btn">Submit</a>
 	</div>
 </body>
-<script>	
+<script>			
+
 	$(document).ready(function(){
 		//get URL params
-		var category = getUrlParameter("category");
-		switch(category){
-			case "buy_sell":
-				$("#category").val("buy-sell");
-				break;
-			case "services":
-				$("#category").val("services");
-				break;
-			case "rent":
-				$("#category").val("rent");
-				break;
-			case "personals":
-				$("#category").val("personals");
-				break;
-			default:
-				$("#category").val("buy-sell");
-		}
+		var category = getUrlParameter("category");		
 
 		/****************************************
         				AD SUBMIT
 		****************************************/
         $("#ad_submit").on('click', function(e){
         	e.preventDefault();
+        	var postingUserID = readCookie("username");
         	var contact_info = $("#contact_info").val();
-        	var price = $("#price").val();
+        	var price = $("#price").val() *100;
         	var category = $("#category").val();
 			var for_sale_by = $("#for_sale_by").val();
 			var availability = $("#availability").val();
@@ -106,7 +150,41 @@
 			var description = $("#description").val();
 			var address = $("#address").val();
 			var pic = $("#pic").val();
+
+			//Date parsing stuff, ignore....
+			Date.prototype.yyyymmdd = function() {
+			  var mm = this.getMonth() + 1; // getMonth() is zero-based
+			  var dd = this.getDate();
+
+			  return [this.getFullYear(),
+			          (mm>9 ? '' : '0') + mm,
+			          (dd>9 ? '' : '0') + dd
+			         ].join('-');
+			};
+			var postingDate =  new Date();
+			postingDate = postingDate.yyyymmdd();
+
+			isPromoting = false;
+			isRenting = false;
+			//optional fields
+			var filePath = null;
+			var storeID = null;
+			var dateRented = null;
+			var hoursRented = null;
+			var membershipPlan = null;
+			var deliveryServices = null;
+			var amountInCADCents = null;
+			var cardNumber = null;
+			var cardExpiryDate = null;
+			var cardSecurityCode = null;
+			var cardholderNumber = null;
+			var cardCompany = null;
+			var cardType = null;
+			var paymentDate = null;
+			var daysToPromote = 0;
+
         	var isError = false;
+        	var subCategory = getUrlParameter("category");
         	$("#ad-error").hide();
 
         	//validation
@@ -142,32 +220,71 @@
         		$("#ad-error").show();
         	}        	
         	else{        		
-        		//no errors, proceed with submit attempt
+        		if($('input:radio[name="promo"]').val() != 'no_promo'){
+        			//buying promotion
+        			isPromoting = true;
+        		}
+        		if($('input:radio[name="promo"]').val() != 'no_rental'){
+        			//renting space
+        			isRenting = true;
+        		}
+
+        		//post the ad
         		$.ajax({
-		            url: '/php/post_ad.php',
+		            url: '/php/scripts/post-ad.php',
 		            type: 'POST',
 					data: {
-		                contact_info: contact_info,
-						price: price,
-						category: category,
-						for_sale_by: for_sale_by,
-						availability: availability,
+						isPromoting: isPromoting,
+						isRenting:isRenting,
+						postingUserID : postingUserID,
+						postingDate : postingDate,
+						adType:category,
 						title: title,
 						description: description,
-						address: address,
-						pic: pic
+						priceInCADCents: price,
+						category:subCategory,
+						daysToPromote: daysToPromote,
+						filePath:filePath,
+						storeID:storeID,
+						dateRented:dateRented,
+						hoursRented:hoursRented,
+						membershipPlan:membershipPlan,
+						deliveryServices:deliveryServices,
+						amountInCADCents:amountInCADCents,
+						cardNumber:cardNumber,
+						cardExpiryDate:cardExpiryDate,
+						cardSecurityCode:cardSecurityCode,
+						cardholderNumber:cardholderNumber,
+						cardCompany:cardCompany,
+						cardType:cardType,
+						paymentDate:paymentDate
 					},
 		            success: function(response) {
-		                //if response indicates ad post was successful...
-		                //display success message
-		                //redirect to /landing.html
+		            	response = JSON.parse(response);
+		            			              
 		            },
-		            error: function(err){
-		            	alert("There was an error while trying to post your ad: " + JSON.stringify(err));
+		            error: function(response) {
+		                var errorMessage = JSON.parse(response.responseText).message; //refer to the script to see error msg
+		                var statusCode = response.status;
+		                console.log(errorMessage);
+		                console.log(statusCode);
 		            }
 		        });
+		    
+					
         	}        	
         });
+
+		$('input:radio[name="rent"]').change(function(){
+			if ($(this).is(':checked') && $(this).val() == 'rental') {
+	            //someone wants to rent
+	            $("#rental_container").show();
+	        }
+	        else{
+	        	//hide rental section
+	        	$("#rental_container").hide();
+	        }
+		});
 	});
 </script>
 </html>
