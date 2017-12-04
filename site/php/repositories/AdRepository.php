@@ -28,7 +28,9 @@ class AdRepository {
         $this->closeConnection();
         return $result;
     }
-    public function deleteAd($adID){
+
+    public function deleteAd($adID)
+    {
         /* Delete an ad and all rows that reference it */
         $sql = "DELETE FROM Ratings ";
         $sql .= "WHERE AdIDBeingRated = $adID; ";
@@ -49,9 +51,44 @@ class AdRepository {
         $this->closeConnection();
         return $result;
     }
+
+    public function postAd($ad)
+    {
+        $adID = null;
+        $rentedSpaceID = null;
+        $sqlInsertAd = "INSERT INTO `ads`(`PostingUserID`, `PostingDate`, `DaysToPromote`, `AdType`, `Title`, `Description`, `PriceInCADCents`, `Category`) ";
+        $sqlInsertAd .= "VALUES ($ad->postingUserID','$ad->postingDate','$ad->daysToPromote','$ad->adType','$ad->title','$ad->description','$ad->priceInCADCents','$ad->category'); ";
+        $resultInsertAd = $this->returnResult($sqlInsertAd);
+
+        if ($resultInsertAd) {
+            $adID = "SELECT AdID FROM Ads ORDER BY AdId DESC LIMIT 1";
+        }
+
+        $sqlInsertImageAndRentedSpace = "INSERT INTO Images ('FilePath', 'AdID') VALUES ('$ad->filePath','$adID'); ";
+        $sqlInsertImageAndRentedSpace .= "INSERT INTO `rentedspaces`(AdID`, `StoreID`, `DateRented`, `HoursRented`, `DeliveryServices`) ";
+        $sqlInsertImageAndRentedSpace .= "VALUES ('$adID','$ad->storeID', '$ad->dateRented', '$ad->hoursRented', '$ad->deliveryServices'); ";
+        $resultInsertRentedSpace = $this->returnResultOfMultiQuery($sqlInsertImageAndRentedSpace);
+
+        if ($resultInsertRentedSpace) {
+            $rentedSpaceID = "SELECT RentedSpaceID FROM rentedSpaces ORDER BY RentedSpaceID DESC LIMIT 1";
+        }
+
+        $sqlInsertPayment = "INSERT INTO `payments`(`PayingUserID`, `RentedSpaceID`, `AmountInCADCents`, `CardNumber`, `CardExpiryDate`, `CardSecurityCode`, `CardholderName`, `CardCompany`, `CardType`, `PaymentDate`) ";
+        $sqlInsertPayment .= "VALUES ('$ad->postingUserID', '$rentedSpaceID', '$ad->amountInCADCents', '$ad->cardNumber', '$ad->cardExpiryDate', '$ad->cardSecurityCode', '$ad->cardholderNumber', '$ad->cardCompany', '$ad->cardType', '$ad->paymentDate') ";
+        $result = $this->returnResult($sqlInsertPayment);
+        $this->closeConnection();
+        return $result;
+    }
+
     public function returnResult($sql)
     {
         $result = $this->connection->query($sql);
+        return $result;
+    }
+
+    public function returnResultOfMultiQuery($sql)
+    {
+        $result = $this->connection->multi_query($sql);
         return $result;
     }
 

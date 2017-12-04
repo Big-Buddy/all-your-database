@@ -14,7 +14,7 @@
 <script>
     $(document).ready(function() {
         $.ajax({
-            url: '/php/scripts/register.php',
+            url: '/php/scripts/post-ad.php',
             type: 'POST',
             data: {
                 userID: 'charizard18',
@@ -30,7 +30,7 @@
                 addressPostalCode: 'asd'
             },
             success: function(response) {
-                console.log(response);
+                console.log(JSON.parse(response));
             },
             error: function(response) {
                 var errorMessage = JSON.parse(response.responseText).message; //refer to the script to see error msg
@@ -43,7 +43,7 @@
             url: '/php/scripts/report8.php',
             type: 'GET',
             success: function(response) {
-                console.log(response);
+                console.log(response.status);
             },
             error: function(response) {
                 var errorMessage = JSON.parse(response.responseText).message; //refer to the script to see error msg
