@@ -80,6 +80,19 @@ class AdRepository {
         return $result;
     }
 
+    public function editAd($ad)
+    {
+        $sqlUpdateAd = "UPDATE `ads` SET PostingUserID`='$ad->postingUserID',`PostingDate`='$ad->postingDate',`DaysToPromote`='$ad->daysToPromote',`AdType`='$ad->adType',`Title`='$ad->title',`Description`='$ad->description',`PriceInCADCents`='$ad->priceInCADCents',`Category`='$ad->category' ";
+        $sqlUpdateAd .= "WHERE AdID='$ad->ID'; ";
+        $sqlUpdateAd .= "UPDATE `rentedspaces` SET DateRented`='$ad->dateRented',`HoursRented`='$ad->hoursRented',`DeliveryServices`='$ad->deliveryServices' ";
+        $sqlUpdateAd .= "WHERE AdID='$ad->ID'; ";
+        $sqlUpdateAd .= "UPDATE `payments` SET `PaymentID`='$ad->paymentID',`AmountInCADCents`='$ad->amountInCADCents',`CardNumber`='$ad->cardNumber',`CardExpiryDate`='$ad->cardExpiryDate',`CardSecurityCode`='$ad->cardSecurityCode',`CardholderName`='$ad->cardholderName',`CardCompany`='$ad->cardCompany',`CardType`='$ad->cardType',`PaymentDate`='$ad->paymentDate'";
+        $sqlUpdateAd .= "WHERE PaymentID='$ad->paymentID'";
+        $result = $this->returnResultOfMultiQuery($sqlUpdateAd);
+        $this->closeConnection();
+        return $result;
+    }
+
     public function returnResult($sql)
     {
         $result = $this->connection->query($sql);
