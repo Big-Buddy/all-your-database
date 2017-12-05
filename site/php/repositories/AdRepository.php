@@ -107,11 +107,8 @@ class AdRepository {
             $adID = $this->getMostRecentAd();
         }
 
-        var_dump($adID);
 
         if ($ad->isRenting != 'false') {
-            echo 'here';
-            var_dump($ad);
             $sqlInsertRentedSpace = "INSERT INTO `rentedspaces`(`AdID`, `StoreID`, `DateRented`, `HoursRented`, `DeliveryServices`) ";
             $sqlInsertRentedSpace .= "VALUES ('$adID','$ad->storeID', '$ad->dateRented', '$ad->hoursRented', '$ad->deliveryServices'); ";
             echo $sqlInsertRentedSpace;

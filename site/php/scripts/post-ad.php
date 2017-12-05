@@ -1,6 +1,6 @@
 <?php
 
-// error_reporting(0);
+error_reporting(0);
 require_once '../repositories/AdRepository.php';
 
 $adRepository = new AdRepository();
