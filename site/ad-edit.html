@@ -9,7 +9,7 @@
 </head>
 <body>
 	<div class="container">
-		<h1>Fill the form to submit an ad</h1>
+		<h1>Fill the form to <span id="header-line">submit</span> an ad</h1>
 		<table class="input-form input-form-large">
 			<tr>
 				<td>Email or Phone number</td>
@@ -192,6 +192,7 @@
 					$("#description").val(response.description);
 					$("#address").val(response.addressStreet);
 					isEditing = true;
+					$("#header-line").text("edit");
 	                	              
 	            },
 	            error: function(err){
