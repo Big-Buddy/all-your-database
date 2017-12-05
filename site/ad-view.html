@@ -135,6 +135,7 @@
 			            success: function(response) {
 			            	response = JSON.parse(response);
 			            	console.log(JSON.stringify(response,4,'\t'));
+			            	$("#category").text(username+"'s");
 			                //ads retrieved
 			                //format respones
 			                var formatted_response = "<table><tr class='report-table-header'><td>Title</td><td>Description</td><td>Seller</td><td>Rate Product</td></tr>";
