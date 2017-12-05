@@ -107,9 +107,14 @@ class AdRepository {
             $adID = $this->getMostRecentAd();
         }
 
+        var_dump($adID);
+
         if ($ad->isRenting != 'false') {
+            echo 'here';
+            var_dump($ad);
             $sqlInsertRentedSpace = "INSERT INTO `rentedspaces`(`AdID`, `StoreID`, `DateRented`, `HoursRented`, `DeliveryServices`) ";
             $sqlInsertRentedSpace .= "VALUES ('$adID','$ad->storeID', '$ad->dateRented', '$ad->hoursRented', '$ad->deliveryServices'); ";
+            echo $sqlInsertRentedSpace;
             $result = $this->returnResult($sqlInsertRentedSpace);
 
             if ($result) {
@@ -123,9 +128,13 @@ class AdRepository {
             }
         }
 
-        if ($ad->daysToPromote != '0') {
+        if ($ad->isPromoting != 'false') {
             $sqlInsertPayment = "INSERT INTO `payments`(`PayingUserID`, `RentedSpaceID`, `AmountInCADCents`, `CardNumber`, `CardExpiryDate`, `CardSecurityCode`, `CardholderName`, `CardCompany`, `CardType`, `PaymentDate`) ";
-            $sqlInsertPayment .= "VALUES ('$ad->postingUserID', '$rentedSpaceID', '$ad->amountInCADCents', '$ad->cardNumber', '$ad->cardExpiryDate', '$ad->cardSecurityCode', '$ad->cardholderNumber', '$ad->cardCompany', '$ad->cardType', now()) ";
+            if ($rentedSpaceID == null) {
+                $sqlInsertPayment .= "VALUES ('$ad->postingUserID', null, '$ad->amountInCADCents', '$ad->cardNumber', '$ad->cardExpiryDate', '$ad->cardSecurityCode', '$ad->cardholderName', '$ad->cardCompany', '$ad->cardType', now()) ";
+            } else {
+                $sqlInsertPayment .= "VALUES ('$ad->postingUserID', '$rentedSpaceID', '$ad->amountInCADCents', '$ad->cardNumber', '$ad->cardExpiryDate', '$ad->cardSecurityCode', '$ad->cardholderName', '$ad->cardCompany', '$ad->cardType', now()) ";
+            }
             $result = $this->returnResult($sqlInsertPayment);
         }
 
