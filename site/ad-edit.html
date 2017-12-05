@@ -359,13 +359,17 @@
         		}
         		if($('input:radio[name="rent"]:checked').val() != 'no_rental'){
         			//renting space
-        			isRenting = true;   
+        			isRenting = true;  
+        			if(category == "buy"){
+        				alert("You can only rent space for a 'sell' ad");
+        				cardError = true;
+        			} 
         			//need CC validation  
         			amountInCADCents = $("#amount_due").text() * 100;
         			cardNumber = $("#card_number").val();
 					cardExpiryDate = $("#card_expiry").val();
 					cardSecurityCode = $("#card_security").val();
-					cardholderNumber = $("#card_name").val();
+					cardholderName = $("#card_name").val();
 					cardCompany = $("#card_company").val();
 					cardType = $("#card_type").val();
 					storeID = $("#selected_store").val();
@@ -380,7 +384,7 @@
 		        	if(cardSecurityCode == "" || cardSecurityCode == null || cardSecurityCode == undefined){
 		        		cardError = true;
 		        	}
-					if(cardholderNumber == "" || cardholderNumber == null || cardholderNumber == undefined){
+					if(cardholderName == "" || cardholderName == null || cardholderName == undefined){
 		        		cardError = true;
 		        	}     			
         		}
